@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://tenor.com/view/skeleton-banging-fist-on-ground-agony-anguish-pain-suffering-gif-10047053495593873096" />
+<img src="https://media.tenor.com/7sNOnG48Y_wAAAAC/skeleton-banging-fist-on-ground.gif" width="300" />
 </div>
 
 https://maximilian-wikstrom.vercel.app
