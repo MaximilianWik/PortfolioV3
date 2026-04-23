@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import VanillaTilt from 'vanilla-tilt';
 import { Sigil } from '../shared/Sigil';
 import { DispersingText } from '../shared/DispersingText';
+import { CornerBrackets } from '../shared/CornerBrackets';
 import { PROFILE } from '../../lib/data';
 
 export const Hero: React.FC = () => {
@@ -234,36 +236,71 @@ export const Hero: React.FC = () => {
                   tags: ["AGENTIC AI", "LLMS"],
                   pdfLink: "/Integrating%20Agentic%20AI%20into%20Software%20Development%20A%20Sociotechnical%20Case%20Study%20in%20a%20Large%20Nordic%20Bank.pdf"
                 }
-              ].map((deed, i) => (
-                <div key={i} className="group relative p-6 bg-ink-deep border border-bone-faded/10 transition-colors hover:bg-ink-iron">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-display text-xl text-bone-white uppercase tracking-wider">{deed.title}</h3>
-                    <span className="font-subdisplay text-[10px] text-bone-faded">{deed.num}</span>
-                  </div>
-                  <p className="text-xs text-bone-dim mt-2 font-body italic leading-relaxed">
-                    {deed.desc}
-                  </p>
-                  <div className="mt-4 flex gap-2">
-                    {deed.tags.map(tag => (
-                      <span key={tag} className="text-[9px] font-mono border border-bone-faded/30 px-2 py-0.5 text-bone-faded uppercase">{tag}</span>
-                    ))}
-                  </div>
-                  {deed.pdfLink && (
-                    <div className="mt-6 flex">
-                      <motion.a 
-                        href={deed.pdfLink} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
-                        transition={{ duration: 0.3 }}
-                        className="inline-block font-subdisplay text-[9px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
-                      >
-                        View Document
-                      </motion.a>
+              ].map((deed, i) => {
+                const tiltRef = useRef<HTMLDivElement>(null);
+                const [isHovered, setIsHovered] = useState(false);
+
+                useEffect(() => {
+                  if (tiltRef.current) {
+                    VanillaTilt.init(tiltRef.current, {
+                      max: 5,
+                      speed: 600,
+                      reverse: true,
+                      glare: true,
+                      'max-glare': 0.1,
+                    });
+                  }
+                }, []);
+                
+                return (
+                  <div 
+                    key={i} 
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    className="relative"
+                  >
+                    <div 
+                      ref={tiltRef}
+                      className={`relative p-6 border border-bone-faded/10 transition-colors duration-500 overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
+                    >
+                      {/* Outline animation */}
+                      <div className="absolute top-0 left-0 h-[1px] bg-ember-blood transition-all duration-300 origin-left z-50" style={{ width: isHovered ? '100%' : '0%', transitionDelay: '0ms' }} />
+                      <div className="absolute top-0 right-0 w-[1px] bg-ember-blood transition-all duration-300 origin-top z-50" style={{ height: isHovered ? '100%' : '0%', transitionDelay: '300ms' }} />
+                      <div className="absolute bottom-0 right-0 h-[1px] bg-ember-blood transition-all duration-300 origin-right z-50" style={{ width: isHovered ? '100%' : '0%', transitionDelay: '600ms' }} />
+                      <div className="absolute bottom-0 left-0 w-[1px] bg-ember-blood transition-all duration-300 origin-bottom z-50" style={{ height: isHovered ? '100%' : '0%', transitionDelay: '900ms' }} />
+
+                      <div className="flex justify-between items-start z-10 relative">
+                        <h3 className="font-display text-xl text-bone-white uppercase tracking-wider">{deed.title}</h3>
+                        <span className="font-subdisplay text-[10px] text-bone-faded">{deed.num}</span>
+                      </div>
+                      <p className="text-xs text-bone-dim mt-2 font-body italic leading-relaxed z-10 relative">
+                        {deed.desc}
+                      </p>
+                      <div className="mt-4 flex gap-2 z-10 relative">
+                        {deed.tags.map(tag => (
+                          <span key={tag} className={`text-[9px] font-mono border border-bone-faded/30 px-2 py-0.5 uppercase transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}>{tag}</span>
+                        ))}
+                      </div>
+                      {deed.pdfLink && (
+                        <div className="mt-6 flex z-10 relative">
+                          <motion.a 
+                            href={deed.pdfLink} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+                            transition={{ duration: 0.3 }}
+                            className="inline-block font-subdisplay text-[9px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
+                          >
+                            View Document
+                          </motion.a>
+                        </div>
+                      )}
+                      
+                      <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'border-gilt' : 'text-bone-faded/20'}`} />
                     </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
