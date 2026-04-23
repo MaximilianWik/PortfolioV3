@@ -70,7 +70,7 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
         
         <div className="flex flex-wrap gap-2 mb-10 z-10">
           {project.tech.map((t, j) => (
-            <span key={j} className="font-mono text-[9px] text-bone-faded uppercase tracking-widest px-2 py-1 bg-ink-void/50 border border-bone-faded/10 transition-colors relative z-10" style={{ borderColor: isHovered ? '#B8935A' : undefined }}>
+            <span key={j} className="font-mono text-[9px] text-bone-faded uppercase tracking-widest px-2 py-1 bg-ink-void/50 border border-bone-faded/10 transition-colors relative z-10" style={{ color: isHovered ? '#B8935A' : undefined }}>
               {t}
             </span>
           ))}
