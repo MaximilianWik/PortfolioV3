@@ -92,7 +92,7 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
           </span>
         </div>
 
-        <CornerBrackets className="text-bone-faded/10 transition-colors duration-500 z-[70]" style={{ color: isHovered ? '#B8935A' : undefined }} />
+        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'border-gilt' : 'border-bone-faded/20'}`} />
       </div>
     </RevealOnScroll>
   );
