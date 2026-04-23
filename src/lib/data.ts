@@ -99,5 +99,12 @@ export const PROJECTS = [
     subtitle: "A Men in Black-themed desktop application for managing aliens, agents, and administrators within a fictional MIB organization. Built as a team project (three developers). The app presents different menus based on user role — administrators create and modify records, agents search and inspect alien profiles, and aliens can log in to view and update their own information. Includes role-based login flows (Admin / Agent / Alien), account registration, password changes, alien registration with registration dates and equipment tracking, search functionality, and a MySQL backend for persistent storage.",
     tech: ["Java", "Java Swing", "AWT", "MySQL", "JDBC", "SQL", "NetBeans", "Apache Ant", "Role-Based Access Control", "Team Project", "Git"],
     link: "https://github.com/MaximilianWik/MIB-projekt-Java-Winframe.git"
+  },
+  {
+    id: "IV",
+    title: "Cursed Echoes - Typing Survival Game",
+    subtitle: "A Dark Souls-inspired gothic typing survival game built in the browser. Players type incoming words drawn from a large lore-flavored dictionary (spanning Dark Souls, Bloodborne, Sekiro, and Elden Ring terminology) to cast spells and survive waves of increasing difficulty. Features include a health and scoring system, combo multipliers, difficulty scaling, pause/resume, accuracy tracking (total vs. correct keystrokes), a high-score board, mobile-friendly input focus handling, responsive canvas scaling, hidden secret screens with interactive easter eggs, and animated character states (idle / casting). Deployed live on Vercel.",
+    tech: ["TypeScript", "React 19", "Vite", "Tailwind CSS 4", "Framer Motion", "Lucide React", "Express", "Node.js", "Vercel", "HTML5", "Game State Management", "Git"],
+    link: "https://github.com/MaximilianWik/CursedEchoesMiniGame.git"
   }
 ];

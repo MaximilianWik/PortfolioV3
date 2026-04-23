@@ -43,7 +43,7 @@ const StatItem: React.FC<{ label: string; value: number; prefix?: string }> = ({
 };
 
 export const About: React.FC = () => {
-  const bio = "You find the signatory's mark in the margin. Maximilian Wikström, holder of the Information Systems rite, keeps the ledgers at DNB. His hand binds Copilot and Power Automate into instruments that spare others from repetition. He writes Python in the night hours.";
+  const bio = "You find the signatory's mark in the margin. Maximilian Wikström, holder of the Information Systems rite, keeps the ledgers at DNB. His hand binds Copilot and Power Automate into instruments that spare others from repetition. He writes TypeScript and Python in the night hours.";
   // We use Pretext to pre-calculate the layout height for visual stability
   const layout = usePretextLayout(bio, 'italic 18px "EB Garamond"', 500, 1.6);
 
@@ -67,10 +67,10 @@ export const About: React.FC = () => {
               <img 
                 src="/blackmaiden.jpg" 
                 alt="Maiden in Black" 
-                className="w-full h-auto object-contain opacity-85 mix-blend-luminosity grayscale-[20%] transition-all duration-1000 group-hover:opacity-100 group-hover:scale-105"
+                className="w-full h-auto object-contain opacity-95 transition-all duration-1000 group-hover:opacity-100 group-hover:scale-105"
                 style={{
-                  maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 90%)',
-                  WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 90%)'
+                  maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 95%)',
+                  WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 95%)'
                 }}
               />
               
@@ -81,7 +81,7 @@ export const About: React.FC = () => {
               <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink-void to-transparent pointer-events-none" />
               
               {/* Radial dark backing to ensure text remains highly legible over any image */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(5,5,5,0.75)_0%,transparent_50%)] pointer-events-none" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(5,5,5,0.5)_0%,transparent_60%)] pointer-events-none" />
 
               {/* Text Center Overlay */}
               <div className="absolute inset-0 text-center px-8 flex flex-col items-center justify-center pointer-events-none z-10">
@@ -115,8 +115,8 @@ export const About: React.FC = () => {
 
           <div className="grid grid-cols-3 gap-4 mt-12">
             <StatItem label="Years Active" value={6} />
-            <StatItem label="Systems Tamed" value={14} />
-            <StatItem label="Lingua Franca" value={7} />
+            <StatItem label="Systems Tamed" value={18} />
+            <StatItem label="Lingua Franca" value={8} />
           </div>
         </div>
       </div>

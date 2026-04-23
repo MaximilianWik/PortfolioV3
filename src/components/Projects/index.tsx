@@ -48,14 +48,16 @@ export const Projects: React.FC = () => {
               </div>
               
               <div className="flex items-center justify-between">
-                <a 
+                <motion.a 
                   href={project.link} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase hover:text-gilt transition-colors border-b border-bone-faded/30 pb-1"
+                  whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+                  transition={{ duration: 0.3 }}
+                  className="inline-block font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
                 >
                   View Artifact
-                </a>
+                </motion.a>
                 <span className="font-mono text-[8px] text-bone-faded uppercase tracking-widest opacity-50">
                   // Representative
                 </span>
