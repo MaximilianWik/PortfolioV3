@@ -40,20 +40,20 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
       >
         {/* State-Driven Outline Effects */}
         <div 
-          className="absolute top-0 left-0 w-full h-[1px] bg-ember-blood transition-transform duration-300 origin-left z-50" 
-          style={{ transform: isHovered ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0ms' }} 
+          className="absolute top-0 left-0 h-[1px] bg-ember-blood transition-all duration-300 origin-left z-50" 
+          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '0ms' }} 
         />
         <div 
-          className="absolute top-0 right-0 h-full w-[1px] bg-ember-blood transition-transform duration-300 origin-top z-50" 
-          style={{ transform: isHovered ? 'scaleY(1)' : 'scaleY(0)', transitionDelay: '300ms' }} 
+          className="absolute top-0 right-0 w-[1px] bg-ember-blood transition-all duration-300 origin-top z-50" 
+          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '300ms' }} 
         />
         <div 
-          className="absolute bottom-0 right-0 w-full h-[1px] bg-ember-blood transition-transform duration-300 origin-right z-50" 
-          style={{ transform: isHovered ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '600ms' }} 
+          className="absolute bottom-0 right-0 h-[1px] bg-ember-blood transition-all duration-300 origin-right z-50" 
+          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '600ms' }} 
         />
         <div 
-          className="absolute bottom-0 left-0 h-full w-[1px] bg-ember-blood transition-transform duration-300 origin-bottom z-50" 
-          style={{ transform: isHovered ? 'scaleY(1)' : 'scaleY(0)', transitionDelay: '900ms' }} 
+          className="absolute bottom-0 left-0 w-[1px] bg-ember-blood transition-all duration-300 origin-bottom z-50" 
+          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '900ms' }} 
         />
 
         <div className="absolute top-6 right-8 font-subdisplay text-3xl text-bone-faded/20 transition-colors pointer-events-none z-10" style={{ color: isHovered ? '#B8935A' : undefined }}>
@@ -92,7 +92,7 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
           </span>
         </div>
 
-        <CornerBrackets className="text-bone-faded/10 transition-colors duration-500 z-10" style={{ color: isHovered ? '#B8935A' : undefined }} />
+        <CornerBrackets className="text-bone-faded/10 transition-colors duration-500 z-[70]" style={{ color: isHovered ? '#B8935A' : undefined }} />
       </div>
     </RevealOnScroll>
   );
