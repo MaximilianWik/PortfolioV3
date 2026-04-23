@@ -37,9 +37,9 @@ export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
         x: 0, 
         y: 0 
       }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: false, margin: "-100px" }}
       transition={{ 
-        duration: 0.8, 
+        duration: 1.2, 
         delay, 
         ease: [0.2, 0.8, 0.2, 1] 
       }}
