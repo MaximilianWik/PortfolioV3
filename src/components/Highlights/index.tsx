@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import VanillaTilt from 'vanilla-tilt';
 import { SectionHeading } from '../shared/SectionHeading';
@@ -19,6 +19,7 @@ interface DeedCardProps {
 
 const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, pdfLink }) => {
   const tiltRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (tiltRef.current) {
@@ -38,17 +39,22 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8 }}
-      className="group relative"
+      className="relative"
     >
       <div 
         ref={tiltRef}
-        className="relative bg-ink-deep p-8 md:p-10 border border-bone-faded/10 transition-colors duration-500 group-hover:bg-ink-iron overflow-hidden"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative bg-ink-deep p-8 md:p-10 border border-bone-faded/10 transition-colors duration-500 overflow-hidden"
+        style={{
+          backgroundColor: isHovered ? '#1a1a1a' : undefined // Replace with correct color class
+        }}
       >
-        <span className="absolute top-6 right-6 font-subdisplay text-xs text-bone-faded group-hover:text-gilt transition-colors">
+        <span className="absolute top-6 right-6 font-subdisplay text-xs text-bone-faded transition-colors" style={{ color: isHovered ? '#B8935A' : undefined }}>
           {index}
         </span>
         
-        <h3 className="font-display text-2xl text-bone-white mb-4 tracking-wide uppercase transition-colors group-hover:text-soul-pale">
+        <h3 className="font-display text-2xl text-bone-white mb-4 tracking-wide uppercase transition-colors" style={{ color: isHovered ? '#D1C7B7' : undefined }}>
           {title}
         </h3>
         
@@ -71,10 +77,13 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
           </div>
         )}
 
-        <CornerBrackets className="text-bone-faded/20 group-hover:border-gilt transition-colors duration-500" />
+        <CornerBrackets className="text-bone-faded/20 transition-colors duration-500" style={{ borderColor: isHovered ? '#B8935A' : undefined }} />
         
         {/* Hover blood-rule */}
-        <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-ember-blood transition-all duration-700 group-hover:w-full" />
+        <div 
+          className="absolute bottom-0 left-0 h-[1px] bg-ember-blood transition-all duration-700"
+          style={{ width: isHovered ? '100%' : '0%' }}
+        />
       </div>
     </motion.div>
   );
