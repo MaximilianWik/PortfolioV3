@@ -20,8 +20,9 @@ export const Hero: React.FC = () => {
       {/* Background Sigil Glow */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 0.08, scale: 1 }}
-        transition={{ duration: 2, ease: "easeOut" }}
+        whileInView={{ opacity: 0.08, scale: 1 }}
+        viewport={{ once: false }}
+        transition={{ duration: 3, ease: "easeOut" }}
         className="absolute w-[60vh] h-[60vh] text-gilt pointer-events-none sigil-bg flex items-center justify-center -z-10"
       >
         <Sigil variant="runes" className="w-full h-full animate-[spin_60s_linear_infinite]" />
@@ -31,8 +32,9 @@ export const Hero: React.FC = () => {
         {/* Left Pillar: Bio & Status */}
         <motion.div 
           initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false }}
+          transition={{ duration: 1.2, delay: 0.5 }}
           className="col-span-1 md:col-span-4 flex flex-col pt-8 min-w-0"
         >
           <div>
@@ -137,7 +139,9 @@ export const Hero: React.FC = () => {
         {/* Center Pillar: Main Identity */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: false }}
+          transition={{ duration: 1.5 }}
           className="col-span-1 md:col-span-4 flex flex-col items-center justify-between md:border-x border-bone-faded/20 py-12 md:py-0 min-w-0"
         >
           <div className="flex flex-col items-center flex-1 justify-center pt-8 px-4 md:px-0">
@@ -215,8 +219,9 @@ export const Hero: React.FC = () => {
         {/* Right Pillar: Recent Deeds */}
         <motion.div 
           initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false }}
+          transition={{ duration: 1.2, delay: 0.5 }}
           className="col-span-1 md:col-span-4 flex flex-col pt-8 min-w-0"
         >
           <div>
@@ -314,8 +319,9 @@ export const Hero: React.FC = () => {
 
       <motion.div 
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: false }}
+        transition={{ delay: 2.5, duration: 2 }}
         className="absolute bottom-6 flex flex-col items-center"
       >
         <div className="w-[1px] h-8 bg-bone-faded/30 relative overflow-hidden">
