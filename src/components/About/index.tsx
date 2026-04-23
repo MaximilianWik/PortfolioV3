@@ -59,7 +59,8 @@ export const About: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
+          transition={{ duration: 1.5 }}
           className="relative flex w-full"
         >
           <div className="relative w-full mx-auto flex items-center justify-center">
@@ -101,7 +102,8 @@ export const About: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
+            transition={{ duration: 1.5 }}
             className="border-l border-ember-blood pl-6 py-4"
             style={{ minHeight: layout.height || 'auto' }}
           >
