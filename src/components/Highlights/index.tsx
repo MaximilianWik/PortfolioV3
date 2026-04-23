@@ -15,9 +15,10 @@ interface DeedCardProps {
   description: string;
   delay: number;
   pdfLink?: string;
+  tags?: string[];
 }
 
-const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, pdfLink }) => {
+const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, pdfLink, tags }) => {
   const tiltRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -40,30 +41,40 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8 }}
       className="relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div 
         ref={tiltRef}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className="relative bg-ink-deep p-8 md:p-10 border border-bone-faded/10 transition-colors duration-500 overflow-hidden"
-        style={{
-          backgroundColor: isHovered ? '#1a1a1a' : undefined // Replace with correct color class
-        }}
+        className={`relative p-8 md:p-10 border border-bone-faded/10 transition-colors duration-500 overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
       >
-        <span className="absolute top-6 right-6 font-subdisplay text-xs text-bone-faded transition-colors" style={{ color: isHovered ? '#B8935A' : undefined }}>
+        <span className={`absolute top-6 right-6 font-subdisplay text-xs transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}>
           {index}
         </span>
         
-        <h3 className="font-display text-2xl text-bone-white mb-4 tracking-wide uppercase transition-colors" style={{ color: isHovered ? '#D1C7B7' : undefined }}>
+        <h3 className={`font-display text-2xl mb-4 tracking-wide uppercase transition-colors ${isHovered ? 'text-soul-pale' : 'text-bone-white'}`}>
           {title}
         </h3>
         
-        <p className="font-body text-bone-dim leading-relaxed italic text-sm md:text-base">
+        <p className="font-body text-bone-dim leading-relaxed italic text-sm md:text-base mb-6">
           {description}
         </p>
 
+        {tags && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            {tags.map((tag, i) => (
+              <span 
+                key={i} 
+                className={`font-mono text-[9px] uppercase tracking-widest px-2 py-1 bg-ink-void/50 border border-bone-faded/10 transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
         {pdfLink && (
-          <div className="mt-8 flex relative z-20">
+          <div className="flex relative z-20">
             <motion.a 
               href={pdfLink} 
               target="_blank" 
@@ -77,12 +88,24 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
           </div>
         )}
 
-        <CornerBrackets className="text-bone-faded/20 transition-colors duration-500" style={{ borderColor: isHovered ? '#B8935A' : undefined }} />
+        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'border-gilt' : 'text-bone-faded/20'}`} />
         
-        {/* Hover blood-rule */}
+        {/* State-Driven Outline Effects */}
         <div 
-          className="absolute bottom-0 left-0 h-[1px] bg-ember-blood transition-all duration-700"
-          style={{ width: isHovered ? '100%' : '0%' }}
+          className="absolute top-0 left-0 h-[1px] bg-ember-blood transition-all duration-300 origin-left z-50" 
+          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '0ms' }} 
+        />
+        <div 
+          className="absolute top-0 right-0 w-[1px] bg-ember-blood transition-all duration-300 origin-top z-50" 
+          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '300ms' }} 
+        />
+        <div 
+          className="absolute bottom-0 right-0 h-[1px] bg-ember-blood transition-all duration-300 origin-right z-50" 
+          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '600ms' }} 
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-[1px] bg-ember-blood transition-all duration-300 origin-bottom z-50" 
+          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '900ms' }} 
         />
       </div>
     </motion.div>
@@ -94,19 +117,22 @@ export const Highlights: React.FC = () => {
     {
       index: "I",
       title: "DNB Bank — AI & Automation Specialist",
-      description: "Binding Copilot Studio agents and Power Automate flows into the secure foundations of DNB. Scaling identity governance and automation in the regulated shadows."
+      description: "Binding Copilot Studio agents and Power Automate flows into the secure foundations of DNB. Scaling identity governance and automation in the regulated shadows.",
+      tags: ["AI Agents", "Power Automate"]
     },
     {
       index: "II",
       title: "SEB — The Agentic Thesis",
       description: "A scholar's pursuit into Agentic AI within the iron-clad walls of SEB. Developing frameworks for autonomous reasoning where failure is not an option.",
-      pdfLink: "/Integrating%20Agentic%20AI%20into%20Software%20Development%20A%20Sociotechnical%20Case%20Study%20in%20a%20Large%20Nordic%20Bank.pdf"
+      pdfLink: "/Integrating%20Agentic%20AI%20into%20Software%20Development%20A%20Sociotechnical%20Case%20Study%20in%20a%20Large%20Nordic%20Bank.pdf",
+      tags: ["Agentic AI", "LLMs"]
     },
     {
       index: "III",
       title: "EduCal — Business Intelligence",
       description: "Modernizing data architecture through Medallion rites. Forging decay-curve models in Power BI to forecast the inevitable fade of resources.",
-      pdfLink: "/Slutleverans.EduCal.pdf"
+      pdfLink: "/Slutleverans.EduCal.pdf",
+      tags: ["BI", "Data"]
     }
   ];
 
