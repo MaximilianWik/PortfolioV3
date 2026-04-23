@@ -38,8 +38,8 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.8 }}
+      viewport={{ once: false }}
+      transition={{ delay, duration: 1.2 }}
       className="relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
