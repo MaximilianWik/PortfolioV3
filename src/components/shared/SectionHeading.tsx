@@ -25,7 +25,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: false }}
+        transition={{ duration: 1.2 }}
         className="font-subdisplay text-bone-faded text-sm tracking-[0.3em] mb-4"
       >
         {numeral}.
@@ -34,8 +35,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       <motion.h2 
         initial={{ opacity: 0, letterSpacing: '0.1em' }}
         whileInView={{ opacity: 1, letterSpacing: '0.25em' }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: false }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
         className="font-display text-4xl md:text-5xl uppercase text-center mb-8"
       >
         {title}
@@ -51,7 +52,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         <motion.p 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
+          transition={{ duration: 1.5 }}
           className="mt-6 font-body italic text-bone-dim text-center max-w-md"
         >
           {subtitle}
