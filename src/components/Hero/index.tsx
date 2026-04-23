@@ -179,10 +179,16 @@ export const Hero: React.FC = () => {
               transition={{ duration: 1, ease: "easeOut" }}
               className="absolute w-full h-full object-contain"
               style={{
-                maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 80%)',
-                WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 80%)'
+                maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 75%)',
+                WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 75%)'
               }}
             />
+            
+            {/* Edge Fades - Same as About section */}
+            <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-ink-void to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink-void to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ink-void to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink-void to-transparent pointer-events-none z-10" />
             
             {/* The classic interactive text */}
             <AnimatePresence>
