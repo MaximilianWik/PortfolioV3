@@ -9,11 +9,23 @@ import { motion, AnimatePresence } from 'motion/react';
 export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [text, setText] = useState("");
-  const fullText = "Ashes of automation. Dreams of silicon.";
+  const phrases = [
+    "Awakening...",
+    "Challenging the Abyss...",
+    "Collecting Cursed Echoes...",
+    "Kindling the Flame...",
+    "Binding the Ledger..."
+  ];
+
+  const getPhrase = (p: number) => {
+    const index = Math.floor((p / 100) * phrases.length);
+    return phrases[Math.min(index, phrases.length - 1)];
+  };
 
   useEffect(() => {
     let currentText = "";
     let i = 0;
+    const fullText = "Ashes of automation. Dreams of silicon.";
     const typingInterval = setInterval(() => {
       if (i < fullText.length) {
         currentText += fullText[i];
@@ -33,7 +45,7 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         }
         return prev + 1;
       });
-    }, 20);
+    }, 40); // Slower progress for more readable text changes
 
     return () => {
       clearInterval(typingInterval);
@@ -61,7 +73,7 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
       </div>
       
       <div className="mt-4 font-mono text-[10px] text-bone-faded tracking-widest uppercase">
-        {Math.round(progress)}% — Initializing Ledger
+        {Math.round(progress)}% — {getPhrase(progress)}
       </div>
     </motion.div>
   );
