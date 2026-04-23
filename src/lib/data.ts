@@ -106,5 +106,12 @@ export const PROJECTS = [
     subtitle: "A Dark Souls-inspired gothic typing survival game built in the browser. Players type incoming words drawn from a large lore-flavored dictionary (spanning Dark Souls, Bloodborne, Sekiro, and Elden Ring terminology) to cast spells and survive waves of increasing difficulty. Features include a health and scoring system, combo multipliers, difficulty scaling, pause/resume, accuracy tracking (total vs. correct keystrokes), a high-score board, mobile-friendly input focus handling, responsive canvas scaling, hidden secret screens with interactive easter eggs, and animated character states (idle / casting). Deployed live on Vercel.",
     tech: ["TypeScript", "React 19", "Vite", "Tailwind CSS 4", "Framer Motion", "Lucide React", "Express", "Node.js", "Vercel", "HTML5", "Game State Management", "Git"],
     link: "https://github.com/MaximilianWik/CursedEchoesMiniGame.git"
+  },
+  {
+    id: "V",
+    title: "Hattfabriken - Custom Factory Management System",
+    subtitle: "A full-stack web application for managing the operations of a custom hat manufacturer. The system supports the entire workflow from customer inquiry to delivery: customers can browse hats, submit custom requests specifying material, measurements, height, and special effects, and receive a price quote. Staff can then convert requests into formal offers and confirmed orders, while admins manage the warehouse inventory, materials catalog, and special-effects options. Orders include automatically generated PDF invoices and email notifications sent to customers, with a status pipeline (To-Do → In Progress → Completed) and shipping/cost calculations. The application also exposes a documented Web API alongside the MVC frontend.",
+    tech: ["C#", ".NET 8", "ASP.NET Core MVC", "ASP.NET Core Web API", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "QuestPDF", "MailKit", "Swagger", "Bootstrap", "jQuery", "Git"],
+    link: "https://github.com/hannesmalm/Hattfabriken"
   }
 ];
