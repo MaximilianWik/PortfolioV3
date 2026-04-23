@@ -3,13 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Sigil } from '../shared/Sigil';
 import { DispersingText } from '../shared/DispersingText';
 import { PROFILE } from '../../lib/data';
 
 export const Hero: React.FC = () => {
+  const [isBonfireLit, setIsBonfireLit] = useState(false);
+
   return (
     <section className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden bg-ink-void">
       
@@ -29,7 +31,7 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
-          className="col-span-1 md:col-span-4 flex flex-col pt-8"
+          className="col-span-1 md:col-span-4 flex flex-col pt-8 min-w-0"
         >
           <div>
             <div className="font-subdisplay text-bone-dim text-[10px] tracking-widest mb-4 uppercase">II. THE BEARER</div>
@@ -41,7 +43,7 @@ export const Hero: React.FC = () => {
             <div className="mt-8 space-y-4">
               <div className="border-l border-ember-blood pl-4 py-2">
                 <div className="font-mono text-[10px] text-bone-faded uppercase tracking-tighter">Current Domain</div>
-                <div className="font-display text-xl text-bone-white">DNB Bank — AI & Automation</div>
+                <div className="font-display text-xl text-bone-white truncate">DNB Bank — AI & Automation</div>
               </div>
             </div>
           </div>
@@ -58,33 +60,75 @@ export const Hero: React.FC = () => {
               </div>
             </div>
             
-            <a href="/CV_Maximilian_WikstromPDF.pdf" target="_blank" rel="noopener noreferrer" className="block text-center border border-bone-faded/40 py-3 font-subdisplay text-[11px] tracking-widest hover:border-gilt hover:text-gilt transition-all uppercase">
+            <motion.a 
+              href="/CV_Maximilian_WikstromPDF.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              whileHover={{ 
+                backgroundColor: 'rgba(184,147,90,0.05)', 
+                borderColor: '#B8935A', 
+                color: '#B8935A', 
+                y: -5,
+                textShadow: '0px 0px 8px rgba(184,147,90,0.8)',
+                boxShadow: '0px 0px 15px rgba(184,147,90,0.2)'
+              }}
+              transition={{ duration: 0.3 }}
+              className="block text-center border border-bone-faded/40 py-3 font-subdisplay text-[11px] tracking-widest uppercase text-bone-white"
+            >
               Download Resume (PDF)
-            </a>
+            </motion.a>
             
             <div className="grid grid-cols-3 gap-2 w-full pt-2">
-              <a href={`mailto:${PROFILE.email}`} className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep hover:bg-ink-iron hover:border-gilt transition-all hover:-translate-y-1">
-                <Sigil variant="eye" className="w-10 h-10 text-bone-dim group-hover:text-gilt transition-colors" />
-                <div className="text-center">
-                  <span className="block font-subdisplay text-[9px] text-bone-white tracking-widest uppercase mb-1">Initiate Rite</span>
-                  <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase">(Email)</span>
+              <motion.a 
+                href={`mailto:${PROFILE.email}`} 
+                whileHover={{ y: -5, borderColor: '#B8935A', backgroundColor: 'rgba(184,147,90,0.05)', boxShadow: '0px 0px 15px rgba(184,147,90,0.2)' }}
+                className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep"
+              >
+                <Sigil variant="eye" className="w-10 h-10 text-bone-dim transition-all duration-300 group-hover:text-gilt" />
+                <div className="text-center w-full">
+                  <span className="block font-subdisplay text-[9px] text-bone-white tracking-widest uppercase mb-1 truncate transition-all duration-300 group-hover:text-gilt">Initiate Rite</span>
+                  <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase truncate">(Email)</span>
                 </div>
-              </a>
-              <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep hover:bg-ink-iron hover:border-gilt transition-all hover:-translate-y-1">
-                <Sigil variant="serpent" className="w-10 h-10 text-bone-dim group-hover:text-gilt transition-colors" />
-                <div className="text-center">
-                  <span className="block font-subdisplay text-[9px] text-bone-white tracking-widest uppercase mb-1">The Web</span>
-                  <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase">(LinkedIn)</span>
+              </motion.a>
+              <motion.a 
+                href={PROFILE.linkedin} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                whileHover={{ y: -5, borderColor: '#B8935A', backgroundColor: 'rgba(184,147,90,0.05)', boxShadow: '0px 0px 15px rgba(184,147,90,0.2)' }}
+                className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep"
+              >
+                <Sigil variant="serpent" className="w-10 h-10 text-bone-dim transition-all duration-300 group-hover:text-gilt" />
+                <div className="text-center w-full">
+                  <span className="block font-subdisplay text-[9px] text-bone-white tracking-widest uppercase mb-1 truncate transition-all duration-300 group-hover:text-gilt">The Web</span>
+                  <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase truncate">(LinkedIn)</span>
                 </div>
-              </a>
-              <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep hover:bg-ink-iron hover:border-gilt transition-all hover:-translate-y-1">
-                <Sigil variant="runes" className="w-10 h-10 text-bone-dim group-hover:text-gilt transition-colors" />
-                <div className="text-center">
-                  <span className="block font-subdisplay text-[9px] text-bone-white tracking-widest uppercase mb-1">The Forge</span>
-                  <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase">(GitHub)</span>
+              </motion.a>
+              <motion.a 
+                href={PROFILE.github} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                whileHover={{ y: -5, borderColor: '#B8935A', backgroundColor: 'rgba(184,147,90,0.05)', boxShadow: '0px 0px 15px rgba(184,147,90,0.2)' }}
+                className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep"
+              >
+                <Sigil variant="runes" className="w-10 h-10 text-bone-dim transition-all duration-300 group-hover:text-gilt" />
+                <div className="text-center w-full">
+                  <span className="block font-subdisplay text-[9px] text-bone-white tracking-widest uppercase mb-1 truncate transition-all duration-300 group-hover:text-gilt">The Forge</span>
+                  <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase truncate">(GitHub)</span>
                 </div>
-              </a>
+              </motion.a>
             </div>
+            
+            <motion.a 
+              href="https://cursedechoes.vercel.app" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              whileHover={{ y: -5, borderColor: '#8B1A1A', backgroundColor: 'rgba(139,26,26,0.05)', boxShadow: '0px 0px 20px rgba(139,26,26,0.3)' }}
+              className="group flex items-center justify-center gap-4 py-4 px-6 border border-bone-faded/10 bg-ink-deep w-full mt-2 cursor-pointer"
+            >
+              <Sigil variant="sword" className="w-6 h-6 text-bone-dim transition-all duration-300 group-hover:text-ember-blood flex-shrink-0 -rotate-45" />
+              <span className="font-display text-[clamp(12px,1.5vw,18px)] tracking-[0.2em] text-bone-white uppercase transition-all duration-300 group-hover:text-ember-blood whitespace-nowrap">Play Minigame</span>
+              <Sigil variant="sword" className="w-6 h-6 text-bone-dim transition-all duration-300 group-hover:text-ember-blood flex-shrink-0 rotate-45" />
+            </motion.a>
           </div>
         </motion.div>
 
@@ -92,43 +136,77 @@ export const Hero: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="col-span-1 md:col-span-4 flex flex-col items-center justify-between md:border-x border-bone-faded/20 py-12 md:py-0"
+          className="col-span-1 md:col-span-4 flex flex-col items-center justify-between md:border-x border-bone-faded/20 py-12 md:py-0 min-w-0"
         >
-          <div className="flex flex-col items-center flex-1 justify-center pt-8">
-            <h1 className="font-display text-6xl md:text-8xl text-center leading-[0.85] tracking-[0.25em] uppercase flex flex-col items-center">
-              <DispersingText as="span" text="MAXIMILIAN" baseColor="#E6E0D4" className="flex-nowrap justify-center text-bone-white" />
-              <DispersingText as="span" text="WIKSTRÖM" baseColor="#9A968B" className="flex-nowrap justify-center text-bone-dim" />
+          <div className="flex flex-col items-center flex-1 justify-center pt-8 px-4 md:px-0">
+            <h1 className="font-display text-[clamp(2.5rem,5.2vw,6.8rem)] text-center leading-[0.82] tracking-[0.08em] sm:tracking-[0.1em] md:tracking-[0.2em] uppercase flex flex-col items-center">
+              <DispersingText as="span" text="MAXIMILIAN" baseColor="#E6E0D4" className="flex-nowrap justify-center text-bone-white whitespace-nowrap" />
+              <DispersingText as="span" text="WIKSTRÖM" baseColor="#9A968B" className="flex-nowrap justify-center text-bone-dim whitespace-nowrap" />
             </h1>
-            <div className="h-px w-32 bg-ember-blood my-8"></div>
+            <div className="h-px w-20 sm:w-24 md:w-32 bg-ember-blood my-6 md:my-8"></div>
             <DispersingText 
               text="AI & Automation Specialist"
-              className="font-subdisplay text-xs tracking-[0.4em] text-center uppercase justify-center"
+              className="font-subdisplay text-[9px] sm:text-[10px] md:text-xs tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.4em] text-center uppercase justify-center whitespace-nowrap"
               baseColor="#B8935A" 
               style={{ color: '#B8935A' }} 
             />
           </div>
 
           <div 
-            className="relative w-full aspect-square mt-16 mx-auto flex items-center justify-center group"
-            onMouseEnter={() => (window as any).playDarkSoulsMusic?.()}
+            className="relative w-full max-w-[320px] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[480px] aspect-square mt-10 sm:mt-12 md:mt-16 mx-auto flex items-center justify-center cursor-pointer"
+            onMouseEnter={() => {
+              setIsBonfireLit(true);
+              (window as any).playDarkSoulsMusic?.();
+            }}
+            onMouseLeave={() => setIsBonfireLit(false)}
           >
-            <img 
+            <motion.img 
               src="/bonfire.jpg" 
               alt="Bonfire" 
-              className="absolute w-full h-full object-contain opacity-50 mix-blend-luminosity grayscale-[40%] transition-all duration-1000 group-hover:opacity-90 group-hover:scale-105 group-hover:grayscale-0 group-hover:mix-blend-normal"
+              initial={false}
+              animate={{
+                opacity: isBonfireLit ? 0.95 : 0.6,
+                scale: isBonfireLit ? 1.05 : 1,
+                filter: isBonfireLit ? "grayscale(0%)" : "grayscale(30%)",
+                mixBlendMode: isBonfireLit ? "normal" : "luminosity"
+              }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="absolute w-full h-full object-contain"
               style={{
-                maskImage: 'radial-gradient(ellipse at center, black 25%, transparent 75%)',
-                WebkitMaskImage: 'radial-gradient(ellipse at center, black 25%, transparent 75%)'
+                maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 80%)'
               }}
             />
+            
             {/* The classic interactive text */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 scale-95 transition-all duration-1000 group-hover:opacity-100 group-hover:scale-100 z-10">
-              <div className="font-display text-4xl tracking-[0.3em] text-[#ffbf00] drop-shadow-[0_0_15px_#ff4500] mix-blend-screen scale-y-110">
-                BONFIRE LIT
-              </div>
-            </div>
+            <AnimatePresence>
+              {isBonfireLit && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+                >
+                  <div className="font-display text-2xl sm:text-4xl tracking-[0.3em] text-[#ffcf40] drop-shadow-[0_0_20px_rgba(255,69,0,0.8)] scale-y-110 whitespace-nowrap">
+                    BONFIRE LIT
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Soft lighting bleed on hover */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,100,0,0.15)_0%,transparent_60%)] opacity-0 transition-opacity duration-1000 group-hover:opacity-100 pointer-events-none" />
+            <AnimatePresence>
+              {isBonfireLit && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1 }}
+                  className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,100,0,0.25)_0%,transparent_65%)] pointer-events-none" 
+                />
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
 
@@ -137,7 +215,7 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
-          className="col-span-1 md:col-span-4 flex flex-col pt-8"
+          className="col-span-1 md:col-span-4 flex flex-col pt-8 min-w-0"
         >
           <div>
             <div className="font-subdisplay text-bone-dim text-[10px] tracking-widest mb-4 uppercase">III. RECENT DEEDS</div>
@@ -172,14 +250,16 @@ export const Hero: React.FC = () => {
                   </div>
                   {deed.pdfLink && (
                     <div className="mt-6 flex">
-                      <a 
+                      <motion.a 
                         href={deed.pdfLink} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="font-subdisplay text-[9px] text-bone-white tracking-[0.3em] uppercase hover:text-gilt transition-colors border-b border-bone-faded/30 pb-1"
+                        whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+                        transition={{ duration: 0.3 }}
+                        className="inline-block font-subdisplay text-[9px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
                       >
                         View Document
-                      </a>
+                      </motion.a>
                     </div>
                   )}
                 </div>

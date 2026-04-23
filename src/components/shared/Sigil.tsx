@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-type SigilVariant = 'eye' | 'serpent' | 'trefoil' | 'runes' | 'compass';
+type SigilVariant = 'eye' | 'serpent' | 'trefoil' | 'runes' | 'compass' | 'sword';
 
 interface SigilProps {
   variant: SigilVariant;
@@ -49,6 +49,14 @@ export const Sigil: React.FC<SigilProps> = ({ variant, className }) => {
         <path d="M50 5L55 45L95 50L55 55L50 95L45 55L5 50L45 45L50 5Z" stroke="currentColor" strokeWidth="1" />
         <circle cx="50" cy="50" r="10" stroke="currentColor" strokeWidth="1" />
         <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
+      </svg>
+    ),
+    sword: (
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 10L55 25V70H45V25L50 10Z" stroke="currentColor" strokeWidth="1" />
+        <path d="M35 70H65M48 70V85C48 88 52 88 52 85V70" stroke="currentColor" strokeWidth="1" />
+        <circle cx="50" cy="90" r="3" stroke="currentColor" strokeWidth="1" />
+        <path d="M40 70L38 65M60 70L62 65" stroke="currentColor" strokeWidth="1" />
       </svg>
     ),
   };

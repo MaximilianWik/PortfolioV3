@@ -73,14 +73,14 @@ export const HumanityRestored: React.FC = () => {
               }}
             />
 
-            {/* 3. The Teal Horizontal Ethereal Energy Smear - Vertical Fade Added */}
+            {/* 3. The Teal Horizontal Ethereal Energy Smear - Sharpened */}
             <motion.div
-              initial={{ scaleX: 0, scaleY: 0.1, opacity: 0, filter: 'blur(40px) brightness(3)' }}
+              initial={{ scaleX: 0, scaleY: 0.1, opacity: 0, filter: 'blur(20px) brightness(3)' }}
               animate={{ 
                 scaleX: [0, 5, 2, 7], 
                 scaleY: [0.1, 5, 1, 0],
                 opacity: [0, 1, 0.5, 0],
-                filter: ['blur(40px) brightness(3)', 'blur(15px) brightness(2)', 'blur(20px) brightness(1.5)', 'blur(50px) brightness(0)']
+                filter: ['blur(20px) brightness(3)', 'blur(6px) brightness(2)', 'blur(12px) brightness(1.5)', 'blur(30px) brightness(0)']
               }}
               transition={{ duration: 10, times: [0, 0.05, 0.7, 1], ease: "easeOut" }}
               className="absolute h-[60px] w-full max-w-[100vw]"
@@ -94,7 +94,7 @@ export const HumanityRestored: React.FC = () => {
               }}
             />
 
-            {/* 4. The blinding inner core flash - Softened and blended */}
+            {/* 4. The blinding inner core flash - Sharpened and tightened */}
             <motion.div
               initial={{ scaleX: 0, scaleY: 0, opacity: 0 }}
               animate={{ 
@@ -103,13 +103,13 @@ export const HumanityRestored: React.FC = () => {
                 opacity: [0, 1, 0.4, 0],
               }}
               transition={{ duration: 10, times: [0, 0.05, 0.8, 1], ease: "easeOut" }}
-              className="absolute h-[12px] w-full max-w-4xl"
+              className="absolute h-[8px] w-full max-w-4xl"
               style={{
                 background: 'radial-gradient(ellipse at center, #FFFFFF 0%, rgba(118, 199, 168, 0.8) 40%, transparent 80%)',
-                boxShadow: '0 0 50px 25px rgba(118, 199, 168, 0.6), 0 0 120px 60px rgba(255, 255, 255, 0.3)',
-                filter: 'blur(8px)',
+                boxShadow: '0 0 30px 10px rgba(118, 199, 168, 0.7), 0 0 60px 20px rgba(255, 255, 255, 0.4)',
+                filter: 'blur(2px)',
                 top: '50%',
-                marginTop: '-6px',
+                marginTop: '-4px',
                 zIndex: 3
               }}
             />
@@ -143,14 +143,14 @@ export const HumanityRestored: React.FC = () => {
               </div>
             </div>
 
-            {/* 5. Extreme heavy bloom lens flare overlay */}
+            {/* 5. Extreme bloom lens flare overlay - Sharpened */}
             <motion.div
-              initial={{ scale: 0.95, scaleX: 6, opacity: 0, filter: 'blur(40px) brightness(3)' }}
+              initial={{ scale: 0.95, scaleX: 6, opacity: 0, filter: 'blur(20px) brightness(3)' }}
               animate={{ 
                 scale: [0.95, 1.05, 1.1], 
                 scaleX: [6, 1, 1, 4], 
                 opacity: [0, 1, 0.8, 0],
-                filter: ['blur(40px) brightness(3)', 'blur(10px) brightness(2)', 'blur(12px) brightness(1)', 'blur(40px) brightness(0)']
+                filter: ['blur(20px) brightness(3)', 'blur(4px) brightness(2)', 'blur(8px) brightness(1)', 'blur(30px) brightness(0)']
               }}
               transition={{ duration: 10, times: [0, 0.08, 0.85, 1], ease: "easeOut" }}
               className="absolute z-[9] pointer-events-none mix-blend-screen"
@@ -187,7 +187,6 @@ export const HumanityRestored: React.FC = () => {
                   fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
                   color: '#76C7A8',
                   letterSpacing: '0.04em',
-                  WebkitTextStroke: '1px rgba(0, 0, 0, 0.9)',
                   textShadow: '0 0 20px rgba(118, 199, 168, 0.6), 0 5px 30px rgba(0, 0, 0, 1), 0 10px 40px rgba(0, 0, 0, 1)',
                   transform: 'scaleY(1.3)' 
                 }}

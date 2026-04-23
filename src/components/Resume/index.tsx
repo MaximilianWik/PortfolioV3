@@ -14,15 +14,67 @@ export const Resume: React.FC = () => {
     <section id="resume" className="relative py-32 px-6 overflow-hidden">
       {/* Background Eclipse */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden">
-        <div className="w-full h-full relative opacity-[0.55]">
+        <motion.div 
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.55 }}
+          transition={{ duration: 3, ease: "easeOut" }}
+          className="w-full h-full relative"
+        >
           <img 
             src="/eclipse.jpg" 
             alt="Eclipse Foreground" 
             className="w-full h-full object-cover object-top mix-blend-screen"
           />
-        </div>
+          
+          {/* Animated Bloom/Glow at the top (where the eclipse is) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[40%] flex flex-col items-center">
+            {/* Inner Core Glow */}
+            <motion.div 
+              animate={{ 
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{ 
+                duration: 4, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="w-32 h-32 bg-amber-blood/40 blur-[60px] rounded-full translate-y-[10%]" 
+            />
+            
+            {/* Outer Soft Bloom */}
+            <motion.div 
+              animate={{ 
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{ 
+                duration: 6, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: 1 
+              }}
+              className="absolute top-0 w-full h-full bg-gilt/10 blur-[120px] rounded-full translate-y-[-20%]" 
+            />
+
+            {/* Pulsing Light Spire/Rays */}
+            <motion.div 
+              animate={{ 
+                opacity: [0.2, 0.4, 0.2],
+                scaleY: [0.9, 1.1, 0.9],
+              }}
+              transition={{ 
+                duration: 8, 
+                repeat: Infinity, 
+                ease: "linear" 
+              }}
+              className="absolute top-0 w-[2px] h-screen bg-gradient-to-b from-gilt/60 to-transparent blur-[4px]"
+            />
+          </div>
+        </motion.div>
+        
         {/* Dark overlays to guarantee text legibility and smooth out all four edges */}
-        <div className="absolute inset-0 bg-ink-void/50" />
+        <div className="absolute inset-0 bg-ink-void/40" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink-void to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink-void to-transparent" />
         <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-ink-void to-transparent" />
@@ -69,7 +121,8 @@ export const Resume: React.FC = () => {
               href="/CV_Maximilian_WikstromPDF.pdf"
               target="_blank" 
               rel="noopener noreferrer"
-              whileHover={{ backgroundColor: '#3D2B1F', borderColor: '#B8935A' }}
+              whileHover={{ backgroundColor: '#B8935A0D', borderColor: '#B8935A', scale: 1.02, textShadow: '0 0 8px rgba(184,147,90,0.5)' }}
+              transition={{ duration: 0.3 }}
               className="inline-block px-10 py-4 border border-bone-faded/40 font-subdisplay text-xs text-bone-white tracking-[0.4em] uppercase transition-colors"
             >
               Download Resume (PDF)
@@ -96,7 +149,8 @@ export const Resume: React.FC = () => {
                   href="/Degree%20of%20Bachelor%20of%20Science%20Maximilian%20Wikstrom.pdf"
                   target="_blank" 
                   rel="noopener noreferrer"
-                  whileHover={{ backgroundColor: '#3D2B1F', borderColor: '#B8935A' }}
+                  whileHover={{ backgroundColor: '#B8935A0D', borderColor: '#B8935A', scale: 1.02, textShadow: '0 0 8px rgba(184,147,90,0.5)' }}
+                  transition={{ duration: 0.3 }}
                   className="inline-block px-8 py-3 border border-bone-faded/30 font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase transition-colors"
                 >
                   View Degree (PDF)
@@ -110,11 +164,11 @@ export const Resume: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Languages</h6>
-                    <p className="font-body text-bone-dim italic text-sm">C#, Java, JavaScript, Python, SQL, HTML, CSS</p>
+                    <p className="font-body text-bone-dim italic text-sm">C#, Java, TypeScript, JavaScript, Python, SQL, HTML, CSS</p>
                   </div>
                   <div>
                     <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Frameworks & Platforms</h6>
-                    <p className="font-body text-bone-dim italic text-sm">.NET 6 / .NET 8, ASP.NET Core MVC, Windows Forms, Java Swing, Entity Framework Core, Razor</p>
+                    <p className="font-body text-bone-dim italic text-sm">.NET 6 / .NET 8, ASP.NET Core MVC, Windows Forms, Java Swing, Entity Framework Core, Razor, React 19, Vite, Tailwind CSS, Express / Node.js</p>
                   </div>
                   <div>
                     <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Databases</h6>
@@ -124,15 +178,15 @@ export const Resume: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Frontend</h6>
-                    <p className="font-body text-bone-dim italic text-sm">Bootstrap, jQuery, Razor views, responsive design</p>
+                    <p className="font-body text-bone-dim italic text-sm">React, Tailwind CSS, Bootstrap, jQuery, Razor views, responsive design, animation (Motion / Framer Motion)</p>
                   </div>
                   <div>
                     <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Architecture & Patterns</h6>
-                    <p className="font-body text-bone-dim italic text-sm">MVC, Layered Architecture, Repository Pattern, Dependency Injection, Role-Based Access Control</p>
+                    <p className="font-body text-bone-dim italic text-sm">MVC, Layered Architecture, Repository Pattern, Dependency Injection, Role-Based Access Control, Component-based UI</p>
                   </div>
                   <div>
-                    <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Auth & Tools</h6>
-                    <p className="font-body text-bone-dim italic text-sm">ASP.NET Core Identity, Visual Studio, NetBeans, Git & GitHub, NuGet, Apache Ant, dotnet CLI, EF Core Migrations</p>
+                    <h6 className="font-subdisplay text-[10px] text-gilt uppercase tracking-widest mb-2">Authentication & Tools</h6>
+                    <p className="font-body text-bone-dim italic text-sm">ASP.NET Core Identity, Visual Studio, NetBeans, Git & GitHub, NuGet, npm, Vite, Apache Ant, dotnet CLI, EF Core Migrations, Vercel deployment</p>
                   </div>
                 </div>
               </div>

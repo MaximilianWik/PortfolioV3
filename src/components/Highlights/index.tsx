@@ -58,14 +58,16 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
 
         {pdfLink && (
           <div className="mt-8 flex relative z-20">
-            <a 
+            <motion.a 
               href={pdfLink} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase hover:text-gilt transition-colors border-b border-bone-faded/30 pb-1"
+              whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+              transition={{ duration: 0.3 }}
+              className="inline-block font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
             >
               View Document
-            </a>
+            </motion.a>
           </div>
         )}
 
