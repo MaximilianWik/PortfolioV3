@@ -20,7 +20,8 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
         <motion.span 
           initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
+          transition={{ duration: 1 }}
           className="font-mono text-bone-faded tracking-widest text-xs"
         >
           {entry.year}
@@ -36,8 +37,8 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
       <motion.div 
         initial={{ opacity: 0, x: isLeft ? 40 : -40 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+        viewport={{ once: false }}
+        transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
         className={`md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}
       >
         <div className="md:hidden font-mono text-bone-faded text-[10px] tracking-widest mb-2">
