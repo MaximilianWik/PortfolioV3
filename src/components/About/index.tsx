@@ -115,7 +115,7 @@ export const About: React.FC = () => {
 
           <div className="grid grid-cols-3 gap-4 mt-12">
             <StatItem label="Years Active" value={6} />
-            <StatItem label="Systems Tamed" value={18} />
+            <StatItem label="Systems Tamed" value={19} />
             <StatItem label="Lingua Franca" value={8} />
           </div>
         </div>
