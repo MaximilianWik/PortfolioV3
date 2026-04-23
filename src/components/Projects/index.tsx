@@ -33,29 +33,44 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
         ref={tiltRef}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="group relative bg-ink-deep border border-bone-faded/10 p-10 transition-colors duration-500 hover:bg-ink-iron cursor-pointer overflow-hidden"
+        className="relative bg-ink-deep border border-bone-faded/10 p-10 transition-colors duration-500 cursor-pointer overflow-hidden"
+        style={{
+          backgroundColor: isHovered ? '#1a1a1a' : undefined // Replace with correct color class
+        }}
       >
-        {/* Fill Outline Effects */}
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-ember-blood scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left z-20" />
-        <div className="absolute top-0 right-0 h-full w-[1px] bg-ember-blood scale-y-0 group-hover:scale-y-100 transition-transform duration-700 origin-top z-20" />
-        <div className="absolute bottom-0 right-0 w-full h-[1px] bg-ember-blood scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-right z-20" />
-        <div className="absolute bottom-0 left-0 h-full w-[1px] bg-ember-blood scale-y-0 group-hover:scale-y-100 transition-transform duration-700 origin-bottom z-20" />
+        {/* State-Driven Outline Effects */}
+        <div 
+          className="absolute top-0 left-0 w-full h-[1px] bg-ember-blood transition-transform duration-300 origin-left z-50" 
+          style={{ transform: isHovered ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0ms' }} 
+        />
+        <div 
+          className="absolute top-0 right-0 h-full w-[1px] bg-ember-blood transition-transform duration-300 origin-top z-50" 
+          style={{ transform: isHovered ? 'scaleY(1)' : 'scaleY(0)', transitionDelay: '300ms' }} 
+        />
+        <div 
+          className="absolute bottom-0 right-0 w-full h-[1px] bg-ember-blood transition-transform duration-300 origin-right z-50" 
+          style={{ transform: isHovered ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '600ms' }} 
+        />
+        <div 
+          className="absolute bottom-0 left-0 h-full w-[1px] bg-ember-blood transition-transform duration-300 origin-bottom z-50" 
+          style={{ transform: isHovered ? 'scaleY(1)' : 'scaleY(0)', transitionDelay: '900ms' }} 
+        />
 
-        <div className="absolute top-6 right-8 font-subdisplay text-3xl text-bone-faded/20 group-hover:text-gilt/20 transition-colors pointer-events-none">
+        <div className="absolute top-6 right-8 font-subdisplay text-3xl text-bone-faded/20 transition-colors pointer-events-none z-10" style={{ color: isHovered ? '#B8935A' : undefined }}>
           {project.id}
         </div>
         
-        <h4 className="font-display text-2xl text-bone-white mb-2 uppercase tracking-wide transition-colors group-hover:text-soul-pale">
+        <h4 className="font-display text-2xl text-bone-white mb-2 uppercase tracking-wide transition-colors z-10" style={{ color: isHovered ? '#D1C7B7' : undefined }}>
           {project.title}
         </h4>
         
-        <p className="font-body italic text-bone-dim text-sm mb-8 max-w-xs leading-relaxed">
+        <p className="font-body italic text-bone-dim text-sm mb-8 max-w-xs leading-relaxed z-10">
           "{project.subtitle}"
         </p>
         
-        <div className="flex flex-wrap gap-2 mb-10">
+        <div className="flex flex-wrap gap-2 mb-10 z-10">
           {project.tech.map((t, j) => (
-            <span key={j} className="font-mono text-[9px] text-bone-faded uppercase tracking-widest px-2 py-1 bg-ink-void/50 border border-bone-faded/10 group-hover:border-gilt/30 transition-colors relative z-10">
+            <span key={j} className="font-mono text-[9px] text-bone-faded uppercase tracking-widest px-2 py-1 bg-ink-void/50 border border-bone-faded/10 transition-colors relative z-10" style={{ borderColor: isHovered ? '#B8935A' : undefined }}>
               {t}
             </span>
           ))}
@@ -77,7 +92,7 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
           </span>
         </div>
 
-        <CornerBrackets className="text-bone-faded/10 group-hover:text-gilt transition-colors duration-500" />
+        <CornerBrackets className="text-bone-faded/10 transition-colors duration-500 z-10" style={{ color: isHovered ? '#B8935A' : undefined }} />
       </div>
     </RevealOnScroll>
   );
