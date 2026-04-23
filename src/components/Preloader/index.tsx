@@ -64,9 +64,9 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
         {text}
       </div>
       
-      <div className="w-64 h-[1px] bg-bone-faded/20 overflow-hidden relative">
+      <div className="w-64 h-[1px] bg-ember-blood/20 overflow-hidden relative">
         <motion.div 
-          className="absolute inset-y-0 left-0 bg-bone-white"
+          className="absolute inset-y-0 left-0 bg-ember-blood shadow-[0_0_8px_rgba(139,26,26,0.8)]"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
         />
