@@ -18,17 +18,20 @@ const StatItem: React.FC<{ label: string; value: number; prefix?: string }> = ({
 
   useEffect(() => {
     if (!isInView) return;
-    let start = 0;
     const duration = 1400;
-    const stepTime = Math.abs(Math.floor(duration / value));
-    
-    const timer = setInterval(() => {
-      start += 1;
-      setCount(start);
-      if (start >= value) clearInterval(timer);
-    }, stepTime);
+    const start = performance.now();
+    let rafId = 0;
 
-    return () => clearInterval(timer);
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      // Ease-out cubic feels closer to the original ramping setInterval
+      const eased = 1 - Math.pow(1 - t, 3);
+      setCount(Math.round(eased * value));
+      if (t < 1) rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, [isInView, value]);
 
   return (

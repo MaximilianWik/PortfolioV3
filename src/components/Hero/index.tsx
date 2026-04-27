@@ -1,15 +1,89 @@
-/**
+﻿/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import VanillaTilt from 'vanilla-tilt';
 import { Sigil } from '../shared/Sigil';
 import { DispersingText } from '../shared/DispersingText';
 import { CornerBrackets } from '../shared/CornerBrackets';
+import { AnimatedOutline } from '../shared/AnimatedOutline';
+import { useVanillaTilt } from '../../hooks/useVanillaTilt';
 import { PROFILE } from '../../lib/data';
+
+interface DeedItem {
+  title: string;
+  num: string;
+  desc: string;
+  tags: string[];
+  pdfLink?: string;
+}
+
+const DeedCard: React.FC<{ deed: DeedItem }> = ({ deed }) => {
+  const tiltRef = useVanillaTilt<HTMLDivElement>();
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative"
+    >
+      <div
+        ref={tiltRef}
+        className={`relative p-6 border border-bone-faded/10 transition-colors duration-500 overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
+      >
+        <AnimatedOutline active={isHovered} />
+
+        <div className="flex justify-between items-start z-10 relative">
+          <h3 className="font-display text-xl text-bone-white uppercase tracking-wider">{deed.title}</h3>
+          <span className="font-subdisplay text-[10px] text-bone-faded">{deed.num}</span>
+        </div>
+        <p className="text-xs text-bone-dim mt-2 font-body italic leading-relaxed z-10 relative">
+          {deed.desc}
+        </p>
+        <div className="mt-4 flex gap-2 z-10 relative">
+          {deed.tags.map(tag => (
+            <span key={tag} className={`text-[9px] font-mono border border-bone-faded/30 px-2 py-0.5 uppercase transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}>{tag}</span>
+          ))}
+        </div>
+        {deed.pdfLink && (
+          <div className="mt-6 flex z-10 relative">
+            <motion.a
+              href={deed.pdfLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+              transition={{ duration: 0.3 }}
+              className="inline-block font-subdisplay text-[9px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
+            >
+              View Document
+            </motion.a>
+          </div>
+        )}
+
+        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'text-gilt' : 'text-bone-faded/20'}`} />
+      </div>
+    </div>
+  );
+};
+
+const DEEDS: DeedItem[] = [
+  {
+    title: "DNB Bank – AI & Automation",
+    num: "I",
+    desc: "Binding Copilot Studio agents and Power Automate flows into the secure foundations of DNB. Scaling identity governance and automation in the regulated shadows.",
+    tags: ["AI AGENTS", "POWER AUTOMATE"],
+  },
+  {
+    title: "SEB – Agentic Thesis",
+    num: "II",
+    desc: "A scholar's pursuit into Agentic AI within the iron-clad walls of SEB. Developing frameworks for autonomous reasoning where failure is not an option.",
+    tags: ["AGENTIC AI", "LLMS"],
+    pdfLink: "/Integrating%20Agentic%20AI%20into%20Software%20Development%20A%20Sociotechnical%20Case%20Study%20in%20a%20Large%20Nordic%20Bank.pdf",
+  },
+];
 
 export const Hero: React.FC = () => {
   const [isBonfireLit, setIsBonfireLit] = useState(false);
@@ -40,14 +114,14 @@ export const Hero: React.FC = () => {
           <div>
             <div className="font-subdisplay text-bone-dim text-[10px] tracking-widest mb-4 uppercase">II. THE BEARER</div>
             <DispersingText 
-              text="“A seeker of order in regulated dark. Binder of agents. Keeper of the ledger. He who makes the machine toil so that men may rest.”"
+              text="A seeker of order in regulated dark. Binder of agents. Keeper of the ledger. He who makes the machine toil so that men may rest."
               className="text-lg leading-relaxed italic md:pr-8"
               baseColor="#9A968B"
             />
             <div className="mt-8 space-y-4">
               <div className="border-l border-ember-blood pl-4 py-2">
                 <div className="font-mono text-[10px] text-bone-faded uppercase tracking-tighter">Current Domain</div>
-                <div className="font-display text-xl text-bone-white truncate">DNB Bank — AI & Automation</div>
+                <div className="font-display text-xl text-bone-white truncate">DNB Bank – AI & Automation</div>
               </div>
             </div>
           </div>
@@ -160,10 +234,7 @@ export const Hero: React.FC = () => {
 
           <div 
             className="relative w-full max-w-[320px] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[480px] aspect-square mt-10 sm:mt-12 md:mt-16 mx-auto flex items-center justify-center cursor-pointer"
-            onMouseEnter={() => {
-              setIsBonfireLit(true);
-              (window as any).playDarkSoulsMusic?.();
-            }}
+            onMouseEnter={() => setIsBonfireLit(true)}
             onMouseLeave={() => setIsBonfireLit(false)}
           >
             <motion.img 
@@ -184,13 +255,12 @@ export const Hero: React.FC = () => {
               }}
             />
             
-            {/* Edge Fades - Same as About section */}
+            {/* Edge Fades */}
             <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-ink-void to-transparent pointer-events-none z-10" />
             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink-void to-transparent pointer-events-none z-10" />
             <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ink-void to-transparent pointer-events-none z-10" />
             <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink-void to-transparent pointer-events-none z-10" />
             
-            {/* The classic interactive text */}
             <AnimatePresence>
               {isBonfireLit && (
                 <motion.div 
@@ -207,7 +277,6 @@ export const Hero: React.FC = () => {
               )}
             </AnimatePresence>
 
-            {/* Soft lighting bleed on hover */}
             <AnimatePresence>
               {isBonfireLit && (
                 <motion.div 
@@ -233,85 +302,9 @@ export const Hero: React.FC = () => {
           <div>
             <div className="font-subdisplay text-bone-dim text-[10px] tracking-widest mb-4 uppercase">III. RECENT DEEDS</div>
             <div className="space-y-6">
-              {[
-                { 
-                  title: "DNB Bank — AI & Automation", 
-                  num: "I", 
-                  desc: "Binding Copilot Studio agents and Power Automate flows into the secure foundations of DNB. Scaling identity governance and automation in the regulated shadows.", 
-                  tags: ["AI AGENTS", "POWER AUTOMATE"] 
-                },
-                { 
-                  title: "SEB — Agentic Thesis", 
-                  num: "II", 
-                  desc: "A scholar's pursuit into Agentic AI within the iron-clad walls of SEB. Developing frameworks for autonomous reasoning where failure is not an option.", 
-                  tags: ["AGENTIC AI", "LLMS"],
-                  pdfLink: "/Integrating%20Agentic%20AI%20into%20Software%20Development%20A%20Sociotechnical%20Case%20Study%20in%20a%20Large%20Nordic%20Bank.pdf"
-                }
-              ].map((deed, i) => {
-                const tiltRef = useRef<HTMLDivElement>(null);
-                const [isHovered, setIsHovered] = useState(false);
-
-                useEffect(() => {
-                  if (tiltRef.current) {
-                    VanillaTilt.init(tiltRef.current, {
-                      max: 5,
-                      speed: 600,
-                      reverse: true,
-                      glare: true,
-                      'max-glare': 0.1,
-                    });
-                  }
-                }, []);
-                
-                return (
-                  <div 
-                    key={i} 
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    className="relative"
-                  >
-                    <div 
-                      ref={tiltRef}
-                      className={`relative p-6 border border-bone-faded/10 transition-colors duration-500 overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
-                    >
-                      {/* Outline animation */}
-                      <div className="absolute top-0 left-0 h-[1px] bg-ember-blood transition-all duration-300 origin-left z-50" style={{ width: isHovered ? '100%' : '0%', transitionDelay: '0ms' }} />
-                      <div className="absolute top-0 right-0 w-[1px] bg-ember-blood transition-all duration-300 origin-top z-50" style={{ height: isHovered ? '100%' : '0%', transitionDelay: '300ms' }} />
-                      <div className="absolute bottom-0 right-0 h-[1px] bg-ember-blood transition-all duration-300 origin-right z-50" style={{ width: isHovered ? '100%' : '0%', transitionDelay: '600ms' }} />
-                      <div className="absolute bottom-0 left-0 w-[1px] bg-ember-blood transition-all duration-300 origin-bottom z-50" style={{ height: isHovered ? '100%' : '0%', transitionDelay: '900ms' }} />
-
-                      <div className="flex justify-between items-start z-10 relative">
-                        <h3 className="font-display text-xl text-bone-white uppercase tracking-wider">{deed.title}</h3>
-                        <span className="font-subdisplay text-[10px] text-bone-faded">{deed.num}</span>
-                      </div>
-                      <p className="text-xs text-bone-dim mt-2 font-body italic leading-relaxed z-10 relative">
-                        {deed.desc}
-                      </p>
-                      <div className="mt-4 flex gap-2 z-10 relative">
-                        {deed.tags.map(tag => (
-                          <span key={tag} className={`text-[9px] font-mono border border-bone-faded/30 px-2 py-0.5 uppercase transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}>{tag}</span>
-                        ))}
-                      </div>
-                      {deed.pdfLink && (
-                        <div className="mt-6 flex z-10 relative">
-                          <motion.a 
-                            href={deed.pdfLink} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
-                            transition={{ duration: 0.3 }}
-                            className="inline-block font-subdisplay text-[9px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
-                          >
-                            View Document
-                          </motion.a>
-                        </div>
-                      )}
-                      
-                      <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'border-gilt' : 'text-bone-faded/20'}`} />
-                    </div>
-                  </div>
-                );
-              })}
+              {DEEDS.map((deed) => (
+                <DeedCard key={deed.num} deed={deed} />
+              ))}
             </div>
           </div>
 

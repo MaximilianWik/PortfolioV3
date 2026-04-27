@@ -3,12 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'motion/react';
+
+const HOVER_SELECTOR = 'a, button, .hover-target, a *, button *';
 
 export const CustomCursor: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  // Avoid putting isVisible in the effect deps — we only need a stable ref
+  // guard to flip it once on first mouse activity.
+  const visibleRef = useRef(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -18,35 +24,29 @@ export const CustomCursor: React.FC = () => {
   const cursorY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    const moveMouse = (e: MouseEvent) => {
+    const moveMouse = (e: PointerEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
-    };
-
-    const handleHoverStart = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === 'A' || 
-        target.tagName === 'BUTTON' || 
-        target.closest('button') || 
-        target.closest('a') ||
-        target.classList.contains('hover-target')
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        setIsVisible(true);
       }
     };
 
-    window.addEventListener('mousemove', moveMouse);
-    window.addEventListener('mouseover', handleHoverStart);
+    // Event delegation: one mouseover listener, one matches() check.
+    const handleHover = (e: MouseEvent) => {
+      const t = e.target as Element | null;
+      setIsHovering(!!t && typeof t.matches === 'function' && t.matches(HOVER_SELECTOR));
+    };
+
+    window.addEventListener('pointermove', moveMouse, { passive: true });
+    window.addEventListener('mouseover', handleHover, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', moveMouse);
-      window.removeEventListener('mouseover', handleHoverStart);
+      window.removeEventListener('pointermove', moveMouse);
+      window.removeEventListener('mouseover', handleHover);
     };
-  }, [isVisible, mouseX, mouseY]);
+  }, [mouseX, mouseY]);
 
   if (!isVisible) return null;
 
@@ -65,8 +65,8 @@ export const CustomCursor: React.FC = () => {
       }}
       transition={{ type: 'spring', damping: 20, stiffness: 200 }}
     >
-      <motion.div 
-        className="absolute top-1/2 left-1/2 w-1 h-1 bg-bone-white rounded-full" 
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-1 h-1 bg-bone-white rounded-full"
         style={{ translateX: '-50%', translateY: '-50%' }}
         animate={{
           backgroundColor: isHovering ? '#B8935A' : '#E8E4D8',

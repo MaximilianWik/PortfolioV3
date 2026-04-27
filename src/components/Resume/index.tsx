@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -11,7 +11,7 @@ import { RevealOnScroll } from '../shared/RevealOnScroll';
 
 export const Resume: React.FC = () => {
   return (
-    <section id="resume" className="relative py-32 px-6 overflow-hidden">
+    <section id="resume" className="relative py-32 overflow-hidden">
       {/* Background Eclipse */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden">
         <motion.div 
@@ -39,7 +39,7 @@ export const Resume: React.FC = () => {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="w-32 h-32 bg-amber-blood/40 blur-[60px] rounded-full translate-y-[10%]" 
+              className="w-32 h-32 bg-ember-blood/40 blur-[60px] rounded-full translate-y-[10%]" 
             />
             
             {/* Outer Soft Bloom */}
@@ -197,3 +197,4 @@ export const Resume: React.FC = () => {
     </section>
   );
 };
+

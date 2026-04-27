@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import VanillaTilt from 'vanilla-tilt';
 import { SectionHeading } from '../shared/SectionHeading';
 import { CornerBrackets } from '../shared/CornerBrackets';
+import { AnimatedOutline } from '../shared/AnimatedOutline';
+import { useVanillaTilt } from '../../hooks/useVanillaTilt';
 
 interface DeedCardProps {
   index: string;
@@ -19,20 +20,8 @@ interface DeedCardProps {
 }
 
 const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, pdfLink, tags }) => {
-  const tiltRef = useRef<HTMLDivElement>(null);
+  const tiltRef = useVanillaTilt<HTMLDivElement>();
   const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    if (tiltRef.current) {
-      VanillaTilt.init(tiltRef.current, {
-        max: 5,
-        speed: 600,
-        reverse: true,
-        glare: true,
-        'max-glare': 0.1,
-      });
-    }
-  }, []);
 
   return (
     <motion.div
@@ -88,25 +77,8 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
           </div>
         )}
 
-        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'border-gilt' : 'text-bone-faded/20'}`} />
-        
-        {/* State-Driven Outline Effects */}
-        <div 
-          className="absolute top-0 left-0 h-[1px] bg-ember-blood transition-all duration-300 origin-left z-50" 
-          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '0ms' }} 
-        />
-        <div 
-          className="absolute top-0 right-0 w-[1px] bg-ember-blood transition-all duration-300 origin-top z-50" 
-          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '300ms' }} 
-        />
-        <div 
-          className="absolute bottom-0 right-0 h-[1px] bg-ember-blood transition-all duration-300 origin-right z-50" 
-          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '600ms' }} 
-        />
-        <div 
-          className="absolute bottom-0 left-0 w-[1px] bg-ember-blood transition-all duration-300 origin-bottom z-50" 
-          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '900ms' }} 
-        />
+        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'text-gilt' : 'text-bone-faded/20'}`} />
+        <AnimatedOutline active={isHovered} />
       </div>
     </motion.div>
   );

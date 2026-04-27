@@ -3,29 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import VanillaTilt from 'vanilla-tilt';
 import { SectionHeading } from '../shared/SectionHeading';
 import { CornerBrackets } from '../shared/CornerBrackets';
+import { AnimatedOutline } from '../shared/AnimatedOutline';
+import { useVanillaTilt } from '../../hooks/useVanillaTilt';
 import { PROJECTS } from '../../lib/data';
 import { RevealOnScroll } from '../shared/RevealOnScroll';
 
 const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ project, index }) => {
-  const tiltRef = useRef<HTMLDivElement>(null);
+  const tiltRef = useVanillaTilt<HTMLDivElement>();
   const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    if (tiltRef.current) {
-      VanillaTilt.init(tiltRef.current, {
-        max: 5,
-        speed: 600,
-        reverse: true,
-        glare: true,
-        'max-glare': 0.1,
-      });
-    }
-  }, []);
 
   return (
     <RevealOnScroll delay={index * 0.1}>
@@ -33,28 +22,9 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
         ref={tiltRef}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative bg-ink-deep border border-bone-faded/10 p-10 transition-colors duration-500 cursor-pointer overflow-hidden"
-        style={{
-          backgroundColor: isHovered ? '#1a1a1a' : undefined // Replace with correct color class
-        }}
+        className={`relative border border-bone-faded/10 p-10 transition-colors duration-500 cursor-pointer overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
       >
-        {/* State-Driven Outline Effects */}
-        <div 
-          className="absolute top-0 left-0 h-[1px] bg-ember-blood transition-all duration-300 origin-left z-50" 
-          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '0ms' }} 
-        />
-        <div 
-          className="absolute top-0 right-0 w-[1px] bg-ember-blood transition-all duration-300 origin-top z-50" 
-          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '300ms' }} 
-        />
-        <div 
-          className="absolute bottom-0 right-0 h-[1px] bg-ember-blood transition-all duration-300 origin-right z-50" 
-          style={{ width: isHovered ? '100%' : '0%', transitionDelay: '600ms' }} 
-        />
-        <div 
-          className="absolute bottom-0 left-0 w-[1px] bg-ember-blood transition-all duration-300 origin-bottom z-50" 
-          style={{ height: isHovered ? '100%' : '0%', transitionDelay: '900ms' }} 
-        />
+        <AnimatedOutline active={isHovered} />
 
         <div className="absolute top-6 right-8 font-subdisplay text-3xl text-bone-faded/20 transition-colors pointer-events-none z-10" style={{ color: isHovered ? '#B8935A' : undefined }}>
           {project.id}
@@ -92,7 +62,7 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
           </span>
         </div>
 
-        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'border-gilt' : 'border-bone-faded/20'}`} />
+        <CornerBrackets className={`transition-colors duration-500 z-[70] ${isHovered ? 'text-gilt' : 'text-bone-faded/20'}`} />
       </div>
     </RevealOnScroll>
   );
