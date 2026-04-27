@@ -1,10 +1,16 @@
 # Maximilian Wikström — Portfolio
-
+## https://maximilian-wikstrom.vercel.app/
 A dark-fantasy-formal personal portfolio. Hand-crafted with React, Vite,
 Tailwind CSS v4, and [motion](https://motion.dev/). The visual language is
 deliberately theatrical — ember-blood accents on ink-void, ceremonial
 typography (Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono),
 and a bonfire-lit hero.
+
+
+
+https://github.com/user-attachments/assets/c3adfb73-1fdd-455b-878b-c630435fd14d
+
+
 
 ## Stack
 
