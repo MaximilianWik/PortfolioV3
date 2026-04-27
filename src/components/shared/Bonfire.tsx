@@ -9,6 +9,13 @@ import { motion } from 'motion/react';
 export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  // Mirror hovered state into a ref so the animation loop can read it without
+  // the effect tearing down + spinning up a fresh RAF on every hover toggle.
+  const isHoveredRef = useRef(false);
+
+  useEffect(() => {
+    isHoveredRef.current = isHovered;
+  }, [isHovered]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,7 +25,7 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
-    
+
     class Particle {
       x: number;
       y: number;
@@ -53,32 +60,28 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
         const opacity = this.life / this.maxLife;
         ctx.fillStyle = this.color;
         ctx.globalAlpha = opacity;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (this.color === '#B8935A') { // Cinders glow
+        if (this.color === '#B8935A') {
           ctx.shadowBlur = 10;
           ctx.shadowColor = '#B8935A';
         } else {
           ctx.shadowBlur = 20;
           ctx.shadowColor = '#8B1A1A';
         }
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    const init = () => {
-      canvas.width = 200;
-      canvas.height = 300;
-    };
+    canvas.width = 200;
+    canvas.height = 300;
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.shadowBlur = 0;
-      
-      const intensity = isHovered ? 2.5 : 1;
-      
-      // Spawn new particles
+
+      const intensity = isHoveredRef.current ? 2.5 : 1;
+
       if (Math.random() < 0.6 * intensity) {
         particles.push(new Particle(canvas.width / 2 + (Math.random() - 0.5) * 20, canvas.height - 50, true));
       }
@@ -95,33 +98,32 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
         }
       }
 
-      // Draw coiled sword silhouette (Simplified)
+      // Coiled sword silhouette
       ctx.globalAlpha = 1;
       ctx.shadowBlur = 0;
       ctx.strokeStyle = '#1A1A20';
       ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.moveTo(canvas.width/2 - 5, canvas.height - 20);
-      ctx.lineTo(canvas.width/2 + 5, canvas.height - 180);
+      ctx.moveTo(canvas.width / 2 - 5, canvas.height - 20);
+      ctx.lineTo(canvas.width / 2 + 5, canvas.height - 180);
       ctx.stroke();
 
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    init();
     animate();
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isHovered]);
+  }, []);
 
   return (
-    <div 
+    <div
       className={`relative cursor-pointer group ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <canvas ref={canvasRef} className="block mx-auto" />
-      <motion.div 
+      <motion.div
         animate={{ opacity: isHovered ? 1 : 0 }}
         className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap font-subdisplay text-[10px] tracking-[0.4em] text-gilt/60 uppercase"
       >

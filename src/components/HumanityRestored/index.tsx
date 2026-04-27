@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+﻿import React, { useRef, useMemo } from 'react';
 import { motion, useInView } from 'motion/react';
 
 export const HumanityRestored: React.FC = () => {
@@ -7,9 +7,9 @@ export const HumanityRestored: React.FC = () => {
 
   // Pre-calculate particles
   const particles = useMemo(() => {
-    return Array.from({ length: 120 }).map((_, i) => { // Double the particles
-      // Initially they explode outwards, then drift up
-      const isBurst = i < 40; // First 40 particles are the initial explosion burst
+    return Array.from({ length: 60 }).map((_, i) => {
+      // First third is the initial burst; the rest drift up afterward.
+      const isBurst = i < 20;
       return {
         id: i,
         xStart: 0,
@@ -136,7 +136,8 @@ export const HumanityRestored: React.FC = () => {
                     style={{
                       background: '#FFFFFF',
                       boxShadow: '0 0 15px 5px rgba(118,199,168,1), 0 0 30px 10px rgba(118,199,168,0.5)',
-                      filter: 'blur(0.5px)'
+                      filter: 'blur(0.5px)',
+                      willChange: 'transform, opacity'
                     }}
                   />
                 ))}
@@ -235,3 +236,4 @@ export const HumanityRestored: React.FC = () => {
     </section>
   );
 };
+

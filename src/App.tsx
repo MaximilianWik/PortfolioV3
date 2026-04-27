@@ -8,81 +8,65 @@ import Lenis from 'lenis';
 import { AnimatePresence } from 'motion/react';
 import { Analytics } from '@vercel/analytics/react';
 
-// Sections
+// Sections (code-split: all heavy non-hero sections load after first paint).
 import { Preloader } from './components/Preloader';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Highlights } from './components/Highlights';
-import { Timeline } from './components/Timeline';
-import { Projects } from './components/Projects';
-import { Resume } from './components/Resume';
-import { Contact } from './components/Contact';
-import { HumanityRestored } from './components/HumanityRestored';
 import { Footer } from './components/Footer';
+
+const Timeline = React.lazy(() => import('./components/Timeline').then(m => ({ default: m.Timeline })));
+const Projects = React.lazy(() => import('./components/Projects').then(m => ({ default: m.Projects })));
+const Resume = React.lazy(() => import('./components/Resume').then(m => ({ default: m.Resume })));
+const Contact = React.lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
+const HumanityRestored = React.lazy(() =>
+  import('./components/HumanityRestored').then(m => ({ default: m.HumanityRestored })),
+);
 
 // Shared
 import { CustomCursor } from './components/shared/CustomCursor';
 import { Navigation } from './components/shared/Navigation';
 import { CindersOverlay } from './components/shared/CindersOverlay';
-
 import { Firelink } from './components/shared/Firelink';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const hasAttemptedPlay = useRef(false);
 
-  // Set initial volume
+  // Set initial volume when the <audio> element is created.
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.4;
-    }
+    if (audioRef.current) audioRef.current.volume = 0.4;
   }, []);
 
-  const attemptPlay = () => {
-    if (!audioRef.current) return;
-    
-    // If it's already playing, do nothing
-    if (!audioRef.current.paused) return;
-
-    const playPromise = audioRef.current.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          console.log("Audio playing successfully.");
-          hasAttemptedPlay.current = true;
-        })
-        .catch((error) => {
-          console.warn("Audio play failed, waiting for user interaction:", error);
-        });
-    }
-  };
-
+  // Lazy audio start: preload="none" keeps the 6.6MB mp3 off the network until
+  // the user signals intent. A single pointerdown listener is enough for
+  // autoplay gating — it self-removes on the first real interaction.
   useEffect(() => {
-    // Attempt auto-play when loading finishes
-    if (!isLoading) {
-      attemptPlay();
-    }
-  }, [isLoading]);
+    if (isLoading) return;
 
-  // Global window listeners for fallback, capturing phase to catch them early
-  useEffect(() => {
-    const handleInteraction = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        attemptPlay();
-      }
+    const start = () => {
+      window.removeEventListener('pointerdown', start);
+      window.removeEventListener('keydown', start);
+      const el = audioRef.current;
+      if (!el || !el.paused) return;
+      el.play().catch(() => {
+        // Browser still blocks — re-arm until the next interaction.
+        window.addEventListener('pointerdown', start, { once: true, passive: true });
+        window.addEventListener('keydown', start, { once: true });
+      });
     };
 
-    const events = ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'];
-    events.forEach(e => window.addEventListener(e, handleInteraction, { capture: true, passive: true }));
+    window.addEventListener('pointerdown', start, { once: true, passive: true });
+    window.addEventListener('keydown', start, { once: true });
 
     return () => {
-      events.forEach(e => window.removeEventListener(e, handleInteraction, { capture: true }));
+      window.removeEventListener('pointerdown', start);
+      window.removeEventListener('keydown', start);
     };
-  }, []);
+  }, [isLoading]);
 
+  // Smooth scroll
   useEffect(() => {
-    // Initialize Smooth Scroll
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -91,35 +75,27 @@ export default function App() {
       smoothWheel: true,
     });
 
-    function raf(time: number) {
+    let rafId: number;
+    const raf = (time: number) => {
       lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
 
   return (
-    <main 
-      className="min-h-screen bg-ink-void overflow-x-hidden selection:bg-ember-blood/30 flex flex-col"
-      // Added inline handlers as absolute fallbacks 
-      onClick={attemptPlay}
-      onTouchStart={attemptPlay}
-      onMouseMove={attemptPlay}
-      onScroll={attemptPlay}
-      onKeyDown={attemptPlay}
-    >
-      {/* Native audio element */}
-      <audio ref={audioRef} src="/DarkSouls3.mp3" loop preload="auto" />
+    <main className="min-h-screen bg-ink-void overflow-x-hidden selection:bg-ember-blood/30 flex flex-col">
+      {/* Ambient music. preload="none" — we never fetch the file until the user interacts. */}
+      <audio ref={audioRef} src="/DarkSouls3.mp3" loop preload="none" />
 
       <CustomCursor />
-      
       <CindersOverlay />
-      
+
       <AnimatePresence mode="wait">
         {isLoading ? (
           <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
@@ -131,19 +107,22 @@ export default function App() {
               <About />
               <Highlights />
               <Firelink />
-              <Timeline />
-              <Projects />
-              <Resume />
-              <Contact />
+              <React.Suspense fallback={null}>
+                <Timeline />
+                <Projects />
+                <Resume />
+                <Contact />
+              </React.Suspense>
             </div>
-            <HumanityRestored />
+            <React.Suspense fallback={null}>
+              <HumanityRestored />
+            </React.Suspense>
             <Footer />
           </div>
         )}
       </AnimatePresence>
-      
+
       <Analytics />
     </main>
   );
 }
-
