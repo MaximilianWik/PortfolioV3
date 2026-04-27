@@ -6,6 +6,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Lenis from 'lenis';
 import { AnimatePresence } from 'motion/react';
+import { Analytics } from '@vercel/analytics/react';
 
 // Sections
 import { Preloader } from './components/Preloader';
@@ -140,6 +141,8 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+      
+      <Analytics />
     </main>
   );
 }
