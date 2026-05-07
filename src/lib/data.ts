@@ -81,44 +81,51 @@ export const EDUCATION = [
 export const PROJECTS = [
   {
     id: "I",
-    title: "Podd App - (RSS Feed Podcast Manager)",
-    subtitle: "A Windows desktop application for collecting and organizing podcasts via RSS feeds. Users add podcasts by pasting an RSS URL, which the app parses to automatically retrieve the podcast title from the feed's XML. Podcasts can be assigned to custom user-defined categories, with full CRUD operations (add, edit, remove) synchronized across the list view and dropdown selector. The project is structured around a classic three-tier architecture, separating UI (WinForms), business logic (BL), and data access (DAL) into distinct class library projects — demonstrating separation of concerns and modular software design.",
-    tech: ["C#", ".NET 6", "Windows Forms", "XML / RSS Parsing", "XPath", "Layered Architecture", "Repository Pattern", "Visual Studio", "Git"],
-    link: "https://github.com/MaximilianWik/Podd-App-RSS-FEED.git"
+    title: "Tessera - Verified-Permanent QR Code Generator",
+    subtitle: "A zero-dependency, client-side QR code generator designed for codes that must work for life — like tattoo QR codes. Verifies correctness against ISO/IEC 18004 Annex I test vectors, round-trip decodes through multiple independent decoders (jsQR, ZXing-js, native BarcodeDetector), and stress-tests damage tolerance with clustered blot overlays (5–30% coverage). Generates archival specification sheets with full module matrices (ASCII + hex), timestamp, source code SHA-256, and reproduction instructions. 100% static, no build step, no runtime dependencies, no server — runs in any browser, deployed on Vercel.",
+    tech: ["JavaScript", "HTML5", "CSS", "QR Encoding", "ISO/IEC 18004", "Client-Side Only", "Vendored Decoders", "Canvas Rendering", "PDF Generation", "Spec-Compliant", "Vercel", "MIT License", "Git"],
+    link: "https://github.com/MaximilianWik/Tessera"
   },
   {
     id: "II",
-    title: "CV Portal - (ASP.NET Core Web Application)",
-    subtitle: "A full-stack web portal where users can register an account, build and publish their personal CV, showcase projects, browse other users' profiles, and send private messages. Essentially a lightweight LinkedIn-style platform for job seekers and students. Users can toggle profiles between public and private, upload profile pictures, fill in CV details (education, experience, skills), attach personal projects, and reach out to other users through an in-app inbox. Protected pages are gated via ASP.NET Core Identity.",
-    tech: ["C#", ".NET 8", "ASP.NET Core MVC", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "Bootstrap", "jQuery", "HTML", "CSS", "JavaScript", "Git"],
-    link: "https://github.com/MaximilianWik/CVPortal-Asp.Net.git"
-  },
-  {
-    id: "III",
-    title: "MIB Project - (Java Swing Desktop Application)",
-    subtitle: "A Men in Black-themed desktop application for managing aliens, agents, and administrators within a fictional MIB organization. Built as a team project (three developers). The app presents different menus based on user role — administrators create and modify records, agents search and inspect alien profiles, and aliens can log in to view and update their own information. Includes role-based login flows (Admin / Agent / Alien), account registration, password changes, alien registration with registration dates and equipment tracking, search functionality, and a MySQL backend for persistent storage.",
-    tech: ["Java", "Java Swing", "AWT", "MySQL", "JDBC", "SQL", "NetBeans", "Apache Ant", "Role-Based Access Control", "Team Project", "Git"],
-    link: "https://github.com/MaximilianWik/MIB-projekt-Java-Winframe.git"
-  },
-  {
-    id: "IV",
     title: "Cursed Echoes - Typing Survival Game",
     subtitle: "A Dark Souls-inspired gothic typing survival game built in the browser. Players type incoming words drawn from a large lore-flavored dictionary (spanning Dark Souls, Bloodborne, Sekiro, and Elden Ring terminology) to cast spells and survive waves of increasing difficulty. Features include a health and scoring system, combo multipliers, difficulty scaling, pause/resume, accuracy tracking (total vs. correct keystrokes), a high-score board, mobile-friendly input focus handling, responsive canvas scaling, hidden secret screens with interactive easter eggs, and animated character states (idle / casting). Deployed live on Vercel.",
     tech: ["TypeScript", "React 19", "Vite", "Tailwind CSS 4", "Framer Motion", "Lucide React", "Express", "Node.js", "Vercel", "HTML5", "Game State Management", "Git"],
     link: "https://github.com/MaximilianWik/CursedEchoesMiniGame.git"
   },
   {
+    id: "III",
+    title: "PortfolioV3 - Dark-Fantasy-Formal Personal Portfolio",
+    subtitle: "This very site. A hand-crafted, theatrical personal portfolio built on React 19, Vite 6, and Tailwind CSS 4, leaning into a deliberately ceremonial visual language — ember-blood accents on ink-void, Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono typography, and a bonfire-lit hero. Features declarative motion choreography via motion/react, parallax card tilt with vanilla-tilt, smooth inertial scrolling through Lenis, pre-measured paragraph layout via @chenglou/pretext, code-split sections, ambient audio handling, and Vercel Analytics for deploy-side metrics. All content (profile, experience, education, projects) is centralized in a single typed data module, making the entire site a thin presentation layer over structured data.",
+    tech: ["TypeScript", "React 19", "Vite 6", "Tailwind CSS 4", "motion/react", "vanilla-tilt", "lenis", "@chenglou/pretext", "Vercel Analytics", "Code Splitting", "Vercel", "Git"],
+    link: "https://github.com/MaximilianWik/PortfolioV3"
+  },
+  {
+    id: "IV",
+    title: "Podd App - (RSS Feed Podcast Manager)",
+    subtitle: "A Windows desktop application for collecting and organizing podcasts via RSS feeds. Users add podcasts by pasting an RSS URL, which the app parses to automatically retrieve the podcast title from the feed's XML. Podcasts can be assigned to custom user-defined categories, with full CRUD operations (add, edit, remove) synchronized across the list view and dropdown selector. The project is structured around a classic three-tier architecture, separating UI (WinForms), business logic (BL), and data access (DAL) into distinct class library projects — demonstrating separation of concerns and modular software design.",
+    tech: ["C#", ".NET 6", "Windows Forms", "XML / RSS Parsing", "XPath", "Layered Architecture", "Repository Pattern", "Visual Studio", "Git"],
+    link: "https://github.com/MaximilianWik/Podd-App-RSS-FEED.git"
+  },
+  {
     id: "V",
+    title: "CV Portal - (ASP.NET Core Web Application)",
+    subtitle: "A full-stack web portal where users can register an account, build and publish their personal CV, showcase projects, browse other users' profiles, and send private messages. Essentially a lightweight LinkedIn-style platform for job seekers and students. Users can toggle profiles between public and private, upload profile pictures, fill in CV details (education, experience, skills), attach personal projects, and reach out to other users through an in-app inbox. Protected pages are gated via ASP.NET Core Identity.",
+    tech: ["C#", ".NET 8", "ASP.NET Core MVC", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "Bootstrap", "jQuery", "HTML", "CSS", "JavaScript", "Git"],
+    link: "https://github.com/MaximilianWik/CVPortal-Asp.Net.git"
+  },
+  {
+    id: "VI",
+    title: "MIB Project - (Java Swing Desktop Application)",
+    subtitle: "A Men in Black-themed desktop application for managing aliens, agents, and administrators within a fictional MIB organization. Built as a team project (three developers). The app presents different menus based on user role — administrators create and modify records, agents search and inspect alien profiles, and aliens can log in to view and update their own information. Includes role-based login flows (Admin / Agent / Alien), account registration, password changes, alien registration with registration dates and equipment tracking, search functionality, and a MySQL backend for persistent storage.",
+    tech: ["Java", "Java Swing", "AWT", "MySQL", "JDBC", "SQL", "NetBeans", "Apache Ant", "Role-Based Access Control", "Team Project", "Git"],
+    link: "https://github.com/MaximilianWik/MIB-projekt-Java-Winframe.git"
+  },
+  {
+    id: "VII",
     title: "Hattfabriken - Custom Factory Management System",
     subtitle: "A full-stack web application for managing the operations of a custom hat manufacturer. The system supports the entire workflow from customer inquiry to delivery: customers can browse hats, submit custom requests specifying material, measurements, height, and special effects, and receive a price quote. Staff can then convert requests into formal offers and confirmed orders, while admins manage the warehouse inventory, materials catalog, and special-effects options. Orders include automatically generated PDF invoices and email notifications sent to customers, with a status pipeline (To-Do → In Progress → Completed) and shipping/cost calculations. The application also exposes a documented Web API alongside the MVC frontend.",
     tech: ["C#", ".NET 8", "ASP.NET Core MVC", "ASP.NET Core Web API", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "QuestPDF", "MailKit", "Swagger", "Bootstrap", "jQuery", "Git"],
     link: "https://github.com/hannesmalm/Hattfabriken"
-  },
-  {
-    id: "VI",
-    title: "Tessera - Verified-Permanent QR Code Generator",
-    subtitle: "A zero-dependency, client-side QR code generator designed for codes that must work for life — like tattoo QR codes. Verifies correctness against ISO/IEC 18004 Annex I test vectors, round-trip decodes through multiple independent decoders (jsQR, ZXing-js, native BarcodeDetector), and stress-tests damage tolerance with clustered blot overlays (5–30% coverage). Generates archival specification sheets with full module matrices (ASCII + hex), timestamp, source code SHA-256, and reproduction instructions. 100% static, no build step, no runtime dependencies, no server — runs in any browser, deployed on Vercel.",
-    tech: ["JavaScript", "HTML5", "CSS", "QR Encoding", "ISO/IEC 18004", "Client-Side Only", "Vendored Decoders", "Canvas Rendering", "PDF Generation", "Spec-Compliant", "Vercel", "MIT License", "Git"],
-    link: "https://github.com/MaximilianWik/Tessera"
   }
 ];
