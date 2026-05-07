@@ -113,5 +113,12 @@ export const PROJECTS = [
     subtitle: "A full-stack web application for managing the operations of a custom hat manufacturer. The system supports the entire workflow from customer inquiry to delivery: customers can browse hats, submit custom requests specifying material, measurements, height, and special effects, and receive a price quote. Staff can then convert requests into formal offers and confirmed orders, while admins manage the warehouse inventory, materials catalog, and special-effects options. Orders include automatically generated PDF invoices and email notifications sent to customers, with a status pipeline (To-Do → In Progress → Completed) and shipping/cost calculations. The application also exposes a documented Web API alongside the MVC frontend.",
     tech: ["C#", ".NET 8", "ASP.NET Core MVC", "ASP.NET Core Web API", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "QuestPDF", "MailKit", "Swagger", "Bootstrap", "jQuery", "Git"],
     link: "https://github.com/hannesmalm/Hattfabriken"
+  },
+  {
+    id: "VI",
+    title: "Tessera - Verified-Permanent QR Code Generator",
+    subtitle: "A zero-dependency, client-side QR code generator designed for codes that must work for life — like tattoo QR codes. Verifies correctness against ISO/IEC 18004 Annex I test vectors, round-trip decodes through multiple independent decoders (jsQR, ZXing-js, native BarcodeDetector), and stress-tests damage tolerance with clustered blot overlays (5–30% coverage). Generates archival specification sheets with full module matrices (ASCII + hex), timestamp, source code SHA-256, and reproduction instructions. 100% static, no build step, no runtime dependencies, no server — runs in any browser, deployed on Vercel.",
+    tech: ["JavaScript", "HTML5", "CSS", "QR Encoding", "ISO/IEC 18004", "Client-Side Only", "Vendored Decoders", "Canvas Rendering", "PDF Generation", "Spec-Compliant", "Vercel", "MIT License", "Git"],
+    link: "https://github.com/MaximilianWik/Tessera"
   }
 ];
