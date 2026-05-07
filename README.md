@@ -6,6 +6,14 @@ deliberately theatrical — ember-blood accents on ink-void, ceremonial
 typography (Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono),
 and a bonfire-lit hero.
 
+**Live:** https://maximilian-wikstrom.vercel.app/
+
+
+
+https://github.com/user-attachments/assets/84bcd295-179e-4162-b54a-da6df846e36c
+
+
+
 ## Stack
 
 - **React 19** + **TypeScript**
