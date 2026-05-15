@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://maximilian-wikstrom.vercel.app/sitemap.xml

@@ -13,23 +13,62 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="px-6 md:px-12 py-12 md:py-6 border-t border-bone-faded/30 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-mono text-bone-faded">
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 uppercase items-center md:items-start">
-        <span>Status: <span className="text-gilt">Available</span></span>
-        <span>Loc: Stockholm, Sweden</span>
-        <span>Last Sync: {currentYearRoman}</span>
-      </div>
-      
-      <button 
-        onClick={scrollToTop}
-        className="group font-subdisplay hover:text-gilt transition-colors flex items-center gap-2 uppercase tracking-[0.2em]"
+    <footer className="px-6 md:px-12 py-8 md:py-6 border-t border-bone-faded/30 flex flex-col gap-6 text-[10px] font-mono text-bone-faded">
+      {/* Cross-links to my other shrines — bidirectional identity graph for SEO. */}
+      <nav
+        aria-label="Other works by Maximilian Wikström"
+        className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 md:gap-6 pb-4 border-b border-bone-faded/15"
       >
-        <span className="transition-transform group-hover:-translate-y-1">^</span>
-        Return to the Ledger
-      </button>
+        <span className="font-subdisplay uppercase tracking-[0.2em] text-bone-faded/70">
+          Other Shrines
+        </span>
+        <ul className="flex flex-wrap gap-x-5 gap-y-2 uppercase tracking-[0.15em]">
+          <li>
+            <a href="https://max-wik.com/" rel="author me" className="hover:text-gilt transition-colors">
+              max-wik.com
+            </a>
+          </li>
+          <li>
+            <a href="https://tessera-neon.vercel.app/" rel="me" className="hover:text-gilt transition-colors">
+              Tessera
+            </a>
+          </li>
+          <li>
+            <a href="https://cursedechoes.vercel.app/" rel="me" className="hover:text-gilt transition-colors">
+              Cursed Echoes
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/MaximilianWik" rel="me" className="hover:text-gilt transition-colors">
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/max_wik/" rel="me" className="hover:text-gilt transition-colors">
+              Instagram
+            </a>
+          </li>
+        </ul>
+      </nav>
 
-      <div className="font-subdisplay tracking-widest uppercase text-center md:text-right">
-        Set in Cormorant & Cinzel // Forged in Shadow
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 uppercase items-center md:items-start">
+          <span>Status: <span className="text-gilt">Available</span></span>
+          <span>Loc: Stockholm, Sweden</span>
+          <span>Last Sync: {currentYearRoman}</span>
+        </div>
+
+        <button
+          onClick={scrollToTop}
+          className="group font-subdisplay hover:text-gilt transition-colors flex items-center gap-2 uppercase tracking-[0.2em]"
+        >
+          <span className="transition-transform group-hover:-translate-y-1">^</span>
+          Return to the Ledger
+        </button>
+
+        <div className="font-subdisplay tracking-widest uppercase text-center md:text-right">
+          Set in Cormorant & Cinzel // Forged in Shadow
+        </div>
       </div>
     </footer>
   );
