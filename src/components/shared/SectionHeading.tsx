@@ -14,15 +14,15 @@ interface SectionHeadingProps {
   sigil?: 'eye' | 'serpent' | 'trefoil' | 'runes' | 'compass';
 }
 
-export const SectionHeading: React.FC<SectionHeadingProps> = ({ 
-  numeral, 
-  title, 
-  subtitle, 
-  sigil = 'trefoil' 
+export const SectionHeading: React.FC<SectionHeadingProps> = ({
+  numeral,
+  title,
+  subtitle,
+  sigil = 'trefoil'
 }) => {
   return (
     <div className="flex flex-col items-center mb-20">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false }}
@@ -31,8 +31,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       >
         {numeral}.
       </motion.div>
-      
-      <motion.h2 
+
+      <motion.h2
         initial={{ opacity: 0, letterSpacing: '0.1em' }}
         whileInView={{ opacity: 1, letterSpacing: '0.25em' }}
         viewport={{ once: false }}
@@ -49,7 +49,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       </div>
 
       {subtitle && (
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 0.6 }}
           viewport={{ once: false }}

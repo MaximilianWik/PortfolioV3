@@ -13,9 +13,9 @@ interface RevealOnScrollProps {
   className?: string;
 }
 
-export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({ 
-  children, 
-  delay = 0, 
+export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
+  children,
+  delay = 0,
   direction = 'up',
   className = ""
 }) => {
@@ -28,20 +28,20 @@ export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
 
   return (
     <motion.div
-      initial={{ 
-        opacity: 0, 
+      initial={{
+        opacity: 0,
         ...directions[direction]
       }}
-      whileInView={{ 
-        opacity: 1, 
-        x: 0, 
-        y: 0 
+      whileInView={{
+        opacity: 1,
+        x: 0,
+        y: 0
       }}
       viewport={{ once: false, margin: "-100px" }}
-      transition={{ 
-        duration: 1.2, 
-        delay, 
-        ease: [0.2, 0.8, 0.2, 1] 
+      transition={{
+        duration: 1.2,
+        delay,
+        ease: [0.2, 0.8, 0.2, 1]
       }}
       className={className}
     >

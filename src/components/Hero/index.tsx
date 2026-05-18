@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -90,9 +90,9 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden bg-ink-void">
-      
+
       {/* Background Sigil Glow */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 0.08, scale: 1 }}
         viewport={{ once: false }}
@@ -104,7 +104,7 @@ export const Hero: React.FC = () => {
 
       <div className="z-10 grid grid-cols-1 md:grid-cols-12 gap-12 w-full">
         {/* Left Pillar: Bio & Status */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
@@ -113,7 +113,7 @@ export const Hero: React.FC = () => {
         >
           <div>
             <div className="font-subdisplay text-bone-dim text-[10px] tracking-widest mb-4 uppercase">II. THE BEARER</div>
-            <DispersingText 
+            <DispersingText
               text="A seeker of order in regulated dark. Binder of agents. Keeper of the ledger. He who makes the machine toil so that men may rest."
               className="text-lg leading-relaxed italic md:pr-8"
               baseColor="#9A968B"
@@ -137,15 +137,15 @@ export const Hero: React.FC = () => {
                 <div className="font-subdisplay text-[9px] tracking-tighter text-bone-faded uppercase">Systems Tamed</div>
               </div>
             </div>
-            
-            <motion.a 
-              href="/CV_Maximilian_WikstromPDF.pdf" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              whileHover={{ 
-                backgroundColor: 'rgba(184,147,90,0.05)', 
-                borderColor: '#B8935A', 
-                color: '#B8935A', 
+
+            <motion.a
+              href="/CV_Maximilian_WikstromPDF.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{
+                backgroundColor: 'rgba(184,147,90,0.05)',
+                borderColor: '#B8935A',
+                color: '#B8935A',
                 y: -5,
                 textShadow: '0px 0px 8px rgba(184,147,90,0.8)',
                 boxShadow: '0px 0px 15px rgba(184,147,90,0.2)'
@@ -155,10 +155,10 @@ export const Hero: React.FC = () => {
             >
               Download Resume (PDF)
             </motion.a>
-            
+
             <div className="grid grid-cols-3 gap-2 w-full pt-2">
-              <motion.a 
-                href={`mailto:${PROFILE.email}`} 
+              <motion.a
+                href={`mailto:${PROFILE.email}`}
                 whileHover={{ y: -5, borderColor: '#B8935A', backgroundColor: 'rgba(184,147,90,0.05)', boxShadow: '0px 0px 15px rgba(184,147,90,0.2)' }}
                 className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep"
               >
@@ -168,10 +168,10 @@ export const Hero: React.FC = () => {
                   <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase truncate">(Email)</span>
                 </div>
               </motion.a>
-              <motion.a 
-                href={PROFILE.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <motion.a
+                href={PROFILE.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ y: -5, borderColor: '#B8935A', backgroundColor: 'rgba(184,147,90,0.05)', boxShadow: '0px 0px 15px rgba(184,147,90,0.2)' }}
                 className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep"
               >
@@ -181,10 +181,10 @@ export const Hero: React.FC = () => {
                   <span className="block font-mono text-[8px] text-bone-faded tracking-[0.2em] uppercase truncate">(LinkedIn)</span>
                 </div>
               </motion.a>
-              <motion.a 
-                href={PROFILE.github} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <motion.a
+                href={PROFILE.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ y: -5, borderColor: '#B8935A', backgroundColor: 'rgba(184,147,90,0.05)', boxShadow: '0px 0px 15px rgba(184,147,90,0.2)' }}
                 className="group flex flex-col items-center justify-between gap-4 p-4 border border-bone-faded/10 bg-ink-deep"
               >
@@ -195,11 +195,11 @@ export const Hero: React.FC = () => {
                 </div>
               </motion.a>
             </div>
-            
-            <motion.a 
-              href="https://cursedechoes.vercel.app" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+
+            <motion.a
+              href="https://cursedechoes.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ y: -5, borderColor: '#8B1A1A', backgroundColor: 'rgba(139,26,26,0.05)', boxShadow: '0px 0px 20px rgba(139,26,26,0.3)' }}
               className="group flex items-center justify-center gap-4 py-4 px-6 border border-bone-faded/10 bg-ink-deep w-full mt-2 cursor-pointer"
             >
@@ -211,7 +211,7 @@ export const Hero: React.FC = () => {
         </motion.div>
 
         {/* Center Pillar: Main Identity */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: false }}
@@ -224,22 +224,22 @@ export const Hero: React.FC = () => {
               <DispersingText as="span" text="WIKSTRÖM" baseColor="#9A968B" className="flex-nowrap justify-center text-bone-dim whitespace-nowrap" />
             </h1>
             <div className="h-px w-20 sm:w-24 md:w-32 bg-ember-blood my-6 md:my-8"></div>
-            <DispersingText 
+            <DispersingText
               text="AI & Automation Specialist"
               className="font-subdisplay text-[9px] sm:text-[10px] md:text-xs tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.4em] text-center uppercase justify-center whitespace-nowrap"
-              baseColor="#B8935A" 
-              style={{ color: '#B8935A' }} 
+              baseColor="#B8935A"
+              style={{ color: '#B8935A' }}
             />
           </div>
 
-          <div 
+          <div
             className="relative w-full max-w-[320px] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[480px] aspect-square mt-10 sm:mt-12 md:mt-16 mx-auto flex items-center justify-center cursor-pointer"
             onMouseEnter={() => setIsBonfireLit(true)}
             onMouseLeave={() => setIsBonfireLit(false)}
           >
-            <motion.img 
-              src="/bonfire.jpg" 
-              alt="Bonfire" 
+            <motion.img
+              src="/bonfire.jpg"
+              alt="Bonfire"
               loading="eager"
               decoding="async"
               fetchPriority="high"
@@ -257,16 +257,16 @@ export const Hero: React.FC = () => {
                 WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 75%)'
               }}
             />
-            
+
             {/* Edge Fades */}
             <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-ink-void to-transparent pointer-events-none z-10" />
             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink-void to-transparent pointer-events-none z-10" />
             <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ink-void to-transparent pointer-events-none z-10" />
             <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink-void to-transparent pointer-events-none z-10" />
-            
+
             <AnimatePresence>
               {isBonfireLit && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
@@ -282,12 +282,12 @@ export const Hero: React.FC = () => {
 
             <AnimatePresence>
               {isBonfireLit && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 1 }}
-                  className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,100,0,0.25)_0%,transparent_65%)] pointer-events-none" 
+                  className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,100,0,0.25)_0%,transparent_65%)] pointer-events-none"
                 />
               )}
             </AnimatePresence>
@@ -295,7 +295,7 @@ export const Hero: React.FC = () => {
         </motion.div>
 
         {/* Right Pillar: Recent Deeds */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
@@ -319,7 +319,7 @@ export const Hero: React.FC = () => {
         </motion.div>
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: false }}
@@ -327,7 +327,7 @@ export const Hero: React.FC = () => {
         className="absolute bottom-6 flex flex-col items-center"
       >
         <div className="w-[1px] h-8 bg-bone-faded/30 relative overflow-hidden">
-          <motion.div 
+          <motion.div
             animate={{ y: [0, 32] }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             className="absolute top-0 left-0 w-full h-2 bg-ember-blood"

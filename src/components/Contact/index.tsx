@@ -23,13 +23,13 @@ export const Contact: React.FC = () => {
   return (
     <section id="invocation" className="py-32 px-6">
       <div className="max-w-4xl mx-auto flex flex-col items-center">
-        <SectionHeading 
-          numeral="VII" 
-          title="The Invocation" 
+        <SectionHeading
+          numeral="VII"
+          title="The Invocation"
           sigil="compass"
         />
 
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: false }}
@@ -59,7 +59,7 @@ export const Contact: React.FC = () => {
         <div className="w-full max-w-xl">
           <AnimatePresence mode="wait">
             {!isSubmitted ? (
-              <motion.form 
+              <motion.form
                 key="form"
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.5 } }}
@@ -68,9 +68,9 @@ export const Contact: React.FC = () => {
               >
                 <div className="grid md:grid-cols-2 gap-12">
                   <div className="relative group">
-                    <input 
-                      type="text" 
-                      required 
+                    <input
+                      type="text"
+                      required
                       className="w-full bg-transparent border-b border-bone-faded/20 py-4 font-body placeholder:text-bone-faded/40 text-bone-white focus:outline-none focus:border-gilt transition-colors peer"
                       placeholder=" "
                     />
@@ -79,9 +79,9 @@ export const Contact: React.FC = () => {
                     </label>
                   </div>
                   <div className="relative group">
-                    <input 
-                      type="email" 
-                      required 
+                    <input
+                      type="email"
+                      required
                       className="w-full bg-transparent border-b border-bone-faded/20 py-4 font-body placeholder:text-bone-faded/40 text-bone-white focus:outline-none focus:border-gilt transition-colors peer"
                       placeholder=" "
                     />
@@ -92,8 +92,8 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="relative group">
-                  <textarea 
-                    required 
+                  <textarea
+                    required
                     rows={4}
                     className="w-full bg-transparent border-b border-bone-faded/20 py-4 font-body placeholder:text-bone-faded/40 text-bone-white focus:outline-none focus:border-gilt transition-colors peer resize-none"
                     placeholder=" "
@@ -104,7 +104,7 @@ export const Contact: React.FC = () => {
                 </div>
 
                 <div className="flex justify-center pt-8">
-                  <motion.button 
+                  <motion.button
                     type="submit"
                     whileHover={{ backgroundColor: '#3D2B1F', borderColor: '#B8935A' }}
                     className="relative px-12 py-5 border border-bone-faded/40 font-subdisplay text-xs text-bone-white tracking-[0.5em] uppercase overflow-hidden"
@@ -114,7 +114,7 @@ export const Contact: React.FC = () => {
                 </div>
               </motion.form>
             ) : (
-              <motion.div 
+              <motion.div
                 key="success"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

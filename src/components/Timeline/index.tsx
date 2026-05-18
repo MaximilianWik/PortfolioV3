@@ -17,7 +17,7 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
     <div className={`relative mb-20 md:flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-center`}>
       {/* Date - Desktop */}
       <div className={`hidden md:flex w-1/2 ${isLeft ? 'justify-start pl-12' : 'justify-end pr-12'}`}>
-        <motion.span 
+        <motion.span
           initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
@@ -34,7 +34,7 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
       </div>
 
       {/* Content */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: isLeft ? 40 : -40 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: false }}
@@ -44,24 +44,24 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
         <div className="md:hidden font-mono text-bone-faded text-[10px] tracking-widest mb-2">
           {entry.year}
         </div>
-        
+
         <h4 className="font-display text-2xl text-bone-white mb-1 uppercase tracking-wider">
           {entry.role}
         </h4>
-        
+
         <div className="font-subdisplay text-xs text-gilt/80 mb-4 tracking-widest">
           {entry.company}
         </div>
-        
-        <DispersingText 
+
+        <DispersingText
           text={entry.description}
           className="font-body text-bone-dim text-sm italic mb-6 leading-relaxed max-w-lg md:mx-0 mx-auto"
         />
-        
+
         <div className={`flex flex-wrap gap-2 ${isLeft ? 'md:justify-end' : 'md:justify-start'}`}>
           {entry.skills.map((skill, i) => (
-            <span 
-              key={i} 
+            <span
+              key={i}
               className="px-3 py-1 border border-bone-faded/20 text-[10px] font-mono text-bone-faded uppercase tracking-tighter"
             >
               {skill}
@@ -133,9 +133,9 @@ export const Timeline: React.FC = () => {
               WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)'
             }}
           >
-            <img 
-              src="/HumanityNoBg.gif" 
-              alt="" 
+            <img
+              src="/HumanityNoBg.gif"
+              alt=""
               loading="lazy"
               decoding="async"
               className="w-full h-auto opacity-100"
@@ -150,16 +150,16 @@ export const Timeline: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <SectionHeading 
-          numeral="IV" 
-          title="The Chronicle" 
+        <SectionHeading
+          numeral="IV"
+          title="The Chronicle"
           sigil="runes"
         />
-        
+
         <div className="relative mt-20">
           {/* Central Line */}
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-bone-faded/20 -translate-x-1/2" />
-          
+
           <div className="space-y-12">
             {EXPERIENCE.map((entry, i) => (
               <TimelineEntry key={i} entry={entry} index={i} />

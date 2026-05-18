@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useLayoutEffect, useMemo } from 'react';
+import { useState, useLayoutEffect } from 'react';
 // Pretext might be imported differently depending on the package type
 // We'll try to import and handle if it's doesn't exist
 import * as Pretext from '@chenglou/pretext';
@@ -34,7 +34,7 @@ export function usePretextLayout(
       const prepared = Pretext.prepare(text, font);
       // @ts-ignore
       const res = Pretext.layout(prepared, maxWidth, lineHeight);
-      
+
       // Calculate tightest width for "shrink-wrapped" look
       let maxLineWidth = 0;
       // @ts-ignore

@@ -33,18 +33,18 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div 
+      <div
         ref={tiltRef}
         className={`relative p-8 md:p-10 border border-bone-faded/10 transition-colors duration-500 overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
       >
         <span className={`absolute top-6 right-6 font-subdisplay text-xs transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}>
           {index}
         </span>
-        
+
         <h3 className={`font-display text-2xl mb-4 tracking-wide uppercase transition-colors ${isHovered ? 'text-soul-pale' : 'text-bone-white'}`}>
           {title}
         </h3>
-        
+
         <p className="font-body text-bone-dim leading-relaxed italic text-sm md:text-base mb-6">
           {description}
         </p>
@@ -52,8 +52,8 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
         {tags && (
           <div className="flex flex-wrap gap-2 mb-8">
             {tags.map((tag, i) => (
-              <span 
-                key={i} 
+              <span
+                key={i}
                 className={`font-mono text-[9px] uppercase tracking-widest px-2 py-1 bg-ink-void/50 border border-bone-faded/10 transition-colors ${isHovered ? 'text-gilt' : 'text-bone-faded'}`}
               >
                 {tag}
@@ -64,10 +64,10 @@ const DeedCard: React.FC<DeedCardProps> = ({ index, title, description, delay, p
 
         {pdfLink && (
           <div className="flex relative z-20">
-            <motion.a 
-              href={pdfLink} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <motion.a
+              href={pdfLink}
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
               transition={{ duration: 0.3 }}
               className="inline-block font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
@@ -111,17 +111,17 @@ export const Highlights: React.FC = () => {
   return (
     <section id="highlights" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <SectionHeading 
-          numeral="III" 
-          title="The Deeds" 
+        <SectionHeading
+          numeral="III"
+          title="The Deeds"
           sigil="serpent"
         />
-        
+
         <div className="grid md:grid-cols-3 gap-8 md:gap-10">
           {deeds.map((deed, i) => (
-            <DeedCard 
-              key={i} 
-              {...deed} 
+            <DeedCard
+              key={i}
+              {...deed}
               delay={i * 0.2}
             />
           ))}

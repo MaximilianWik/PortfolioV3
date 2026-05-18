@@ -53,13 +53,13 @@ const sharedOptions = {
 export const SkillRadar: React.FC = () => {
   const data = {
     labels: [
-      'AI & Automation', 
-      'Python Scripting', 
-      'Power BI / DAX', 
-      'Full-stack Dev', 
-      'Data Modeling', 
-      'ERP/CRM', 
-      'IAM / Security', 
+      'AI & Automation',
+      'Python Scripting',
+      'Power BI / DAX',
+      'Full-stack Dev',
+      'Data Modeling',
+      'ERP/CRM',
+      'IAM / Security',
       'UX Sensibility'
     ],
     datasets: [{

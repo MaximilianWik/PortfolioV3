@@ -52,14 +52,14 @@ export const About: React.FC = () => {
 
   return (
     <section id="about" className="py-32 px-6 max-w-6xl mx-auto">
-      <SectionHeading 
-        numeral="II" 
-        title="The Bearer" 
+      <SectionHeading
+        numeral="II"
+        title="The Bearer"
         sigil="eye"
       />
-      
+
       <div className="grid md:grid-cols-2 gap-16 items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
@@ -68,9 +68,9 @@ export const About: React.FC = () => {
         >
           <div className="relative w-full mx-auto flex items-center justify-center">
             <div className="w-full relative group flex items-center justify-center">
-              <img 
-                src="/blackmaiden.jpg" 
-                alt="Maiden in Black" 
+              <img
+                src="/blackmaiden.jpg"
+                alt="Maiden in Black"
                 loading="lazy"
                 decoding="async"
                 className="w-full h-auto object-contain opacity-95 transition-all duration-1000 group-hover:opacity-100 group-hover:scale-105"
@@ -79,13 +79,13 @@ export const About: React.FC = () => {
                   WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 95%)'
                 }}
               />
-              
+
               {/* Extra vertical fade for the absolute top and bottom just in case it hits grid edges */}
               <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ink-void to-transparent pointer-events-none" />
               <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink-void to-transparent pointer-events-none" />
               <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink-void to-transparent pointer-events-none" />
               <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink-void to-transparent pointer-events-none" />
-              
+
               {/* Radial dark backing to ensure text remains highly legible over any image */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(5,5,5,0.5)_0%,transparent_60%)] pointer-events-none" />
 
@@ -94,7 +94,7 @@ export const About: React.FC = () => {
                 <div className="font-mono text-[9px] text-bone-faded uppercase tracking-[0.4em] mb-4">
                   The Nexus
                 </div>
-                <DispersingText 
+                <DispersingText
                   text="“Soul of the mind, key to life's ether. Soul of the lost, withdrawn from its vessel. Let strength be granted, so the world might be mended.”"
                   className="font-body text-bone-white text-base leading-relaxed italic drop-shadow-xl"
                 />
@@ -104,7 +104,7 @@ export const About: React.FC = () => {
         </motion.div>
 
         <div className="flex flex-col">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false }}
@@ -113,7 +113,7 @@ export const About: React.FC = () => {
             style={{ minHeight: layout.height || 'auto' }}
           >
             <div className="font-mono text-[10px] text-bone-faded uppercase tracking-widest mb-4">The Ledger Mark</div>
-            <DispersingText 
+            <DispersingText
               text={bio}
               className="font-body text-bone-dim text-lg leading-relaxed italic"
               style={{ width: layout.tightestWidth || 'auto' }}

@@ -95,8 +95,8 @@ export const PROJECTS = [
   },
   {
     id: "III",
-    title: "PortfolioV3 - Dark-Fantasy-Formal Personal Portfolio",
-    subtitle: "This very site. A hand-crafted, theatrical personal portfolio built on React 19, Vite 6, and Tailwind CSS 4, leaning into a deliberately ceremonial visual language — ember-blood accents on ink-void, Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono typography, and a bonfire-lit hero. Features declarative motion choreography via motion/react, parallax card tilt with vanilla-tilt, smooth inertial scrolling through Lenis, pre-measured paragraph layout via @chenglou/pretext, code-split sections, ambient audio handling, and Vercel Analytics for deploy-side metrics. All content (profile, experience, education, projects) is centralized in a single typed data module, making the entire site a thin presentation layer over structured data.",
+    title: "PortfolioV3 - Soulsborne-Inspired Personal Portfolio",
+    subtitle: "This very site. A hand-crafted, theatrical personal portfolio built on React 19, Vite 6, and Tailwind CSS 4, leaning into a deliberately ceremonial soulsborne-inspired visual language — ember-blood accents on ink-void, Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono typography, and a bonfire-lit hero. Features declarative motion choreography via motion/react, parallax card tilt with vanilla-tilt, smooth inertial scrolling through Lenis, pre-measured paragraph layout via @chenglou/pretext, code-split sections, ambient audio handling, and Vercel Analytics for deploy-side metrics. All content (profile, experience, education, projects) is centralized in a single typed data module, making the entire site a thin presentation layer over structured data.",
     tech: ["TypeScript", "React 19", "Vite 6", "Tailwind CSS 4", "motion/react", "vanilla-tilt", "lenis", "@chenglou/pretext", "Vercel Analytics", "Code Splitting", "Vercel", "Git"],
     link: "https://github.com/MaximilianWik/PortfolioV3"
   },

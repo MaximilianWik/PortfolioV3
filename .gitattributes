@@ -1,0 +1,18 @@
+# Normalize line endings in the repo. Source files are stored as LF and
+# Windows checkouts get LF too — Vite, ESLint, and tsc all handle LF cleanly,
+# and this stops the repo from accumulating CRLF/LF mixed diffs.
+* text=auto eol=lf
+
+# Binary assets — never touch.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.pdf   binary
+*.mp3   binary
+*.mp4   binary
+*.woff  binary
+*.woff2 binary

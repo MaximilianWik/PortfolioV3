@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -14,67 +14,67 @@ export const Resume: React.FC = () => {
     <section id="resume" className="relative py-32 overflow-hidden">
       {/* Background Eclipse */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden">
-        <motion.div 
+        <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.55 }}
           transition={{ duration: 3, ease: "easeOut" }}
           className="w-full h-full relative"
         >
-          <img 
-            src="/eclipse.jpg" 
-            alt="Eclipse Foreground" 
+          <img
+            src="/eclipse.jpg"
+            alt="Eclipse Foreground"
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover object-top mix-blend-screen"
           />
-          
+
           {/* Animated Bloom/Glow at the top (where the eclipse is) */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[40%] flex flex-col items-center">
             {/* Inner Core Glow */}
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 opacity: [0.3, 0.6, 0.3],
                 scale: [1, 1.1, 1],
               }}
-              transition={{ 
-                duration: 4, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
-              className="w-32 h-32 bg-ember-blood/40 blur-[60px] rounded-full translate-y-[10%]" 
+              className="w-32 h-32 bg-ember-blood/40 blur-[60px] rounded-full translate-y-[10%]"
             />
-            
+
             {/* Outer Soft Bloom */}
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 opacity: [0.1, 0.3, 0.1],
                 scale: [1, 1.2, 1],
               }}
-              transition={{ 
-                duration: 6, 
-                repeat: Infinity, 
+              transition={{
+                duration: 6,
+                repeat: Infinity,
                 ease: "easeInOut",
-                delay: 1 
+                delay: 1
               }}
-              className="absolute top-0 w-full h-full bg-gilt/10 blur-[120px] rounded-full translate-y-[-20%]" 
+              className="absolute top-0 w-full h-full bg-gilt/10 blur-[120px] rounded-full translate-y-[-20%]"
             />
 
             {/* Pulsing Light Spire/Rays */}
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 opacity: [0.2, 0.4, 0.2],
                 scaleY: [0.9, 1.1, 0.9],
               }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "linear" 
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "linear"
               }}
               className="absolute top-0 w-[2px] h-screen bg-gradient-to-b from-gilt/60 to-transparent blur-[4px]"
             />
           </div>
         </motion.div>
-        
+
         {/* Dark overlays to guarantee text legibility and smooth out all four edges */}
         <div className="absolute inset-0 bg-ink-void/40" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink-void to-transparent" />
@@ -84,12 +84,12 @@ export const Resume: React.FC = () => {
       </div>
 
       <div className="relative max-w-6xl mx-auto z-10 drop-shadow-2xl">
-        <SectionHeading 
-          numeral="VI" 
-          title="The Formal Hand" 
+        <SectionHeading
+          numeral="VI"
+          title="The Formal Hand"
           sigil="eye"
         />
-        
+
         <div className="grid md:grid-cols-[1fr_2.5fr] gap-16 md:gap-24 relative z-10">
           {/* Left Metadata */}
           <RevealOnScroll className="space-y-12">
@@ -119,9 +119,9 @@ export const Resume: React.FC = () => {
               </div>
             </div>
 
-            <motion.a 
+            <motion.a
               href="/CV_Maximilian_WikstromPDF.pdf"
-              target="_blank" 
+              target="_blank"
               rel="noopener noreferrer"
               whileHover={{ backgroundColor: '#B8935A0D', borderColor: '#B8935A', scale: 1.02, textShadow: '0 0 8px rgba(184,147,90,0.5)' }}
               transition={{ duration: 0.3 }}
@@ -145,11 +145,11 @@ export const Resume: React.FC = () => {
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-12">
-                <motion.a 
+                <motion.a
                   href="/Degree%20of%20Bachelor%20of%20Science%20Maximilian%20Wikstrom.pdf"
-                  target="_blank" 
+                  target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ backgroundColor: '#B8935A0D', borderColor: '#B8935A', scale: 1.02, textShadow: '0 0 8px rgba(184,147,90,0.5)' }}
                   transition={{ duration: 0.3 }}

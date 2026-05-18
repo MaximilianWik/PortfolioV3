@@ -1,4 +1,4 @@
-﻿import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { motion, useInView } from 'motion/react';
 
 export const HumanityRestored: React.FC = () => {
@@ -24,8 +24,8 @@ export const HumanityRestored: React.FC = () => {
   }, []);
 
   return (
-    <section 
-      ref={containerRef} 
+    <section
+      ref={containerRef}
       className="relative min-h-[60vh] flex items-center justify-center py-32 bg-ink-void z-20"
     >
       {/* Background Dimming for contrast */}
@@ -38,8 +38,8 @@ export const HumanityRestored: React.FC = () => {
             {/* 1. Deep black/shadow ambient radial swell */}
             <motion.div
               initial={{ scaleX: 0, scaleY: 0, opacity: 0 }}
-              animate={{ 
-                scaleX: [0, 1, 1], 
+              animate={{
+                scaleX: [0, 1, 1],
                 scaleY: [0, 1, 0],
                 opacity: [0, 1, 0],
               }}
@@ -57,8 +57,8 @@ export const HumanityRestored: React.FC = () => {
             {/* 2. Strong solid black horizontal band with vertical fading */}
             <motion.div
               initial={{ scaleX: 0, opacity: 0, filter: 'blur(30px)' }}
-              animate={{ 
-                scaleX: [0, 1.2, 1.2, 0], 
+              animate={{
+                scaleX: [0, 1.2, 1.2, 0],
                 opacity: [0, 1, 1, 0],
                 filter: ['blur(30px)', 'blur(12px)', 'blur(12px)', 'blur(30px)']
               }}
@@ -76,8 +76,8 @@ export const HumanityRestored: React.FC = () => {
             {/* 3. The Teal Horizontal Ethereal Energy Smear - Sharpened */}
             <motion.div
               initial={{ scaleX: 0, scaleY: 0.1, opacity: 0, filter: 'blur(20px) brightness(3)' }}
-              animate={{ 
-                scaleX: [0, 5, 2, 7], 
+              animate={{
+                scaleX: [0, 5, 2, 7],
                 scaleY: [0.1, 5, 1, 0],
                 opacity: [0, 1, 0.5, 0],
                 filter: ['blur(20px) brightness(3)', 'blur(6px) brightness(2)', 'blur(12px) brightness(1.5)', 'blur(30px) brightness(0)']
@@ -97,8 +97,8 @@ export const HumanityRestored: React.FC = () => {
             {/* 4. The blinding inner core flash - Sharpened and tightened */}
             <motion.div
               initial={{ scaleX: 0, scaleY: 0, opacity: 0 }}
-              animate={{ 
-                scaleX: [0, 3, 1, 0], 
+              animate={{
+                scaleX: [0, 3, 1, 0],
                 scaleY: [0, 4, 1, 0],
                 opacity: [0, 1, 0.4, 0],
               }}
@@ -121,13 +121,13 @@ export const HumanityRestored: React.FC = () => {
                   <motion.div
                     key={p.id}
                     initial={{ opacity: 0, y: `${p.yStart}vh`, x: `${p.xStart}vw`, scale: 0 }}
-                    animate={{ 
-                      opacity: [0, 1, 0], 
+                    animate={{
+                      opacity: [0, 1, 0],
                       y: [`${p.yStart}vh`, `${p.yEnd}vh`],
                       x: [`${p.xStart}vw`, `${p.xEnd}vw`],
                       scale: [0, p.scale, p.scale * 0.2]
                     }}
-                    transition={{ 
+                    transition={{
                       duration: p.duration,
                       delay: p.delay,
                       ease: "easeOut"
@@ -147,22 +147,22 @@ export const HumanityRestored: React.FC = () => {
             {/* 5. Extreme bloom lens flare overlay - Sharpened */}
             <motion.div
               initial={{ scale: 0.95, scaleX: 6, opacity: 0, filter: 'blur(20px) brightness(3)' }}
-              animate={{ 
-                scale: [0.95, 1.05, 1.1], 
-                scaleX: [6, 1, 1, 4], 
+              animate={{
+                scale: [0.95, 1.05, 1.1],
+                scaleX: [6, 1, 1, 4],
                 opacity: [0, 1, 0.8, 0],
                 filter: ['blur(20px) brightness(3)', 'blur(4px) brightness(2)', 'blur(8px) brightness(1)', 'blur(30px) brightness(0)']
               }}
               transition={{ duration: 10, times: [0, 0.08, 0.85, 1], ease: "easeOut" }}
               className="absolute z-[9] pointer-events-none mix-blend-screen"
             >
-              <h2 
+              <h2
                 className="uppercase text-4xl md:text-6xl lg:text-[5.5rem] text-center"
                 style={{
                   fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
                   color: '#76C7A8',
                   letterSpacing: '0.04em',
-                  transform: 'scaleY(1.3)' 
+                  transform: 'scaleY(1.3)'
                 }}
               >
                 Humanity Restored
@@ -172,9 +172,9 @@ export const HumanityRestored: React.FC = () => {
             {/* 6. The "HUMANITY RESTORED" Text */}
             <motion.div
               initial={{ scale: 0.95, scaleX: 4, opacity: 0, filter: 'blur(25px) brightness(2)' }}
-              animate={{ 
-                scale: [0.95, 1.05, 1.1], 
-                scaleX: [4, 1, 1, 4], 
+              animate={{
+                scale: [0.95, 1.05, 1.1],
+                scaleX: [4, 1, 1, 4],
                 opacity: [0, 1, 1, 0],
                 filter: ['blur(25px) brightness(2)', 'blur(0px) brightness(1)', 'blur(0px) brightness(1)', 'blur(20px) brightness(0)']
               }}
@@ -182,14 +182,14 @@ export const HumanityRestored: React.FC = () => {
               className="relative z-10"
               style={{ zIndex: 10 }}
             >
-              <h2 
+              <h2
                 className="uppercase text-4xl md:text-6xl lg:text-[5.5rem] text-center"
                 style={{
                   fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
                   color: '#76C7A8',
                   letterSpacing: '0.04em',
                   textShadow: '0 0 20px rgba(118, 199, 168, 0.6), 0 5px 30px rgba(0, 0, 0, 1), 0 10px 40px rgba(0, 0, 0, 1)',
-                  transform: 'scaleY(1.3)' 
+                  transform: 'scaleY(1.3)'
                 }}
               >
                 Humanity Restored
@@ -199,9 +199,9 @@ export const HumanityRestored: React.FC = () => {
             {/* 7. The Reflection (Floor bounce) */}
             <motion.div
               initial={{ scale: 0.95, scaleX: 4, opacity: 0, filter: 'blur(25px) brightness(2)' }}
-              animate={{ 
-                scale: [0.95, 1.05, 1.1], 
-                scaleX: [4, 1, 1, 4], 
+              animate={{
+                scale: [0.95, 1.05, 1.1],
+                scaleX: [4, 1, 1, 4],
                 opacity: [0, 0.5, 0.5, 0],
                 filter: ['blur(25px) brightness(2)', 'blur(8px) brightness(1)', 'blur(8px) brightness(1)', 'blur(25px) brightness(0)']
               }}
@@ -213,7 +213,7 @@ export const HumanityRestored: React.FC = () => {
                  maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 60%)',
               }}
             >
-              <h2 
+              <h2
                 className="uppercase text-4xl md:text-6xl lg:text-[5.5rem] text-center"
                 style={{
                   fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
@@ -228,7 +228,7 @@ export const HumanityRestored: React.FC = () => {
           </>
         )}
       </div>
-      
+
       {/* Space placeholder */}
       {!isInView && (
          <div className="h-[150px] w-full" />

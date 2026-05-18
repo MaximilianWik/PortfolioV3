@@ -9,16 +9,16 @@ export const Firelink: React.FC = () => {
     target: containerRef,
     offset: ["start end", "end start"]
   });
-  
+
   const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
 
   return (
     <section ref={containerRef} className="relative h-[60vh] md:h-[80vh] w-full overflow-hidden flex items-center justify-center my-32">
       {/* Parallax Background */}
       <motion.div style={{ y }} className="absolute inset-0 w-full h-[140%] -top-[20%]">
-        <img 
-          src={firekeeperImg} 
-          alt="Fire Keeper" 
+        <img
+          src={firekeeperImg}
+          alt="Fire Keeper"
           loading="lazy"
           decoding="async"
           className="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity grayscale-[50%]"
@@ -35,7 +35,7 @@ export const Firelink: React.FC = () => {
         <div className="font-mono text-[9px] text-bone-faded uppercase tracking-[0.4em] mb-6">
           A Moment of Respite
         </div>
-        <DispersingText 
+        <DispersingText
           text="“Touch the darkness within me. Take nourishment from these sovereignless souls.”"
           className="font-body text-bone-dim text-xl md:text-2xl leading-relaxed italic"
         />

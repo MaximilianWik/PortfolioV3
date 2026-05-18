@@ -16,9 +16,9 @@ export const Insights: React.FC = () => {
       {/* Background Imagery */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
         <div className="w-full h-[120%] relative opacity-[0.15]">
-          <img 
-            src="/bonfire.jpg" 
-            alt="Bonfire Background" 
+          <img
+            src="/bonfire.jpg"
+            alt="Bonfire Background"
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover object-bottom mix-blend-luminosity grayscale-[50%]"
@@ -30,16 +30,16 @@ export const Insights: React.FC = () => {
       </div>
 
       <div className="relative max-w-6xl mx-auto z-10">
-        <SectionHeading 
-          numeral="V" 
-          title="The Glyphs Laid Bare" 
+        <SectionHeading
+          numeral="V"
+          title="The Glyphs Laid Bare"
           sigil="runes"
         />
 
         {/* Thematic Introduction */}
         <div className="text-center max-w-2xl mx-auto mb-20">
           <div className="w-[1px] h-8 bg-ember-blood/50 mx-auto mb-6" />
-          <DispersingText 
+          <DispersingText
             text="“The flow of time itself is convoluted; with heroes centuries old phasing in and out. The very fabric wavers, and relations shift and obscure.”"
             className="font-body text-bone-dim text-lg leading-relaxed italic drop-shadow-xl"
           />
@@ -47,7 +47,7 @@ export const Insights: React.FC = () => {
             A distillation of profound attributes, etched into the dark.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 relative">
           <RevealOnScroll className="bg-ink-void/40 backdrop-blur-md p-8 md:p-12 border border-gilt/20 drop-shadow-2xl relative h-[450px] group transition-all duration-700 hover:bg-ink-void/60 hover:border-gilt/40">
             <h3 className="font-subdisplay text-xs text-gilt uppercase tracking-widest mb-10 border-b border-gilt/10 pb-4 text-center">V.a — Skill Proficiency</h3>
