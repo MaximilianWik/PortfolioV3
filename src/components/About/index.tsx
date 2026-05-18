@@ -71,6 +71,8 @@ export const About: React.FC = () => {
               <img 
                 src="/blackmaiden.jpg" 
                 alt="Maiden in Black" 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-auto object-contain opacity-95 transition-all duration-1000 group-hover:opacity-100 group-hover:scale-105"
                 style={{
                   maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 95%)',

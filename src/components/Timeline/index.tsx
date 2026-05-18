@@ -136,6 +136,8 @@ export const Timeline: React.FC = () => {
             <img 
               src="/HumanityNoBg.gif" 
               alt="" 
+              loading="lazy"
+              decoding="async"
               className="w-full h-auto opacity-100"
               referrerPolicy="no-referrer"
             />

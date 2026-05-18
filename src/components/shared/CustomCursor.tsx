@@ -24,6 +24,10 @@ export const CustomCursor: React.FC = () => {
   const cursorY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
+    // Coarse-pointer devices never see this cursor (it's already hidden via
+    // `hidden md:block`), so skip the listeners and motion entirely there.
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
     const moveMouse = (e: PointerEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);

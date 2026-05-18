@@ -240,6 +240,9 @@ export const Hero: React.FC = () => {
             <motion.img 
               src="/bonfire.jpg" 
               alt="Bonfire" 
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
               initial={false}
               animate={{
                 opacity: isBonfireLit ? 0.95 : 0.6,

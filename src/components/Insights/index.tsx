@@ -19,6 +19,8 @@ export const Insights: React.FC = () => {
           <img 
             src="/bonfire.jpg" 
             alt="Bonfire Background" 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-bottom mix-blend-luminosity grayscale-[50%]"
           />
         </div>

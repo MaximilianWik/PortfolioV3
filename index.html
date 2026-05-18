@@ -43,6 +43,9 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@300;500&display=swap"
     />
 
+    <!-- Preload hero LCP image so it lands in parallel with the JS bundle. -->
+    <link rel="preload" as="image" href="/bonfire.jpg" fetchpriority="high" />
+
     <!-- JSON-LD: Person schema. This portfolio is the identity hub linking out to every other property. -->
     <script type="application/ld+json">
     {

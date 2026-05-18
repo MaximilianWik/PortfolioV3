@@ -12,6 +12,18 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
+  // Skip the theatrical loader on every visit after the first within this tab.
+  // SEO crawlers and returning users get instant content; first paint stays cinematic.
+  const shouldSkip = typeof window !== 'undefined' && window.sessionStorage.getItem('mw_seen') === '1';
+
+  useEffect(() => {
+    if (shouldSkip) {
+      onCompleteRef.current();
+      return;
+    }
+    try { window.sessionStorage.setItem('mw_seen', '1'); } catch {}
+  }, [shouldSkip]);
+
   const phrases = [
     'Awakening...',
     'Challenging the Abyss...',
@@ -26,6 +38,7 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
   };
 
   useEffect(() => {
+    if (shouldSkip) return;
     let currentText = '';
     let i = 0;
     const fullText = 'Ashes of automation. Dreams of silicon.';
@@ -44,23 +57,26 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     // before it fires (e.g. parent forcibly unmounts while progress reaches 100).
     let completionTimeout: ReturnType<typeof setTimeout> | null = null;
 
+    // 2% per tick × 25ms = ~1.25s to fill — keeps the cinematic but unblocks LCP fast.
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval);
-          completionTimeout = setTimeout(() => onCompleteRef.current(), 500);
+          completionTimeout = setTimeout(() => onCompleteRef.current(), 300);
           return 100;
         }
-        return prev + 1;
+        return prev + 2;
       });
-    }, 40);
+    }, 25);
 
     return () => {
       clearInterval(typingInterval);
       clearInterval(progressInterval);
       if (completionTimeout !== null) clearTimeout(completionTimeout);
     };
-  }, []);
+  }, [shouldSkip]);
+
+  if (shouldSkip) return null;
 
   return (
     <motion.div

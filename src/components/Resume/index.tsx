@@ -23,6 +23,8 @@ export const Resume: React.FC = () => {
           <img 
             src="/eclipse.jpg" 
             alt="Eclipse Foreground" 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-top mix-blend-screen"
           />
           

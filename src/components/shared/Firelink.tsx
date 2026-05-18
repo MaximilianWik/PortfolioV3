@@ -19,6 +19,8 @@ export const Firelink: React.FC = () => {
         <img 
           src={firekeeperImg} 
           alt="Fire Keeper" 
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity grayscale-[50%]"
         />
       </motion.div>

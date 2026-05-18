@@ -17,8 +17,16 @@ export const CindersOverlay: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Skip the ambient effect entirely when the user prefers reduced motion,
+    // or on coarse-pointer devices (touchscreens) where the cursor-repel
+    // interaction is moot. Saves a fullscreen rAF loop on most phones.
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    if (prefersReduced || isCoarse) return;
+
     let animationFrameId: number;
     let particles: Particle[] = [];
+    let isPaused = false;
 
     // Cap DPR at 1.5 — the overlay is intentionally low-detail, and rendering
     // a fullscreen canvas at native 2x/3x is pure waste for an ambient effect.
@@ -99,6 +107,10 @@ export const CindersOverlay: React.FC = () => {
     };
 
     const animate = () => {
+      if (isPaused) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
       const cssWidth = canvas.width / dpr;
       const cssHeight = canvas.height / dpr;
       ctx.clearRect(0, 0, cssWidth, cssHeight);
@@ -115,14 +127,22 @@ export const CindersOverlay: React.FC = () => {
       mouse.current.y = e.clientY;
     };
 
+    // Pause the rAF loop while the tab is hidden so we don't waste battery
+    // and CPU on a canvas no one is looking at.
+    const handleVisibility = () => {
+      isPaused = document.visibilityState === 'hidden';
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('resize', init);
+    document.addEventListener('visibilitychange', handleVisibility);
     init();
     animate();
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', init);
+      document.removeEventListener('visibilitychange', handleVisibility);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

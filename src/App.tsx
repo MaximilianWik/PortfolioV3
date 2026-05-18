@@ -14,6 +14,8 @@ import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Highlights } from './components/Highlights';
 import { Footer } from './components/Footer';
+import { Navigation } from './components/shared/Navigation';
+import { Firelink } from './components/shared/Firelink';
 
 const Timeline = React.lazy(() => import('./components/Timeline').then(m => ({ default: m.Timeline })));
 const Projects = React.lazy(() => import('./components/Projects').then(m => ({ default: m.Projects })));
@@ -23,11 +25,15 @@ const HumanityRestored = React.lazy(() =>
   import('./components/HumanityRestored').then(m => ({ default: m.HumanityRestored })),
 );
 
-// Shared
-import { CustomCursor } from './components/shared/CustomCursor';
-import { Navigation } from './components/shared/Navigation';
-import { CindersOverlay } from './components/shared/CindersOverlay';
-import { Firelink } from './components/shared/Firelink';
+// CustomCursor and CindersOverlay are pure ambience — defer them so they don't
+// compete with the hero bundle on first paint. They mount after the preloader
+// resolves anyway, and a lazy import keeps them out of the entry chunk.
+const CustomCursor = React.lazy(() =>
+  import('./components/shared/CustomCursor').then(m => ({ default: m.CustomCursor })),
+);
+const CindersOverlay = React.lazy(() =>
+  import('./components/shared/CindersOverlay').then(m => ({ default: m.CindersOverlay })),
+);
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -65,8 +71,13 @@ export default function App() {
     };
   }, [isLoading]);
 
-  // Smooth scroll
+  // Smooth scroll — opt-out for users who prefer reduced motion. Lenis adds a
+  // rAF loop that runs every frame regardless of user input, so gating it on
+  // the OS preference is both a perf and accessibility win.
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -93,8 +104,10 @@ export default function App() {
       {/* Ambient music. preload="none" — we never fetch the file until the user interacts. */}
       <audio ref={audioRef} src="/DarkSouls3.mp3" loop preload="none" />
 
-      <CustomCursor />
-      <CindersOverlay />
+      <React.Suspense fallback={null}>
+        <CustomCursor />
+        <CindersOverlay />
+      </React.Suspense>
 
       <AnimatePresence mode="wait">
         {isLoading ? (
