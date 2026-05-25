@@ -147,5 +147,3 @@ export const PROJECTS = [
     link: "https://github.com/hannesmalm/Hattfabriken"
   }
 ];
-  }
-];
