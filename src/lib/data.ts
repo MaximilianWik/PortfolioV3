@@ -84,14 +84,16 @@ export const PROJECTS = [
     title: "Studio Panic Attack - Interactive 3D Web Experience",
     subtitle: "A GPU-accelerated, fully immersive landing experience for Stockholm creative collective Studio Panic Attack. Built on React Three Fiber with drei composition utilities, @react-three/postprocessing for layered render passes, and @paper-design/shaders-react for full-screen generative shading effects. GSAP orchestrates scroll-driven narrative choreography across the 3D scene graph while R3F manages camera, lighting, and geometry entirely within a single WebGL context — zero DOM animations, no layout thrash. Public assets (61 images, 3 video clips) feed directly into the scene. Deployed on Vercel with Vite 6.",
     tech: ["TypeScript", "React 19", "Vite 6", "React Three Fiber", "drei", "@react-three/postprocessing", "@paper-design/shaders-react", "GSAP", "Three.js", "WebGL", "Vercel", "Git"],
-    link: "https://github.com/MaximilianWik/Studio-Panic-Attack"
+    link: "https://github.com/MaximilianWik/Studio-Panic-Attack",
+    liveLink: "https://studio-panic-attack-maximilian.vercel.app/"
   },
   {
     id: "II",
     title: "Subdermal - QR-Tattoo Domain & Collaborative Canvas",
     subtitle: "A React 19 single-page application deployed at the edge as a Cloudflare Worker, with a Hono 4 API backend and Cloudflare D1 (SQLite at the edge) for persistence. Live at max-wik.com — reached via a real QR-code tattoo on my arm. Runs on a state-switch architecture: a single number in state.ts selects which of nine pages renders, and Cloudflare auto-deploys on every push to main, so the destination behind the tattoo can be re-skinned from a phone in under a minute. The flagship state, Subdermal, is a 16384 × 24576 collaborative canvas where any visitor can sign a piece beside everyone else's. Features nine brushes (pen, watercolor, calligraphy, spray, airbrush, pixel-art, blender, eyedropper, eraser), pinch/zoom + pan, undo/redo with 50-step history, debounced draft auto-save to localStorage, per-browser ownership via UUID + server-side owner_secret, a stroke-by-stroke replay on each detail card, and a token-gated admin moderation flow (Hide / Ban IP) validated on the Worker.",
     tech: ["TypeScript", "React 19", "Vite 6", "Hono 4", "Cloudflare Workers", "Cloudflare D1", "SQLite at the Edge", "HTMLCanvas", "Pan / Zoom", "localStorage", "UUID Ownership", "Auto-Deploy", "QR Code", "Git"],
-    link: "https://github.com/MaximilianWik/Cloudflare-Domain"
+    link: "https://github.com/MaximilianWik/Cloudflare-Domain",
+    liveLink: "https://max-wik.com/"
   },
   {
     id: "III",
@@ -141,5 +143,8 @@ export const PROJECTS = [
     subtitle: "A full-stack web application for managing the operations of a custom hat manufacturer. The system supports the entire workflow from customer inquiry to delivery: customers can browse hats, submit custom requests specifying material, measurements, height, and special effects, and receive a price quote. Staff can then convert requests into formal offers and confirmed orders, while admins manage the warehouse inventory, materials catalog, and special-effects options. Orders include automatically generated PDF invoices and email notifications sent to customers, with a status pipeline and shipping/cost calculations. Also exposes a documented Web API alongside the MVC frontend.",
     tech: ["C#", ".NET 8", "ASP.NET Core MVC", "ASP.NET Core Web API", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "QuestPDF", "MailKit", "Swagger", "Bootstrap", "jQuery", "Git"],
     link: "https://github.com/hannesmalm/Hattfabriken"
+  }
+];
+ttfabriken"
   }
 ];

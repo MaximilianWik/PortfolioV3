@@ -48,17 +48,31 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
           ))}
         </div>
 
-        <div className="flex items-center justify-between relative z-10">
-          <motion.a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
-            transition={{ duration: 0.3 }}
-            className="inline-block font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
-          >
-            View Artifact
-          </motion.a>
+        <div className="flex items-end justify-between relative z-10">
+          <div className="flex flex-col gap-3">
+            <motion.a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+              transition={{ duration: 0.3 }}
+              className="inline-block font-subdisplay text-[10px] text-bone-white tracking-[0.3em] uppercase border-b border-bone-faded/30 pb-1"
+            >
+              View Artifact
+            </motion.a>
+            {project.liveLink && (
+              <motion.a
+                href={project.liveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
+                transition={{ duration: 0.3 }}
+                className="inline-block font-subdisplay text-[10px] text-bone-faded/60 tracking-[0.3em] uppercase border-b border-bone-faded/20 pb-1"
+              >
+                Enter Site
+              </motion.a>
+            )}
+          </div>
           <span className="font-mono text-[8px] text-bone-faded uppercase tracking-widest opacity-50">
             // Representative
           </span>
