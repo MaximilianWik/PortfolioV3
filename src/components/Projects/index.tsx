@@ -67,7 +67,7 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
                 rel="noopener noreferrer"
                 whileHover={{ y: -3, color: '#B8935A', textShadow: '0px 0px 8px rgba(184,147,90,0.8)', borderColor: '#B8935A' }}
                 transition={{ duration: 0.3 }}
-                className="inline-block font-subdisplay text-[10px] text-bone-faded/60 tracking-[0.3em] uppercase border-b border-bone-faded/20 pb-1"
+                className="inline-block font-subdisplay text-[10px] text-ember-blood tracking-[0.3em] uppercase border-b border-ember-blood/30 pb-1"
               >
                 Enter Site
               </motion.a>
