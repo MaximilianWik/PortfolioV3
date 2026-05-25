@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,9 +6,9 @@
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#07070A" />
 
-    <title>Maximilian Wikström — Portfolio</title>
+    <title>Maximilian Wikström — AI &amp; Automation Specialist | Portfolio</title>
 
-    <meta name="description" content="I'm Maximilian Wikström, an AI & Automation Specialist. This is my portfolio — a soulsborne-inspired showcase of my work on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking." />
+    <meta name="description" content="I'm Maximilian Wikström, an AI &amp; Automation Specialist. This is my portfolio — a soulsborne-inspired showcase of my work on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking." />
     <meta name="author" content="Maximilian Wikström" />
     <meta name="robots" content="index, follow" />
     <meta name="google-site-verification" content="H7HDdZjEUthU4b-wcRZ0HNU0A9hGCmx-sP1m30A-zjA" />
@@ -18,22 +18,19 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Maximilian Wikström — Portfolio" />
     <meta property="og:url" content="https://maximilian-wikstrom.vercel.app/" />
-    <meta property="og:title" content="Maximilian Wikström — Portfolio" />
-    <meta property="og:description" content="My soulsborne-inspired portfolio. AI & Automation Specialist working on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking." />
+    <meta property="og:title" content="Maximilian Wikström — AI &amp; Automation Specialist | Portfolio" />
+    <meta property="og:description" content="My soulsborne-inspired portfolio. AI &amp; Automation Specialist working on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking." />
     <meta property="og:image" content="https://maximilian-wikstrom.vercel.app/bonfire.jpg" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Maximilian Wikström — Portfolio" />
-    <meta name="twitter:description" content="My soulsborne-inspired portfolio. AI & Automation Specialist working on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking." />
+    <meta name="twitter:title" content="Maximilian Wikström — AI &amp; Automation Specialist | Portfolio" />
+    <meta name="twitter:description" content="My soulsborne-inspired portfolio. AI &amp; Automation Specialist working on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking." />
     <meta name="twitter:image" content="https://maximilian-wikstrom.vercel.app/bonfire.jpg" />
 
-    <!-- Inline SVG favicon: ember-blood glyph on ink-void background -->
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%2307070A'/><circle cx='32' cy='32' r='18' fill='none' stroke='%238B1A1A' stroke-width='2'/><path d='M32 14 L36 32 L32 50 L28 32 Z' fill='%23B8935A'/></svg>"
-    />
+    <!-- Hosted SVG favicon — Google requires a fetchable URL to show in search results -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
 
     <!-- Fonts: preconnect + single stylesheet, display=swap to keep LCP fast -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,22 +43,38 @@
     <!-- Preload hero LCP image so it lands in parallel with the JS bundle. -->
     <link rel="preload" as="image" href="/bonfire.jpg" fetchpriority="high" />
 
-    <!-- JSON-LD: Person schema. This portfolio is the identity hub linking out to every other property. -->
+    <!-- JSON-LD: Person + WebSite schemas. Person is the identity hub; WebSite ties the domain to it. -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Maximilian Wikström",
-      "alternateName": "Max Wik",
-      "url": "https://maximilian-wikstrom.vercel.app/",
-      "sameAs": [
-        "https://max-wik.com/",
-        "https://tessera-neon.vercel.app/",
-        "https://cursedechoes.vercel.app/",
-        "https://www.instagram.com/max_wik/",
-        "https://github.com/MaximilianWik"
-      ]
-    }
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Maximilian Wikström",
+        "alternateName": "Max Wik",
+        "jobTitle": "AI & Automation Specialist",
+        "description": "AI & Automation Specialist working on Copilot Studio, Power Automate, agentic AI, and identity governance in regulated banking.",
+        "image": "https://maximilian-wikstrom.vercel.app/bonfire.jpg",
+        "url": "https://maximilian-wikstrom.vercel.app/",
+        "sameAs": [
+          "https://max-wik.com/",
+          "https://tessera-neon.vercel.app/",
+          "https://cursedechoes.vercel.app/",
+          "https://www.instagram.com/max_wik/",
+          "https://github.com/MaximilianWik",
+          "https://www.linkedin.com/in/maximilian-wikström/?locale=en"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Maximilian Wikström — Portfolio",
+        "url": "https://maximilian-wikstrom.vercel.app/",
+        "author": {
+          "@type": "Person",
+          "name": "Maximilian Wikström"
+        }
+      }
+    ]
     </script>
   </head>
   <body>
