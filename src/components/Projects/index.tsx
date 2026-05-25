@@ -17,12 +17,12 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <RevealOnScroll delay={index * 0.1}>
+    <RevealOnScroll delay={index * 0.1} className="h-full">
       <div
         ref={tiltRef}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative border border-bone-faded/10 p-10 transition-colors duration-500 cursor-pointer overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
+        className={`relative flex flex-col h-full border border-bone-faded/10 p-10 transition-colors duration-500 cursor-pointer overflow-hidden ${isHovered ? 'bg-ink-iron' : 'bg-ink-deep'}`}
       >
         <AnimatedOutline active={isHovered} />
 
@@ -34,9 +34,11 @@ const RelicCard: React.FC<{ project: typeof PROJECTS[0], index: number }> = ({ p
           {project.title}
         </h4>
 
-        <p className="font-body italic text-bone-dim text-sm mb-8 max-w-xs leading-relaxed z-10">
+        <p className="font-body italic text-bone-dim text-sm mb-6 leading-relaxed z-10 line-clamp-5">
           "{project.subtitle}"
         </p>
+
+        <div className="flex-1" />
 
         <div className="flex flex-wrap gap-2 mb-10 z-10">
           {project.tech.map((t, j) => (
