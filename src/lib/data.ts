@@ -145,5 +145,12 @@ export const PROJECTS = [
     subtitle: "A full-stack web application for managing the operations of a custom hat manufacturer. The system supports the entire workflow from customer inquiry to delivery: customers can browse hats, submit custom requests specifying material, measurements, height, and special effects, and receive a price quote. Staff can then convert requests into formal offers and confirmed orders, while admins manage the warehouse inventory, materials catalog, and special-effects options. Orders include automatically generated PDF invoices and email notifications sent to customers, with a status pipeline and shipping/cost calculations. Also exposes a documented Web API alongside the MVC frontend.",
     tech: ["C#", ".NET 8", "ASP.NET Core MVC", "ASP.NET Core Web API", "Razor", "Entity Framework Core", "SQL Server", "ASP.NET Core Identity", "EF Migrations", "Dependency Injection", "QuestPDF", "MailKit", "Swagger", "Bootstrap", "jQuery", "Git"],
     link: "https://github.com/hannesmalm/Hattfabriken"
+  },
+  {
+    id: "X",
+    title: "Paleblood Vigil - Generative Algorithmic Art",
+    subtitle: "A single-file, zero-dependency generative art piece built with p5.js. Simulates an N-body attractor system: four gravitational attractors orbit the canvas centre, each exerting inverse-square pull with sinusoidal strength pulsing. Particles accumulate trails on a persistent off-screen p5.Graphics buffer, dimmed each frame to produce heat-map convergence zones in deep crimson-to-blood-orange HSB colour encoding. A geometric substrate of three counter-rotating concentric polygons (hexagon, nonagon, dodecagon) underlays the particle field at low opacity. All randomness is seeded — same seed and parameters reproduce the output exactly. Five live parameters (particle count, gravity pull, turbulence, viscosity, trail fade) update without reinitialisation. No npm, no build step, no server — fully self-contained HTML distributed via GitHub.",
+    tech: ["p5.js", "JavaScript", "HTML5", "Perlin Noise", "N-body Simulation", "HSB Colour", "Procedural Generation", "Seeded PRNG", "Off-screen Canvas", "Cinzel", "Crimson Text", "MIT License", "Git"],
+    link: "https://github.com/MaximilianWik/Paleblood-Vigil"
   }
 ];
