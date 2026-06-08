@@ -20,8 +20,9 @@
  * • Compositing:
  *     embers + sparks → globalCompositeOperation = 'lighter' (additive)
  *     ash             → 'source-over' (normal)
- *     canvas itself   → mixBlendMode: screen on the page, so dark pixels are
- *                       transparent and bright pixels glow over the layout.
+ *     The canvas itself sits on top with regular alpha compositing — no
+ *     mix-blend-mode (it stops working when the canvas ends up in its own
+ *     fixed-position stacking context, producing transparent output).
  *
  * • Trail effect: every frame we paint a translucent destination-out across
  *   the canvas, eroding ~18% of alpha. Particles drawn additively persist for
@@ -78,8 +79,10 @@ const TURB_AMP  = 0.06;
 const MOUSE_R = 200;
 const MOUSE_F = 0.55;
 
-// Trail decay (alpha erased per frame inside the canvas)
-const TRAIL_ALPHA = 0.18;
+// Trail decay (alpha erased per frame inside the canvas).
+// Lower = longer-lived trails / brighter accumulation. 0.08 keeps trails
+// readable for ~12 frames; 0.18 erased them in 5-6.
+const TRAIL_ALPHA = 0.08;
 
 type Kind = 'ember' | 'spark' | 'ash';
 
@@ -277,7 +280,7 @@ export const CindersOverlay: React.FC = () => {
         const flicker = 0.78 + Math.sin(now * 0.022 + p.phase) * 0.22;
         const fadeIn  = Math.min(1, ageT * 8);
         const fadeOut = Math.min(1, (1 - ageT) * 2.8);
-        ctx.globalAlpha = flicker * fadeIn * fadeOut * (p.kind === 'spark' ? 1.0 : 0.85);
+        ctx.globalAlpha = flicker * fadeIn * fadeOut * (p.kind === 'spark' ? 1.0 : 1.0);
 
         const sz = spr.width;
         ctx.drawImage(spr, p.x - sz/2, p.y - sz/2);
@@ -351,7 +354,6 @@ export const CindersOverlay: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-[70]"
-      style={{ mixBlendMode: 'screen' }}
     />
   );
 };
