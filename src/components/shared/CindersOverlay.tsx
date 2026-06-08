@@ -41,8 +41,9 @@
  * • Particle pool: dead particles are recycled in place (Object.assign) — no
  *   allocations per frame after init.
  *
- * • Respects prefers-reduced-motion and pointer:coarse (no canvas at all).
- *   Pauses while tab is hidden.
+ * • Respects prefers-reduced-motion ONLY when the device also has no fine
+ *   pointer (i.e. pure-touch with reduce-motion). On a desktop / laptop with
+ *   any mouse, the fire always runs. Pauses while tab is hidden.
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -106,11 +107,15 @@ export const CindersOverlay: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Skip the effect entirely on reduced-motion preference or coarse pointers.
-    // No allocations, no rAF loop on those targets.
+    // Honor reduced-motion only if the user ALSO has no fine pointer input.
+    // Bare 'reduce' or 'coarse' alone skipped the effect entirely on touchscreen
+    // laptops and on machines with reduce-motion enabled — even when the user
+    // explicitly wanted the fire. Mouse-repel is gated separately at runtime
+    // via mouse.on, so coarse pointers just won't trigger repel; the ambient
+    // animation still runs.
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const coarse = window.matchMedia('(pointer: coarse)').matches;
-    if (reduce || coarse) return;
+    const hasFinePointer = window.matchMedia('(any-pointer: fine)').matches;
+    if (reduce && !hasFinePointer) return;
 
     // Cap DPR at 1.5 — fullscreen ambient canvas, no need for native 2x/3x.
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
