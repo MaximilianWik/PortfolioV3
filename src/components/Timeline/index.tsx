@@ -8,7 +8,6 @@ import { motion } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
 import { EXPERIENCE } from '../../lib/data';
-import { DispersingText } from '../shared/DispersingText';
 
 const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = ({ entry, index }) => {
   const isLeft = index % 2 === 0;
@@ -20,7 +19,7 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
         <motion.span
           initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false }}
+          viewport={{ once: true }}
           transition={{ duration: 1 }}
           className="font-mono text-bone-faded tracking-widest text-xs"
         >
@@ -37,7 +36,7 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
       <motion.div
         initial={{ opacity: 0, x: isLeft ? 40 : -40 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: false }}
+        viewport={{ once: true }}
         transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
         className={`md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}
       >
@@ -53,10 +52,9 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
           {entry.company}
         </div>
 
-        <DispersingText
-          text={entry.description}
-          className="font-body text-bone-dim text-sm italic mb-6 leading-relaxed max-w-lg md:mx-0 mx-auto"
-        />
+        <p className="font-body text-bone-dim text-sm italic mb-6 leading-relaxed max-w-lg md:mx-0 mx-auto">
+          {entry.description}
+        </p>
 
         <div className={`flex flex-wrap gap-2 ${isLeft ? 'md:justify-end' : 'md:justify-start'}`}>
           {entry.skills.map((skill, i) => (
@@ -108,16 +106,12 @@ export const Timeline: React.FC = () => {
             key={gif.id}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: gif.opacity }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             animate={{
-              y: [0, -120, 40, -80, 0],
-              x: [0, 100, -60, 40, 0],
-              rotate: [gif.rotate, gif.rotate + 15, gif.rotate - 15, gif.rotate],
+              y: [0, -60, 0],
             }}
             transition={{
               y: { duration: gif.duration, repeat: Infinity, ease: "easeInOut" },
-              x: { duration: gif.duration * 1.2, repeat: Infinity, ease: "easeInOut" },
-              rotate: { duration: gif.duration * 0.8, repeat: Infinity, ease: "easeInOut" },
               opacity: { duration: 3 }
             }}
             style={{
@@ -127,8 +121,8 @@ export const Timeline: React.FC = () => {
               width: `${gif.size}px`,
               height: 'auto',
               transform: `rotate(${gif.rotate}deg)${gif.mirrored ? ' scaleX(-1)' : ''}`,
-              mixBlendMode: 'screen',
-              filter: 'blur(3px) grayscale(60%) contrast(110%)',
+              filter: 'grayscale(60%)',
+              willChange: 'transform',
               maskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
               WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)'
             }}

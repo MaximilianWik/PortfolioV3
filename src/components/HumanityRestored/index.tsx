@@ -3,7 +3,7 @@ import { motion, useInView } from 'motion/react';
 
 export const HumanityRestored: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: false, amount: 0.5 });
+  const isInView = useInView(containerRef, { once: true, amount: 0.5 });
 
   // Pre-calculate particles
   const particles = useMemo(() => {

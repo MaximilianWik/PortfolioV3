@@ -95,7 +95,7 @@ export const Hero: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 0.08, scale: 1 }}
-        viewport={{ once: false }}
+        viewport={{ once: true }}
         transition={{ duration: 3, ease: "easeOut" }}
         className="absolute w-[60vh] h-[60vh] text-gilt pointer-events-none sigil-bg flex items-center justify-center -z-10"
       >
@@ -107,7 +107,7 @@ export const Hero: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false }}
+          viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 0.5 }}
           className="col-span-1 md:col-span-4 flex flex-col pt-8 min-w-0"
         >
@@ -214,7 +214,7 @@ export const Hero: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false }}
+          viewport={{ once: true }}
           transition={{ duration: 1.5 }}
           className="col-span-1 md:col-span-4 flex flex-col items-center justify-between md:border-x border-bone-faded/20 py-12 md:py-0 min-w-0"
         >
@@ -248,11 +248,11 @@ export const Hero: React.FC = () => {
                 opacity: isBonfireLit ? 0.95 : 0.6,
                 scale: isBonfireLit ? 1.05 : 1,
                 filter: isBonfireLit ? "grayscale(0%)" : "grayscale(30%)",
-                mixBlendMode: isBonfireLit ? "normal" : "luminosity"
               }}
               transition={{ duration: 1, ease: "easeOut" }}
               className="absolute w-full h-full object-contain"
               style={{
+                mixBlendMode: isBonfireLit ? 'normal' : 'luminosity',
                 maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 75%)',
                 WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 75%)'
               }}
@@ -298,7 +298,7 @@ export const Hero: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false }}
+          viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 0.5 }}
           className="col-span-1 md:col-span-4 flex flex-col pt-8 min-w-0"
         >
@@ -322,7 +322,7 @@ export const Hero: React.FC = () => {
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: false }}
+        viewport={{ once: true }}
         transition={{ delay: 2.5, duration: 2 }}
         className="absolute bottom-6 flex flex-col items-center"
       >

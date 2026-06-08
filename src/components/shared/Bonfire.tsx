@@ -49,7 +49,7 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
         this.flicker = Math.random();
       }
 
-      update(intensity: number) {
+      update(intensity: number, t: number) {
         this.y += this.speedY * intensity;
         this.x += (this.speedX + Math.sin(Date.now() * 0.01 + this.flicker)) * 0.5 * intensity;
         this.life--;
@@ -89,8 +89,9 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
         particles.push(new Particle(canvas.width / 2 + (Math.random() - 0.5) * 40, canvas.height - 50, false));
       }
 
+      const t = Date.now();
       for (let i = 0; i < particles.length; i++) {
-        particles[i].update(intensity);
+        particles[i].update(intensity, t);
         particles[i].draw(ctx);
         if (particles[i].life <= 0 || particles[i].size < 0.5) {
           particles.splice(i, 1);

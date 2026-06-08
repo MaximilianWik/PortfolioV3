@@ -32,7 +32,7 @@ export const Contact: React.FC = () => {
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: false }}
+          viewport={{ once: true }}
           transition={{ duration: 1.5 }}
           className="font-display italic text-bone-faded text-2xl md:text-3xl text-center mb-4 tracking-widest"
         >

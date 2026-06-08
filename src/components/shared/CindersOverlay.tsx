@@ -5,7 +5,7 @@
 
 import React, { useRef, useEffect } from 'react';
 
-const MAX_PARTICLES = 220;
+const MAX_PARTICLES = 160;
 
 export const CindersOverlay: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,12 +54,6 @@ export const CindersOverlay: React.FC = () => {
       }
 
       draw() {
-        if (this.isGlow) {
-          ctx.shadowBlur = 5;
-          ctx.shadowColor = this.color;
-        } else {
-          ctx.shadowBlur = 0;
-        }
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
