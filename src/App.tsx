@@ -100,7 +100,7 @@ export default function App() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-ink-void overflow-x-hidden selection:bg-ember-blood/30 flex flex-col">
+    <main className="min-h-screen overflow-x-hidden selection:bg-ember-blood/30 flex flex-col">
       {/* Ambient music. preload="none" — we never fetch the file until the user interacts. */}
       <audio ref={audioRef} src="/DarkSouls3.mp3" loop preload="none" />
 

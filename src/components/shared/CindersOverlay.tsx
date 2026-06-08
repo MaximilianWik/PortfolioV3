@@ -2,88 +2,84 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  *
- * Cinders — fullscreen ember/spark/ash overlay. The site is on fire.
+ * Cinders — fullscreen ember/spark/ash overlay. Burning, behind everything.
  *
  * Architecture
  * ────────────
- * • Sprite atlas (built once on mount): pre-rendered radial-gradient embers at
- *   four sizes × five heat stages, plus an ash sprite. Per-frame drawing is
- *   pure drawImage — no arc(), no per-particle createRadialGradient(), no
- *   shadowBlur. This is the single most important reason the canvas can carry
- *   ~250 particles at 60fps.
+ * • Streak sprite atlas (built once on mount): each ember/spark draws a
+ *   pre-rendered streak shape — bright radial-gradient head with a tapered
+ *   linear-gradient tail. The streak shape IS the trail, so we don't need a
+ *   per-frame full-viewport destination-out pass (the previous version's
+ *   single biggest perf cost). 4 streak lengths × 5 heat stages = 20 sprites,
+ *   plus a round ash sprite. Built lazily inside useEffect, ~40KB total.
+ *
+ * • Per-frame work is just clearRect + drawImage per particle. No fillRect
+ *   trail buffer, no shadowBlur, no per-frame radial gradients.
  *
  * • Three particle classes:
- *     ember — slow rising, glowing, cool through 5 heat stages
- *     spark — small, fast, brief; pop bright then die
- *     ash   — dark drifting flecks, normal-blended, slowly tumble
+ *     ember — slow rising streaks that cool through 5 heat stages
+ *     spark — small, fast, brief; bright pop, short streak
+ *     ash   — dark drifting flecks, normal-blended, tumble + fade
  *
  * • Compositing:
  *     embers + sparks → globalCompositeOperation = 'lighter' (additive)
  *     ash             → 'source-over' (normal)
- *     The canvas itself sits on top with regular alpha compositing — no
- *     mix-blend-mode (it stops working when the canvas ends up in its own
- *     fixed-position stacking context, producing transparent output).
+ *     The canvas itself sits at zIndex: -1, opacity ~0.55 — behind all page
+ *     content, atmospheric not interruptive. No mix-blend-mode (it produces
+ *     transparent output when the canvas is in its own fixed-position
+ *     stacking context).
  *
- * • Trail effect: every frame we paint a translucent destination-out across
- *   the canvas, eroding ~18% of alpha. Particles drawn additively persist for
- *   ~6 frames before fading, producing the streaking flame look without any
- *   per-particle history bookkeeping.
+ * • Erratic motion: a global dual-sinusoid wind field, but each particle
+ *   has its own windMult / turbAmp / turbFreq drawn at spawn, so two
+ *   particles at the same position respond to wind very differently.
+ *   Streak length also varies per spawn (size class 0..3).
  *
- * • Wind: dual sinusoid sampled once per frame, sheared by particle Y so
- *   different vertical layers drift at different rates — gives natural swirl
- *   without the cost of true noise sampling.
+ * • Buoyancy + drag on both axes; spark buoyancy 60% of ember.
  *
- * • Buoyancy: continuous upward acceleration on embers/sparks; ash gets
- *   ~15% buoyancy so it floats but doesn't rocket.
+ * • Mouse repel: cursor pushes particles outward inside MOUSE_R falloff.
  *
- * • Mouse repel: cursor pushes particles outward inside a 200px falloff.
- *
- * • Particle pool: dead particles are recycled in place (Object.assign) — no
+ * • Particle pool: dead particles recycle in place via Object.assign — no
  *   allocations per frame after init.
  *
+ * • DPR clamped to 1 (was 1.5). Fullscreen ambient effect; halving pixel
+ *   count is free perf.
+ *
  * • Respects prefers-reduced-motion ONLY when the device also has no fine
- *   pointer (i.e. pure-touch with reduce-motion). On a desktop / laptop with
- *   any mouse, the fire always runs. Pauses while tab is hidden.
+ *   pointer (i.e. pure-touch + reduce-motion). Pauses on hidden tab.
  */
 
 import React, { useRef, useEffect } from 'react';
 
 // ─────────── Tuning ───────────
-const TARGET_DENSITY = 1 / 6500;     // particles per CSS pixel of viewport area
-const MIN_PARTICLES  = 140;
-const MAX_PARTICLES  = 320;
-const SPARK_RATIO    = 0.45;
+const TARGET_DENSITY = 1 / 9000;     // particles per CSS pixel of viewport
+const MIN_PARTICLES  = 80;
+const MAX_PARTICLES  = 200;
+const SPARK_RATIO    = 0.40;
 const ASH_RATIO      = 0.10;
 
-// Heat stages: white-hot → cooling-dark
+// Heat stages (white-hot → cooling-dark coal)
 const HEAT: { r: number; g: number; b: number }[] = [
-  { r: 255, g: 246, b: 215 }, // 0 white-hot
-  { r: 255, g: 196, b: 110 }, // 1 yellow
-  { r: 240, g: 130, b: 50 },  // 2 orange
-  { r: 184, g: 60,  b: 28 },  // 3 ember red (site palette)
-  { r: 110, g: 28,  b: 16 },  // 4 dying coal
+  { r: 255, g: 246, b: 215 },
+  { r: 255, g: 196, b: 110 },
+  { r: 240, g: 130, b: 50 },
+  { r: 184, g: 60,  b: 28 },
+  { r: 110, g: 28,  b: 16 },
 ];
 
-// Ember sizes (CSS px). Sprite half-extent is radius × GLOW_HALO so the
-// gradient can fade past the bright core into a soft halo.
-const EMBER_RADII = [12, 7, 4, 2.2];
-const GLOW_HALO   = 4;
+// Streak head radii (CSS px) and tail-length multipliers per size class.
+// Size class 0 = biggest streak (long tail), class 3 = small (short tail).
+const HEAD_RADII = [10, 7, 4.5, 2.5];
+const TAIL_MULT  = [7,  6, 4.5, 3.0]; // tail length = headRadius × this
 
 // Physics
-const BUOY_ACC  = 0.018;   // upward acc/frame from heat
+const BUOY_ACC  = 0.020;
 const DRAG      = 0.985;
 const VERT_DRAG = 0.992;
 const WIND_AMP  = 0.95;
-const TURB_AMP  = 0.06;
 
 // Mouse repel
 const MOUSE_R = 200;
 const MOUSE_F = 0.55;
-
-// Trail decay (alpha erased per frame inside the canvas).
-// Lower = longer-lived trails / brighter accumulation. 0.08 keeps trails
-// readable for ~12 frames; 0.18 erased them in 5-6.
-const TRAIL_ALPHA = 0.08;
 
 type Kind = 'ember' | 'spark' | 'ash';
 
@@ -91,8 +87,12 @@ interface Particle {
   x: number; y: number;
   vx: number; vy: number;
   age: number; life: number;
-  base: number;          // 0..1 — drives size class
-  phase: number;         // per-particle phase for flicker/turbulence
+  size: number;          // 0..3 size class (index into HEAD_RADII)
+  phase: number;
+  // Per-particle motion params for erratic, non-uniform drift
+  windMult: number;      // 0.25..1.6 — response to global wind
+  turbAmp: number;       // 0.04..0.18 — turbulence magnitude
+  turbFreq: number;      // 0.6..4.5  — turbulence frequency
   kind: Kind;
   rot: number; rotV: number;
 }
@@ -107,53 +107,79 @@ export const CindersOverlay: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Honor reduced-motion only if the user ALSO has no fine pointer input.
-    // Bare 'reduce' or 'coarse' alone skipped the effect entirely on touchscreen
-    // laptops and on machines with reduce-motion enabled — even when the user
-    // explicitly wanted the fire. Mouse-repel is gated separately at runtime
-    // via mouse.on, so coarse pointers just won't trigger repel; the ambient
-    // animation still runs.
+    // Only short-circuit if BOTH reduce-motion is on AND there's no fine
+    // pointer — i.e. pure-touch users who explicitly asked for less motion.
+    // Mouse-repel is gated separately at runtime via mouse.on.
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasFinePointer = window.matchMedia('(any-pointer: fine)').matches;
     if (reduce && !hasFinePointer) return;
 
-    // Cap DPR at 1.5 — fullscreen ambient canvas, no need for native 2x/3x.
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    // DPR 1 — half the pixels of native 1.5x; the effect is intentionally
+    // soft, sub-pixel detail is wasted here.
+    const dpr = 1;
 
-    // ─────────── Sprite atlas (built once) ───────────
-    const buildEmber = (radius: number, h: { r: number; g: number; b: number }) => {
-      const sz = Math.ceil(radius * GLOW_HALO * 2);
-      const c  = document.createElement('canvas');
-      c.width = c.height = sz;
-      const cx = c.getContext('2d')!;
-      const r  = sz / 2;
-      const g  = cx.createRadialGradient(r, r, 0, r, r, r);
-      // Bright white core → colored hot mid → fading halo → transparent edge
-      g.addColorStop(0,    'rgba(255, 250, 235, 1)');
-      g.addColorStop(0.05, `rgba(${h.r}, ${h.g}, ${h.b}, 1)`);
-      g.addColorStop(0.20, `rgba(${h.r}, ${Math.round(h.g * 0.6)}, ${Math.round(h.b * 0.45)}, 0.78)`);
-      g.addColorStop(0.55, `rgba(${h.r}, ${Math.round(h.g * 0.4)}, ${Math.round(h.b * 0.30)}, 0.20)`);
-      g.addColorStop(1,    `rgba(${h.r}, ${h.g}, ${h.b}, 0)`);
-      cx.fillStyle = g;
-      cx.fillRect(0, 0, sz, sz);
-      return c;
+    // ─────────── Streak sprite atlas ───────────
+    // Each sprite: bright radial head at top + tapered linear tail downward.
+    // Drawn at (p.x - W/2, p.y - headR) so the head sits at the particle
+    // position and the tail trails below.
+    const buildStreak = (
+      headR: number,
+      tailLen: number,
+      h: { r: number; g: number; b: number }
+    ): { canvas: HTMLCanvasElement; headR: number } => {
+      const w = Math.ceil(headR * 4);
+      const totalH = Math.ceil(headR * 2 + tailLen);
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = totalH;
+      const cx2d = c.getContext('2d')!;
+      const mx = w / 2;
+      const headCY = headR; // head center y
+
+      // Tail: linear gradient inside a narrowing trapezoid
+      const tg = cx2d.createLinearGradient(0, headCY, 0, totalH);
+      tg.addColorStop(0,   `rgba(${h.r}, ${h.g}, ${h.b}, 0.70)`);
+      tg.addColorStop(0.4, `rgba(${h.r}, ${Math.round(h.g * 0.55)}, ${Math.round(h.b * 0.30)}, 0.30)`);
+      tg.addColorStop(1,   `rgba(${h.r}, ${h.g}, ${h.b}, 0)`);
+      cx2d.fillStyle = tg;
+      cx2d.beginPath();
+      cx2d.moveTo(mx - headR * 0.7, headCY);
+      cx2d.lineTo(mx + headR * 0.7, headCY);
+      cx2d.lineTo(mx + headR * 0.15, totalH);
+      cx2d.lineTo(mx - headR * 0.15, totalH);
+      cx2d.closePath();
+      cx2d.fill();
+
+      // Head: radial gradient — white-hot core, colored mid, soft halo
+      const hg = cx2d.createRadialGradient(mx, headCY, 0, mx, headCY, headR * 1.9);
+      hg.addColorStop(0,    'rgba(255, 250, 235, 1)');
+      hg.addColorStop(0.06, `rgba(${h.r}, ${h.g}, ${h.b}, 1)`);
+      hg.addColorStop(0.35, `rgba(${h.r}, ${Math.round(h.g * 0.5)}, ${Math.round(h.b * 0.35)}, 0.55)`);
+      hg.addColorStop(1,    `rgba(${h.r}, ${h.g}, ${h.b}, 0)`);
+      cx2d.fillStyle = hg;
+      cx2d.fillRect(0, 0, w, Math.min(totalH, headR * 3));
+
+      return { canvas: c, headR };
     };
 
     const buildAsh = () => {
       const sz = 10;
-      const c  = document.createElement('canvas');
+      const c = document.createElement('canvas');
       c.width = c.height = sz;
-      const cx = c.getContext('2d')!;
-      const g  = cx.createRadialGradient(sz/2, sz/2, 0, sz/2, sz/2, sz/2);
+      const cx2d = c.getContext('2d')!;
+      const g = cx2d.createRadialGradient(sz/2, sz/2, 0, sz/2, sz/2, sz/2);
       g.addColorStop(0,   'rgba(50, 45, 42, 0.95)');
       g.addColorStop(0.5, 'rgba(28, 24, 22, 0.55)');
       g.addColorStop(1,   'rgba(10, 8, 7, 0)');
-      cx.fillStyle = g;
-      cx.fillRect(0, 0, sz, sz);
+      cx2d.fillStyle = g;
+      cx2d.fillRect(0, 0, sz, sz);
       return c;
     };
 
-    const ember: HTMLCanvasElement[][] = EMBER_RADII.map(r => HEAT.map(h => buildEmber(r, h)));
+    // streaks[sizeClass][heatStage]
+    const streaks = HEAD_RADII.map((r, i) =>
+      HEAT.map(h => buildStreak(r, r * TAIL_MULT[i], h))
+    );
     const ash = buildAsh();
 
     // ─────────── Particles ───────────
@@ -161,15 +187,23 @@ export const CindersOverlay: React.FC = () => {
     let cssW = 0, cssH = 0;
 
     const seed = (kind: Kind, w: number, h: number, fromBelow = false): Particle => {
-      const base = Math.random();
-      const life = kind === 'spark' ? 60  + Math.random() * 50
+      const sizeClass = kind === 'spark'
+        ? 3
+        : Math.floor(Math.random() * HEAD_RADII.length);
+      const life = kind === 'spark' ? 50 + Math.random() * 50
                  : kind === 'ash'   ? 380 + Math.random() * 320
-                                    : 220 + Math.random() * 220;
-      const lift = kind === 'spark' ? -2.2 : kind === 'ash' ? -0.25 : -0.95;
+                                    : 220 + Math.random() * 280;
+      const lift = kind === 'spark' ? -2.4 : kind === 'ash' ? -0.25 : -0.95;
+
+      // Per-particle motion — varied response to wind + turbulence so two
+      // particles at the same position move in noticeably different ways.
+      const windMult = 0.25 + Math.random() * 1.35;
+      const turbAmp  = 0.04 + Math.random() * 0.14;
+      const turbFreq = 0.6  + Math.random() * 3.9;
+
       return {
         x: Math.random() * w,
-        // 65% of fresh embers spawn in the bottom 40% of the screen, the rest
-        // anywhere — so the fire feels rooted at the foot but reaches up.
+        // 65% spawn near the bottom band; 35% scattered everywhere
         y: fromBelow
           ? h + 5 + Math.random() * 30
           : (Math.random() < 0.65 ? h - Math.random() * h * 0.4 : Math.random() * h),
@@ -177,8 +211,9 @@ export const CindersOverlay: React.FC = () => {
         vy: lift - Math.random() * 0.5,
         age: fromBelow ? 0 : Math.floor(Math.random() * life * 0.5),
         life,
-        base,
+        size: sizeClass,
         phase: Math.random() * Math.PI * 2,
+        windMult, turbAmp, turbFreq,
         kind,
         rot: Math.random() * Math.PI * 2,
         rotV: (Math.random() - 0.5) * 0.025,
@@ -208,7 +243,6 @@ export const CindersOverlay: React.FC = () => {
       for (let i = 0; i < ashes;  i++) particles.push(seed('ash',   cssW, cssH));
     };
 
-    // Recycle a dead particle in place — no allocations, no GC churn
     const recycle = (p: Particle, w: number, h: number) => {
       Object.assign(p, seed(p.kind, w, h, true));
     };
@@ -223,16 +257,15 @@ export const CindersOverlay: React.FC = () => {
       const w = cssW, h = cssH;
       const t = now * 0.001;
 
-      // Trail decay — translucent destination-out leaves ~6 frames of streak
-      // behind every additive particle. Single fillRect, cheap.
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = `rgba(0,0,0,${TRAIL_ALPHA})`;
-      ctx.fillRect(0, 0, w, h);
+      // Clear rather than trail-decay — clearRect is dramatically cheaper than
+      // a full-viewport destination-out fillRect and the streak sprites give
+      // the trail look on their own.
+      ctx.clearRect(0, 0, w, h);
 
-      // Wind field — sampled once per frame; per-particle Y-shear and phase
-      // turbulence applied inline below.
-      const winRoot1 = Math.sin(t * 0.55)        * WIND_AMP;
-      const winRoot2 = Math.sin(t * 1.30 + 1.7)  * WIND_AMP * 0.35;
+      // Global wind field — sampled once per frame; per-particle windMult and
+      // turbulence applied below.
+      const winRoot1 = Math.sin(t * 0.55)       * WIND_AMP;
+      const winRoot2 = Math.sin(t * 1.30 + 1.7) * WIND_AMP * 0.35;
 
       const m = mouse.current;
 
@@ -244,16 +277,14 @@ export const CindersOverlay: React.FC = () => {
 
         p.age++;
 
-        // Wind: dual sinusoid + Y-shear + per-particle turbulence
-        const windX = winRoot1
-                    + winRoot2 * Math.sin(p.y * 0.004)
-                    + Math.sin(t * 3 + p.phase) * TURB_AMP;
-        p.vx += windX * 0.018;
+        // Per-particle wind response + turbulence
+        const windX = (winRoot1 + winRoot2 * Math.sin(p.y * 0.004)) * p.windMult
+                    + Math.sin(t * p.turbFreq + p.phase) * p.turbAmp;
+        p.vx += windX * 0.022;
         p.vy -= BUOY_ACC * (p.kind === 'spark' ? 0.6 : 1.0);
         p.vx *= DRAG;
         p.vy *= VERT_DRAG;
 
-        // Mouse repel
         if (m.on) {
           const dx = p.x - m.x, dy = p.y - m.y;
           const d2 = dx*dx + dy*dy;
@@ -268,27 +299,22 @@ export const CindersOverlay: React.FC = () => {
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.age > p.life || p.y < -50 || p.x < -60 || p.x > w + 60) {
+        if (p.age > p.life || p.y < -80 || p.x < -60 || p.x > w + 60) {
           recycle(p, w, h);
           continue;
         }
 
-        // Sprite selection: heat stage advances with age, size class fixed at spawn
         const ageT = p.age / p.life;
         const stageIdx = Math.min(HEAT.length - 1, Math.floor(ageT * (HEAT.length - 0.001)));
-        const sizeIdx = p.kind === 'spark'
-          ? 3
-          : Math.min(EMBER_RADII.length - 1, Math.floor((1 - p.base) * EMBER_RADII.length));
-        const spr = ember[sizeIdx][stageIdx];
+        const sprite = streaks[p.size][stageIdx];
 
-        // Flicker around base brightness, fade in/out at endpoints of life
         const flicker = 0.78 + Math.sin(now * 0.022 + p.phase) * 0.22;
         const fadeIn  = Math.min(1, ageT * 8);
         const fadeOut = Math.min(1, (1 - ageT) * 2.8);
-        ctx.globalAlpha = flicker * fadeIn * fadeOut * (p.kind === 'spark' ? 1.0 : 1.0);
+        ctx.globalAlpha = flicker * fadeIn * fadeOut;
 
-        const sz = spr.width;
-        ctx.drawImage(spr, p.x - sz/2, p.y - sz/2);
+        const sw = sprite.canvas.width;
+        ctx.drawImage(sprite.canvas, p.x - sw / 2, p.y - sprite.headR);
       }
 
       // ─────────── Pass 2: ash (normal blend) ───────────
@@ -298,7 +324,7 @@ export const CindersOverlay: React.FC = () => {
         if (p.kind !== 'ash') continue;
 
         p.age++;
-        const windX = winRoot1 * 0.4 + Math.sin(t * 0.7 + p.phase) * 0.3;
+        const windX = winRoot1 * 0.4 * p.windMult + Math.sin(t * p.turbFreq * 0.3 + p.phase) * 0.3;
         p.vx += windX * 0.005;
         p.vy -= BUOY_ACC * 0.15;
         p.vx *= 0.99;
@@ -314,9 +340,9 @@ export const CindersOverlay: React.FC = () => {
 
         const ageT = p.age / p.life;
         const fade = Math.min(1, ageT * 5) * Math.min(1, (1 - ageT) * 3);
-        ctx.globalAlpha = fade * 0.6;
+        ctx.globalAlpha = fade * 0.55;
 
-        const sz = ash.width * (0.7 + p.base * 0.9);
+        const sz = ash.width * (0.7 + (3 - p.size) * 0.25);
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
@@ -358,7 +384,8 @@ export const CindersOverlay: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[70]"
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: -1, opacity: 0.55 }}
     />
   );
 };
