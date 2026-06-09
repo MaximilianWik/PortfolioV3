@@ -217,6 +217,7 @@ export const Timeline: React.FC = () => {
 
   return (
     <section id="chronicle" className="relative py-32 px-6 overflow-hidden">
+      <style>{`@keyframes gif-float { from { transform: translateY(0); } to { transform: translateY(-60px); } }`}</style>
 
       {/* Background GIFs */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -226,11 +227,7 @@ export const Timeline: React.FC = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: gif.opacity }}
             viewport={{ once: true }}
-            animate={{ y: gif.id === 0 ? [0, -60, 0] : [-35, 25, -35] }}
-            transition={{
-              y: { duration: gif.duration, repeat: Infinity, ease: 'easeInOut' },
-              opacity: { duration: 3 },
-            }}
+            transition={{ opacity: { duration: 3 } }}
             style={{
               position: 'absolute',
               left: `${gif.x}%`,
@@ -239,13 +236,21 @@ export const Timeline: React.FC = () => {
               height: 'auto',
               transform: `rotate(${gif.rotate}deg)${gif.mirrored ? ' scaleX(-1)' : ''}`,
               filter: 'grayscale(60%)',
-              willChange: 'transform',
               maskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
               WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
             }}
           >
-            <img src="/HumanityNoBg.gif" alt="" loading="lazy" decoding="async"
-              className="w-full h-auto opacity-100" referrerPolicy="no-referrer" />
+            {/* CSS animation avoids Framer Motion transform conflicts.
+                Negative delay = true phase offset: GIF 0 starts at bottom
+                (ascending), GIF 1 starts at top (descending). */}
+            <div style={{
+              animation: `gif-float ${gif.duration}s ease-in-out infinite alternate`,
+              animationDelay: gif.id === 0 ? '0s' : `-${gif.duration}s`,
+              willChange: 'transform',
+            }}>
+              <img src="/HumanityNoBg.gif" alt="" loading="lazy" decoding="async"
+                className="w-full h-auto opacity-100" referrerPolicy="no-referrer" />
+            </div>
           </motion.div>
         ))}
         <div className="absolute inset-0 bg-gradient-to-b from-ink-void via-transparent to-ink-void" />

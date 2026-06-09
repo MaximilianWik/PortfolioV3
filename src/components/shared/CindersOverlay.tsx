@@ -251,7 +251,7 @@ export const CindersOverlay: React.FC = () => {
     };
 
     const recycle = (p: Particle, w: number, h: number) => {
-      Object.assign(p, seed(p.kind, w, h, true));
+      Object.assign(p, seed(p.kind, w, h, false));
     };
 
     let paused = false;
