@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0] - 2026-06-09
+
+### The Bearer — full section rework
+
+- Replaced the static image + single lore paragraph with a full multi-zone layout.
+- **Opening statement**: large typographic block with ember-blood left border and gilt accent. Direct, punchy voice from the LinkedIn bio.
+- **Main grid (3/5 + 2/5)**: Left column has current role block (DNB Bank, title, detail text), education (Örebro + Nuremberg), philosophy quote, and stat counters. Right column has the blackmaiden image (simplified — removed Dark Souls quote overlay) and a compact character-sheet status panel (Location, Status, Domain, Focus).
+- **Disciplines grid** (4 cards, full-width): Agentic Systems, Automation & Governance, Intelligence & Data, Engineering. Each card has AnimatedOutline + CornerBrackets hover, VanillaTilt 3D, radial glow, skill tags that shift to gilt on hover.
+- **Side Projects** (3 cards): Tessera, Cursed Echoes, Subdermal. Each is a clickable `<a>` with AnimatedOutline in ember-blood, hover lift, "VISIT →" indicator, tagline + detail + tech tags.
+- Removed DispersingText and usePretextLayout layout-height hack (kept hook for bio height stability only).
+- Removed lore-voice bio that obscured real professional info.
+
+---
+
 ## [1.4.0] - 2026-06-09
 
 ### Chronicle — interactive hover awakening
