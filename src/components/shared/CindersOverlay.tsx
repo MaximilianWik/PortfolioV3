@@ -74,7 +74,7 @@ const HEAD_R     = 3;                     // px, fixed for all embers
 const TAIL_LENS  = [52, 32, 18, 8];       // px, one per size class
 
 // Physics — gentler buoyancy + wind for slow, atmospheric drift
-const BUOY_ACC  = 0.008;
+const BUOY_ACC  = 0.005;
 const DRAG      = 0.985;
 const VERT_DRAG = 0.992;
 const WIND_AMP  = 0.45;
@@ -195,10 +195,10 @@ export const CindersOverlay: React.FC = () => {
       const sizeClass = kind === 'spark'
         ? 3
         : Math.floor(Math.random() * TAIL_LENS.length);
-      const life = kind === 'spark' ? 110 + Math.random() * 90
+      const life = kind === 'spark' ? 140 + Math.random() * 100
                  : kind === 'ash'   ? 480 + Math.random() * 400
-                                    : 380 + Math.random() * 420;
-      const lift = kind === 'spark' ? -1.2 : kind === 'ash' ? -0.15 : -0.45;
+                                    : 600 + Math.random() * 600;
+      const lift = kind === 'spark' ? -0.9 : kind === 'ash' ? -0.10 : -0.30;
 
       // Per-particle motion — slower frequencies + smaller amplitudes for
       // smooth, drifting movement instead of jittery uniform wave-form drift.
@@ -316,7 +316,7 @@ export const CindersOverlay: React.FC = () => {
         // Slow flicker — period ~1.5s, gentle 0.78..1.0 brightness oscillation
         const flicker = 0.78 + Math.sin(now * 0.004 + p.phase) * 0.22;
         const fadeIn  = Math.min(1, ageT * 8);
-        const fadeOut = Math.min(1, (1 - ageT) * 2.8);
+        const fadeOut = Math.min(1, (1 - ageT) * 4.5);
         ctx.globalAlpha = flicker * fadeIn * fadeOut;
 
         const sw = sprite.canvas.width;
@@ -391,7 +391,7 @@ export const CindersOverlay: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 1, opacity: 0.55 }}
+      style={{ zIndex: 1, opacity: 0.68 }}
     />
   );
 };
