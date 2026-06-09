@@ -139,7 +139,6 @@ const TimelineEntry: React.FC<EntryProps> = ({
             {/* Role */}
             <motion.h4
               animate={{
-                letterSpacing: isActive ? '0.12em' : '0.06em',
                 textShadow: isActive
                   ? '0 0 20px rgba(184,147,90,0.45)'
                   : '0 0 0px rgba(184,147,90,0)',

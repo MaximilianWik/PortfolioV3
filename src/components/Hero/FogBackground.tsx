@@ -2,191 +2,64 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  *
- * FogBackground — WebGL2 animated fog shader inside the Hero section.
- *
- * A fullscreen PlaneGeometry equivalent: a quad covering the hero that
- * renders 4-octave fbm noise as drifting dark navy fog. The canvas uses
- * alpha:true so the hero's bg-ink-void CSS background shows through
- * transparent areas — fog is additive, not a hard replacement.
- *
- * Mouse position offsets the noise UV for a subtle parallax.
- * isBonfireLit transitions the fog from cool dark-navy to warm ember-blood.
- * Disabled on coarse-pointer (touch) devices.
+ * FogBackground — CSS animated fog blobs for the Hero section.
+ * Five large radial-gradient ellipses drift at different speeds.
+ * mix-blend-mode: screen composites them over the black background
+ * so the dark-navy / ember colours show through without WebGL.
+ * On bonfire hover the blobs warm from navy → ember-blood via a
+ * CSS transition on a data attribute colour override.
  */
 
-import React, { useRef, useEffect } from 'react';
-
-const VERT = `#version 300 es
-in vec2 a_pos;
-out vec2 v_uv;
-void main() {
-  v_uv = a_pos * 0.5 + 0.5;
-  gl_Position = vec4(a_pos, 0.0, 1.0);
-}`;
-
-const FRAG = `#version 300 es
-precision mediump float;
-in vec2  v_uv;
-uniform vec2  u_res;
-uniform float u_time;
-uniform vec2  u_mouse;   // -0.5..0.5, centred on viewport
-uniform float u_warmth;  // 0=cool, 1=warm (bonfire lit)
-out vec4 fragColor;
-
-// ── Value noise ───────────────────────────────────────────────────────────────
-float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
-float noise(vec2 p){
-  vec2 i=floor(p), f=fract(p);
-  f=f*f*(3.0-2.0*f);
-  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),
-             mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
-}
-float fbm(vec2 p){
-  // Rotated octaves give more organic swirl than axis-aligned layering
-  mat2 rot = mat2(0.80, 0.60, -0.60, 0.80);
-  float v=0.0, a=0.52;
-  for(int i=0;i<4;i++){ v+=a*noise(p); p=rot*p*2.1+0.4; a*=0.46; }
-  return v;
-}
-
-void main(){
-  vec2 uv = v_uv;
-  // Mouse parallax — barely perceptible, just enough to feel 3D
-  uv += u_mouse * 0.018;
-
-  // Primary slow drift
-  vec2 np  = uv * 2.2 + vec2(u_time * 0.022, u_time * 0.014);
-  float n  = fbm(np);
-
-  // Secondary faster counter-drift adds depth
-  vec2 np2 = uv * 4.6 + vec2(u_time * -0.016, u_time * 0.019);
-  float n2 = fbm(np2) * 0.30;
-
-  float fog = clamp(n * 0.72 + n2, 0.0, 1.0);
-
-  // Colours — clearly visible against ink-void (#07070A = vec3(0.027))
-  vec3 cool = vec3(0.14, 0.18, 0.32);   // dark-navy fog, clearly above ink-void
-  vec3 warm = vec3(0.28, 0.09, 0.05);   // dark-ember fog on bonfire hover
-  vec3 col  = mix(cool, warm, u_warmth);
-
-  // Edge vignette: pull fog back from viewport edges so hero content pops
-  vec2 vig = abs(uv * 2.0 - 1.0);
-  float v  = 1.0 - smoothstep(0.50, 1.0, max(vig.x, vig.y));
-  fog *= v;
-
-  float density = smoothstep(0.08, 0.58, fog);
-  float alpha   = density * 0.82;
-
-  // Premultiplied alpha for correct WebGL blending with the page
-  fragColor = vec4(col * alpha, alpha);
-}`;
-
-function mkShader(gl: WebGL2RenderingContext, type: number, src: string) {
-  const s = gl.createShader(type)!;
-  gl.shaderSource(s, src); gl.compileShader(s);
-  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
-    console.error('[FogBackground shader]', gl.getShaderInfoLog(s));
-  return s;
-}
+import React from 'react';
 
 interface Props { isBonfireLit: boolean }
 
 export const FogBackground: React.FC<Props> = ({ isBonfireLit }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const warmRef   = useRef(0);
+  const blobs = [
+    { w: '90vw',  h: '60vh', x: '5%',   y: '10%', dur: 38, delay: 0,   ox: '55%', oy: '45%' },
+    { w: '75vw',  h: '55vh', x: '20%',  y: '35%', dur: 52, delay: -14, ox: '40%', oy: '60%' },
+    { w: '65vw',  h: '70vh', x: '-10%', y: '5%',  dur: 44, delay: -8,  ox: '60%', oy: '40%' },
+    { w: '80vw',  h: '45vh', x: '15%',  y: '50%', dur: 60, delay: -22, ox: '45%', oy: '55%' },
+    { w: '55vw',  h: '65vh', x: '35%',  y: '15%', dur: 35, delay: -5,  ox: '50%', oy: '50%' },
+  ] as const;
 
-  // Mirror prop into ref for RAF loop
-  useEffect(() => {
-    const target = isBonfireLit ? 1 : 0;
-    const STEP = 0.03;
-    const id = setInterval(() => {
-      warmRef.current += (target - warmRef.current) * STEP;
-    }, 16);
-    return () => clearInterval(id);
-  }, [isBonfireLit]);
+  // cool = dark navy, warm = dark ember-blood
+  const coolStop1 = 'rgba(28, 38, 68, 0.55)';
+  const coolStop2 = 'rgba(14, 18, 36, 0.20)';
+  const warmStop1 = 'rgba(68, 18, 10, 0.55)';
+  const warmStop2 = 'rgba(36, 10, 6,  0.20)';
 
-  useEffect(() => {
-    // Skip only on pure-touch with no fine pointer (same fix applied to CindersOverlay)
-    const hasFine = window.matchMedia('(any-pointer: fine)').matches;
-    if (!hasFine) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true });
-    if (!gl) return;
-
-    // ── Program ───────────────────────────────────────────────────────────────
-    const prog = gl.createProgram()!;
-    gl.attachShader(prog, mkShader(gl, gl.VERTEX_SHADER,   VERT));
-    gl.attachShader(prog, mkShader(gl, gl.FRAGMENT_SHADER, FRAG));
-    gl.linkProgram(prog);
-    gl.useProgram(prog);
-
-    const quad = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-      -1,-1,  1,-1, -1,1,  1,-1, 1,1, -1,1,
-    ]), gl.STATIC_DRAW);
-    const aPos = gl.getAttribLocation(prog, 'a_pos');
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); // premultiplied
-
-    const uRes    = gl.getUniformLocation(prog, 'u_res');
-    const uTime   = gl.getUniformLocation(prog, 'u_time');
-    const uMouse  = gl.getUniformLocation(prog, 'u_mouse');
-    const uWarmth = gl.getUniformLocation(prog, 'u_warmth');
-
-    let W = 0, H = 0, mx = 0, my = 0, rafId = 0;
-
-    const resize = () => {
-      const parent = canvas.parentElement!;
-      W = parent.clientWidth;
-      H = parent.clientHeight || window.innerHeight;
-      canvas.width  = W;
-      canvas.height = H;
-      gl.viewport(0, 0, W, H);
-    };
-
-    const onMove = (e: MouseEvent) => {
-      mx = (e.clientX / window.innerWidth)  - 0.5;
-      my = (e.clientY / window.innerHeight) - 0.5;
-    };
-
-    const obs = new ResizeObserver(resize);
-    if (canvas.parentElement) obs.observe(canvas.parentElement);
-    window.addEventListener('mousemove', onMove, { passive: true });
-    resize();
-
-    const tick = (now: number) => {
-      rafId = requestAnimationFrame(tick);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform2f(uRes, W, H);
-      gl.uniform1f(uTime, now * 0.001);
-      gl.uniform2f(uMouse, mx, my);
-      gl.uniform1f(uWarmth, warmRef.current);
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-    };
-
-    rafId = requestAnimationFrame(tick);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      obs.disconnect();
-      window.removeEventListener('mousemove', onMove);
-      gl.deleteProgram(prog);
-      gl.deleteBuffer(quad);
-    };
-  }, []);
+  const s1 = isBonfireLit ? warmStop1 : coolStop1;
+  const s2 = isBonfireLit ? warmStop2 : coolStop2;
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0 }}
-    />
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+      {blobs.map((b, i) => (
+        <div
+          key={i}
+          className="absolute"
+          style={{
+            width:  b.w,
+            height: b.h,
+            left:   b.x,
+            top:    b.y,
+            borderRadius: '50%',
+            background: `radial-gradient(ellipse at ${b.ox} ${b.oy}, ${s1} 0%, ${s2} 45%, transparent 72%)`,
+            mixBlendMode: 'screen',
+            transition: 'background 1.2s ease',
+            animation: `fog-drift-${i} ${b.dur}s ${b.delay}s ease-in-out infinite alternate`,
+            willChange: 'transform',
+          }}
+        />
+      ))}
+
+      <style>{`
+        @keyframes fog-drift-0 { from { transform: translate(0,    0)    scale(1);    } to { transform: translate(4%,  3%)   scale(1.06); } }
+        @keyframes fog-drift-1 { from { transform: translate(0,    0)    scale(1);    } to { transform: translate(-3%, 4%)   scale(0.94); } }
+        @keyframes fog-drift-2 { from { transform: translate(0,    0)    scale(1);    } to { transform: translate(5%,  -2%)  scale(1.08); } }
+        @keyframes fog-drift-3 { from { transform: translate(0,    0)    scale(1);    } to { transform: translate(-4%, -3%)  scale(1.04); } }
+        @keyframes fog-drift-4 { from { transform: translate(0,    0)    scale(1);    } to { transform: translate(3%,  5%)   scale(0.96); } }
+      `}</style>
+    </div>
   );
 };
