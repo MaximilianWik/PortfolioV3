@@ -24,7 +24,7 @@
  * • Compositing:
  *     embers + sparks → globalCompositeOperation = 'lighter' (additive)
  *     ash             → 'source-over' (normal)
- *     The canvas itself sits at zIndex: 1, opacity ~0.55 — between background
+ *     The canvas itself sits at zIndex: 1, opacity ~0.45 — between background
  *     imagery (which paints with the static section flow) and foreground
  *     text/cards (which use `relative z-10` to lift above the canvas via
  *     root stacking context). No mix-blend-mode (it produces transparent
@@ -52,7 +52,7 @@
 import React, { useRef, useEffect } from 'react';
 
 // ─────────── Tuning ───────────
-const TARGET_DENSITY = 1 / 9000;     // particles per CSS pixel of viewport
+const TARGET_DENSITY = 1 / 14000;    // particles per CSS pixel of viewport
 const MIN_PARTICLES  = 80;
 const MAX_PARTICLES  = 200;
 const SPARK_RATIO    = 0.40;
@@ -196,15 +196,11 @@ export const CindersOverlay: React.FC = () => {
         ? 3
         : Math.floor(Math.random() * TAIL_LENS.length);
 
-      // V-shape: spawnX and lifeMult must be computed before `life` uses it.
       const spawnX = Math.random() * w;
-      const distFromCentre = w > 0 ? Math.abs(spawnX - w / 2) / (w / 2) : 1;
-      // 0.18 at dead-centre → 1.0 at the edges
-      const lifeMult = 0.18 + 0.82 * distFromCentre;
 
       const life = kind === 'spark' ? 140 + Math.random() * 100
                  : kind === 'ash'   ? 480 + Math.random() * 400
-                                    : (600 + Math.random() * 600) * lifeMult;
+                                    : 500 + Math.random() * 500;
       const lift = kind === 'spark' ? -0.9 : kind === 'ash' ? -0.10 : -0.30;
 
       // Per-particle motion params
@@ -217,7 +213,7 @@ export const CindersOverlay: React.FC = () => {
         // 65% spawn near the bottom band; 35% scattered everywhere
         y: fromBelow
           ? h + 5 + Math.random() * 30
-          : (Math.random() < 0.65 ? h - Math.random() * h * 0.4 : Math.random() * h),
+          : Math.random() * h,
         vx: (Math.random() - 0.5) * 0.6,
         vy: lift - Math.random() * 0.5,
         age: fromBelow ? 0 : Math.floor(Math.random() * life * 0.5),
@@ -397,7 +393,7 @@ export const CindersOverlay: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 1, opacity: 0.68 }}
+      style={{ zIndex: 1, opacity: 0.45 }}
     />
   );
 };
