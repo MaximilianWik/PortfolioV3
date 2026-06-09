@@ -4,7 +4,7 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
 import { AnimatedOutline } from '../shared/AnimatedOutline';
@@ -32,9 +32,6 @@ const TimelineEntry: React.FC<EntryProps> = ({
     reverse: true,
     glare: false,
   });
-
-  // Extract start-year for the watermark (e.g. "2021" from "2021—2024")
-  const watermarkYear = entry.year.split('—')[0];
 
   return (
     <motion.div
@@ -131,33 +128,7 @@ const TimelineEntry: React.FC<EntryProps> = ({
             }}
           />
 
-          {/* Year watermark — bleeds out the opposite edge to fill empty space */}
-          <AnimatePresence>
-            {isActive && (
-              <motion.span
-                key="watermark"
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{ duration: 0.5 }}
-                aria-hidden="true"
-                className={`absolute top-1/2 -translate-y-1/2 font-display font-bold
-                  select-none pointer-events-none leading-none
-                  ${isLeft ? 'left-0 -translate-x-1/4' : 'right-0 translate-x-1/4'}`}
-                style={{
-                  fontSize: 'clamp(5rem, 12vw, 9rem)',
-                  color: 'transparent',
-                  WebkitTextStroke: '1px rgba(184,147,90,0.12)',
-                  letterSpacing: '-0.02em',
-                  zIndex: 0,
-                }}
-              >
-                {watermarkYear}
-              </motion.span>
-            )}
-          </AnimatePresence>
-
-          {/* ── Inner content (above watermark) ── */}
+          {/* ── Content ── */}
           <div className="relative z-10">
 
             {/* Mobile year */}
