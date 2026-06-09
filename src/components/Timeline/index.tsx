@@ -3,17 +3,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
 import { EXPERIENCE } from '../../lib/data';
 
-const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = ({ entry, index }) => {
+// Three.js soul-constellation — lazy loaded so it doesn't block initial paint
+const ChronicleScene = lazy(() =>
+  import('./ChronicleScene').then(m => ({ default: m.ChronicleScene }))
+);
+
+interface TimelineEntryProps {
+  entry: typeof EXPERIENCE[0];
+  index: number;
+  onHover: (i: number | null) => void;
+}
+
+const TimelineEntry: React.FC<TimelineEntryProps> = ({ entry, index, onHover }) => {
   const isLeft = index % 2 === 0;
 
   return (
-    <div className={`relative mb-20 md:flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-center`}>
+    <div
+      className={`relative mb-20 md:flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-center`}
+      onMouseEnter={() => onHover(index)}
+      onMouseLeave={() => onHover(null)}
+    >
       {/* Date - Desktop */}
       <div className={`hidden md:flex w-1/2 ${isLeft ? 'justify-start pl-12' : 'justify-end pr-12'}`}>
         <motion.span
@@ -72,44 +87,37 @@ const TimelineEntry: React.FC<{ entry: typeof EXPERIENCE[0]; index: number }> = 
 };
 
 export const Timeline: React.FC = () => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const bgGifs = useMemo(() => {
     return [
-      {
-        id: 0,
-        x: 15,
-        y: 20,
-        size: 600,
-        rotate: 15,
-        opacity: 0.4,
-        duration: 45,
-        mirrored: false
-      },
-      {
-        id: 1,
-        x: 65,
-        y: 50,
-        size: 700,
-        rotate: -15,
-        opacity: 0.4,
-        duration: 60,
-        mirrored: true
-      }
+      { id: 0, x: 15, y: 20, size: 600, rotate: 15,  opacity: 0.4, duration: 45, mirrored: false },
+      { id: 1, x: 65, y: 50, size: 700, rotate: -15, opacity: 0.4, duration: 60, mirrored: true  },
     ];
   }, []);
 
   return (
     <section id="chronicle" className="relative py-32 px-6 overflow-hidden">
+
+      {/* Three.js soul-constellation — behind GIFs (z-0) */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <Suspense fallback={null}>
+          <ChronicleScene
+            entryCount={EXPERIENCE.length}
+            hoveredIndex={hoveredIndex}
+          />
+        </Suspense>
+      </div>
+
       {/* Background Scattered GIFs */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+      <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden select-none">
         {bgGifs.map((gif) => (
           <motion.div
             key={gif.id}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: gif.opacity }}
             viewport={{ once: true }}
-            animate={{
-              y: [0, -60, 0],
-            }}
+            animate={{ y: [0, -60, 0] }}
             transition={{
               y: { duration: gif.duration, repeat: Infinity, ease: "easeInOut" },
               opacity: { duration: 3 }
@@ -137,18 +145,15 @@ export const Timeline: React.FC = () => {
             />
           </motion.div>
         ))}
-        {/* Vignette Layer */}
+        {/* Vignette */}
         <div className="absolute inset-0 bg-gradient-to-b from-ink-void via-transparent to-ink-void opacity-100" />
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-ink-void to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink-void to-transparent" />
       </div>
 
+      {/* Foreground content */}
       <div className="max-w-6xl mx-auto relative z-10">
-        <SectionHeading
-          numeral="IV"
-          title="The Chronicle"
-          sigil="runes"
-        />
+        <SectionHeading numeral="IV" title="The Chronicle" sigil="runes" />
 
         <div className="relative mt-20">
           {/* Central Line */}
@@ -156,7 +161,12 @@ export const Timeline: React.FC = () => {
 
           <div className="space-y-12">
             {EXPERIENCE.map((entry, i) => (
-              <TimelineEntry key={i} entry={entry} index={i} />
+              <TimelineEntry
+                key={i}
+                entry={entry}
+                index={i}
+                onHover={setHoveredIndex}
+              />
             ))}
           </div>
         </div>

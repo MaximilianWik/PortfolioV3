@@ -195,25 +195,22 @@ export const CindersOverlay: React.FC = () => {
       const sizeClass = kind === 'spark'
         ? 3
         : Math.floor(Math.random() * TAIL_LENS.length);
+
+      // V-shape: spawnX and lifeMult must be computed before `life` uses it.
+      const spawnX = Math.random() * w;
+      const distFromCentre = w > 0 ? Math.abs(spawnX - w / 2) / (w / 2) : 1;
+      // 0.18 at dead-centre → 1.0 at the edges
+      const lifeMult = 0.18 + 0.82 * distFromCentre;
+
       const life = kind === 'spark' ? 140 + Math.random() * 100
                  : kind === 'ash'   ? 480 + Math.random() * 400
                                     : (600 + Math.random() * 600) * lifeMult;
       const lift = kind === 'spark' ? -0.9 : kind === 'ash' ? -0.10 : -0.30;
 
-      // Per-particle motion — slower frequencies + smaller amplitudes for
-      // smooth, drifting movement instead of jittery uniform wave-form drift.
+      // Per-particle motion params
       const windMult = 0.25 + Math.random() * 1.35;
       const turbAmp  = 0.02 + Math.random() * 0.07;
       const turbFreq = 0.25 + Math.random() * 1.55;
-
-      // V-shape distribution: life scales with distance from centre so
-      // edge particles rise high (tall columns) and centre particles die
-      // low (just a sliver at the bottom). Spawning is uniform across the
-      // full width — the V emerges naturally from the life curve.
-      const spawnX = Math.random() * w;
-      const distFromCentre = w > 0 ? Math.abs(spawnX - w / 2) / (w / 2) : 1;
-      // Life multiplier: 0.18 at dead-centre → 1.0 at the edges
-      const lifeMult = 0.18 + 0.82 * distFromCentre;
 
       return {
         x: spawnX,
