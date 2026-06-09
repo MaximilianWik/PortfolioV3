@@ -34,9 +34,6 @@ const CustomCursor = React.lazy(() =>
 const CindersOverlay = React.lazy(() =>
   import('./components/shared/CindersOverlay').then(m => ({ default: m.CindersOverlay })),
 );
-const HeatDistortionOverlay = React.lazy(() =>
-  import('./components/shared/HeatDistortionOverlay').then(m => ({ default: m.HeatDistortionOverlay })),
-);
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -110,7 +107,6 @@ export default function App() {
       <React.Suspense fallback={null}>
         <CustomCursor />
         <CindersOverlay />
-        <HeatDistortionOverlay />
       </React.Suspense>
 
       <AnimatePresence mode="wait">
