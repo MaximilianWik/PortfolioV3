@@ -3,114 +3,253 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useMemo, useState, lazy, Suspense } from 'react';
-import { motion } from 'motion/react';
+import React, { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
+import { AnimatedOutline } from '../shared/AnimatedOutline';
+import { CornerBrackets } from '../shared/CornerBrackets';
+import { useVanillaTilt } from '../../hooks/useVanillaTilt';
 import { EXPERIENCE } from '../../lib/data';
 
-// Three.js soul-constellation — lazy loaded so it doesn't block initial paint
-const ChronicleScene = lazy(() =>
-  import('./ChronicleScene').then(m => ({ default: m.ChronicleScene }))
-);
-
-interface TimelineEntryProps {
+interface EntryProps {
   entry: typeof EXPERIENCE[0];
   index: number;
+  isActive: boolean;
+  isAnyHovered: boolean;
   onHover: (i: number | null) => void;
 }
 
-const TimelineEntry: React.FC<TimelineEntryProps> = ({ entry, index, onHover }) => {
+const TimelineEntry: React.FC<EntryProps> = ({
+  entry, index, isActive, isAnyHovered, onHover,
+}) => {
   const isLeft = index % 2 === 0;
 
+  // VanillaTilt only on the card content — gives depth on the main block
+  const tiltRef = useVanillaTilt<HTMLDivElement>({
+    max: 6,
+    speed: 500,
+    reverse: true,
+    glare: false,
+  });
+
+  // Extract start-year for the watermark (e.g. "2021" from "2021—2024")
+  const watermarkYear = entry.year.split('—')[0];
+
   return (
-    <div
+    <motion.div
+      animate={{
+        opacity: isAnyHovered && !isActive ? 0.22 : 1,
+        scale:   isAnyHovered && !isActive ? 0.97 : 1,
+      }}
+      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`relative mb-20 md:flex ${isLeft ? 'md:flex-row-reverse' : 'md:flex-row'} items-center`}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
     >
-      {/* Date - Desktop */}
+
+      {/* ── Date column ── */}
       <div className={`hidden md:flex w-1/2 ${isLeft ? 'justify-start pl-12' : 'justify-end pr-12'}`}>
         <motion.span
           initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="font-mono text-bone-faded tracking-widest text-xs"
+          animate={{
+            color: isActive ? '#B8935A' : '#5C584F',
+            letterSpacing: isActive ? '0.25em' : '0.15em',
+          }}
+          transition={{ duration: 0.5 }}
+          className="font-mono text-xs tracking-widest"
         >
           {entry.year}
         </motion.span>
       </div>
 
-      {/* Center Sigil Marker */}
-      <div className="absolute left-0 md:left-1/2 top-0 -translate-x-1/2 z-10 flex flex-col items-center">
-        <Sigil variant="runes" className="w-8 h-8 text-bone-dim bg-ink-void p-1 rounded-full border border-bone-faded/20" />
-      </div>
-
-      {/* Content */}
+      {/* ── Centre sigil ── */}
       <motion.div
-        initial={{ opacity: 0, x: isLeft ? 40 : -40 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
-        className={`md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}
+        className="absolute left-0 md:left-1/2 top-0 -translate-x-1/2 z-10 flex flex-col items-center"
+        animate={{ scale: isActive ? 1.25 : 1 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 20 }}
       >
-        <div className="md:hidden font-mono text-bone-faded text-[10px] tracking-widest mb-2">
-          {entry.year}
-        </div>
-
-        <h4 className="font-display text-2xl text-bone-white mb-1 uppercase tracking-wider">
-          {entry.role}
-        </h4>
-
-        <div className="font-subdisplay text-xs text-gilt/80 mb-4 tracking-widest">
-          {entry.company}
-        </div>
-
-        <p className="font-body text-bone-dim text-sm italic mb-6 leading-relaxed max-w-lg md:mx-0 mx-auto">
-          {entry.description}
-        </p>
-
-        <div className={`flex flex-wrap gap-2 ${isLeft ? 'md:justify-end' : 'md:justify-start'}`}>
-          {entry.skills.map((skill, i) => (
-            <span
-              key={i}
-              className="px-3 py-1 border border-bone-faded/20 text-[10px] font-mono text-bone-faded uppercase tracking-tighter"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
+        <motion.div
+          animate={{
+            boxShadow: isActive
+              ? '0 0 16px 4px rgba(184,147,90,0.55)'
+              : '0 0 0 0 rgba(184,147,90,0)',
+          }}
+          transition={{ duration: 0.4 }}
+          className="rounded-full"
+        >
+          <Sigil
+            variant="runes"
+            className={`w-8 h-8 p-1 rounded-full border transition-colors duration-500 ${
+              isActive
+                ? 'text-gilt bg-ink-deep border-gilt/50'
+                : 'text-bone-dim bg-ink-void border-bone-faded/20'
+            }`}
+          />
+        </motion.div>
       </motion.div>
-    </div>
+
+      {/* ── Content card ── */}
+      <div
+        className={`md:w-1/2 pl-12 md:pl-0 ${
+          isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'
+        }`}
+      >
+        {/* Tilt wrapper — relative+overflow-hidden for AnimatedOutline */}
+        <div
+          ref={tiltRef}
+          className="relative p-6 overflow-hidden"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+
+          {/* Sweep border on hover */}
+          <AnimatedOutline
+            active={isActive}
+            colorClass="bg-gilt"
+            durationMs={250}
+            zClass="z-20"
+          />
+
+          {/* Corner brackets */}
+          <CornerBrackets
+            className={`transition-colors duration-500 ${
+              isActive ? 'text-gilt' : 'text-transparent'
+            }`}
+            size={14}
+          />
+
+          {/* Ember glow backdrop */}
+          <motion.div
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse at center, rgba(139,26,26,0.13) 0%, transparent 75%)',
+            }}
+          />
+
+          {/* Year watermark — bleeds out the opposite edge to fill empty space */}
+          <AnimatePresence>
+            {isActive && (
+              <motion.span
+                key="watermark"
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                transition={{ duration: 0.5 }}
+                aria-hidden="true"
+                className={`absolute top-1/2 -translate-y-1/2 font-display font-bold
+                  select-none pointer-events-none leading-none
+                  ${isLeft ? 'left-0 -translate-x-1/4' : 'right-0 translate-x-1/4'}`}
+                style={{
+                  fontSize: 'clamp(5rem, 12vw, 9rem)',
+                  color: 'transparent',
+                  WebkitTextStroke: '1px rgba(184,147,90,0.12)',
+                  letterSpacing: '-0.02em',
+                  zIndex: 0,
+                }}
+              >
+                {watermarkYear}
+              </motion.span>
+            )}
+          </AnimatePresence>
+
+          {/* ── Inner content (above watermark) ── */}
+          <div className="relative z-10">
+
+            {/* Mobile year */}
+            <div className="md:hidden font-mono text-bone-faded text-[10px] tracking-widest mb-2">
+              {entry.year}
+            </div>
+
+            {/* Role */}
+            <motion.h4
+              animate={{
+                letterSpacing: isActive ? '0.12em' : '0.06em',
+                textShadow: isActive
+                  ? '0 0 20px rgba(184,147,90,0.45)'
+                  : '0 0 0px rgba(184,147,90,0)',
+              }}
+              transition={{ duration: 0.5 }}
+              className="font-display text-2xl text-bone-white mb-1 uppercase"
+            >
+              {entry.role}
+            </motion.h4>
+
+            {/* Ember underline — draws from origin side */}
+            <motion.div
+              animate={{ scaleX: isActive ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ originX: isLeft ? 1 : 0 }}
+              className="h-px bg-ember-blood mb-3 w-full"
+            />
+
+            {/* Company */}
+            <motion.div
+              animate={{ color: isActive ? '#B8935A' : 'rgba(184,147,90,0.65)' }}
+              transition={{ duration: 0.4 }}
+              className="font-subdisplay text-xs mb-4 tracking-widest"
+            >
+              {entry.company}
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              animate={{
+                opacity: isActive ? 1 : 0.7,
+                y: isActive ? 0 : 4,
+              }}
+              transition={{ duration: 0.4, delay: isActive ? 0.05 : 0 }}
+              className="font-body text-bone-dim text-sm italic mb-6 leading-relaxed max-w-lg md:mx-0 mx-auto"
+            >
+              {entry.description}
+            </motion.p>
+
+            {/* Skills — staggered */}
+            <div className={`flex flex-wrap gap-2 ${isLeft ? 'md:justify-end' : 'md:justify-start'}`}>
+              {entry.skills.map((skill, i) => (
+                <motion.span
+                  key={skill}
+                  animate={{
+                    borderColor: isActive
+                      ? 'rgba(184,147,90,0.55)'
+                      : 'rgba(92,88,79,0.3)',
+                    color: isActive ? '#B8935A' : '#5C584F',
+                    y: isActive ? 0 : 2,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    delay: isActive ? 0.08 + i * 0.04 : 0,
+                  }}
+                  className="px-3 py-1 border text-[10px] font-mono uppercase tracking-tighter"
+                >
+                  {skill}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
 export const Timeline: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const bgGifs = useMemo(() => {
-    return [
-      { id: 0, x: 15, y: 20, size: 600, rotate: 15,  opacity: 0.4, duration: 45, mirrored: false },
-      { id: 1, x: 65, y: 50, size: 700, rotate: -15, opacity: 0.4, duration: 60, mirrored: true  },
-    ];
-  }, []);
+  const bgGifs = useMemo(() => [
+    { id: 0, x: 15, y: 20, size: 600, rotate: 15,  opacity: 0.4, duration: 45, mirrored: false },
+    { id: 1, x: 65, y: 50, size: 700, rotate: -15, opacity: 0.4, duration: 60, mirrored: true  },
+  ], []);
 
   return (
     <section id="chronicle" className="relative py-32 px-6 overflow-hidden">
 
-      {/* Three.js soul-constellation — behind GIFs (z-0) */}
-      <div className="absolute inset-0 z-[1] pointer-events-none">
-        <Suspense fallback={null}>
-          <ChronicleScene
-            entryCount={EXPERIENCE.length}
-            hoveredIndex={hoveredIndex}
-          />
-        </Suspense>
-      </div>
-
-      {/* Background Scattered GIFs */}
-      <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden select-none">
+      {/* Background GIFs */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
         {bgGifs.map((gif) => (
           <motion.div
             key={gif.id}
@@ -119,8 +258,8 @@ export const Timeline: React.FC = () => {
             viewport={{ once: true }}
             animate={{ y: [0, -60, 0] }}
             transition={{
-              y: { duration: gif.duration, repeat: Infinity, ease: "easeInOut" },
-              opacity: { duration: 3 }
+              y: { duration: gif.duration, repeat: Infinity, ease: 'easeInOut' },
+              opacity: { duration: 3 },
             }}
             style={{
               position: 'absolute',
@@ -132,31 +271,22 @@ export const Timeline: React.FC = () => {
               filter: 'grayscale(60%)',
               willChange: 'transform',
               maskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
-              WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)'
+              WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
             }}
           >
-            <img
-              src="/HumanityNoBg.gif"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="w-full h-auto opacity-100"
-              referrerPolicy="no-referrer"
-            />
+            <img src="/HumanityNoBg.gif" alt="" loading="lazy" decoding="async"
+              className="w-full h-auto opacity-100" referrerPolicy="no-referrer" />
           </motion.div>
         ))}
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-gradient-to-b from-ink-void via-transparent to-ink-void opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink-void via-transparent to-ink-void" />
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-ink-void to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink-void to-transparent" />
       </div>
 
-      {/* Foreground content */}
       <div className="max-w-6xl mx-auto relative z-10">
         <SectionHeading numeral="IV" title="The Chronicle" sigil="runes" />
 
         <div className="relative mt-20">
-          {/* Central Line */}
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-bone-faded/20 -translate-x-1/2" />
 
           <div className="space-y-12">
@@ -165,6 +295,8 @@ export const Timeline: React.FC = () => {
                 key={i}
                 entry={entry}
                 index={i}
+                isActive={hoveredIndex === i}
+                isAnyHovered={hoveredIndex !== null}
                 onHover={setHoveredIndex}
               />
             ))}
