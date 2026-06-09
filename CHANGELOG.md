@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.6.0] - 2026-06-09
+
+### The Bearer — Soul Constellation (full rework)
+
+- Replaced the bio/card layout with an SVG-based orbiting node constellation.
+  10 nodes across 3 rings: Inner (gilt, ~50s orbit) — DNB Bank · SEB · Örebro.
+  Middle (ember-blood, ~75s) — Agentic AI · Automation · BI & Data · Engineering.
+  Outer (bone, ~100s) — Tessera · Cursed Echoes · Subdermal.
+- RAF loop updates all SVG element positions, glows, connection-line endpoints,
+  and label opacities via direct `setAttribute` calls — zero React re-renders
+  per animation frame.
+- Mouse movement applies a CSS `perspective` + `rotateX/Y` tilt to the whole
+  scene via smooth lerp in the RAF loop. Gives a 3D parallax feel without Three.js.
+- Hovering a node pauses its orbit, brightens its glow, and enlarges its circle.
+  Clicking opens a Framer Motion slide-in detail panel with title, subtitle,
+  body copy, tags, and a project link where applicable. Constellation shifts to
+  accommodate the panel. Clicking the same node or Close dismisses it.
+- Central orb pulses (radius + stroke-alpha oscillation) via `Math.sin` in the RAF.
+- Connection lines from center to each node update each frame; brightness and
+  width increase when node is hovered or selected.
+
+---
+
 ## [1.5.0] - 2026-06-09
 
 ### The Bearer — full section rework
