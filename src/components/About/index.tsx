@@ -28,7 +28,7 @@ const Stat: React.FC<{ value: number; label: string }> = ({ value, label }) => {
   return (
     <div ref={ref} className="relative p-3 border border-bone-faded/10 bg-ink-deep/80 flex flex-col">
       <CornerBrackets className="text-bone-faded/20" size={5} />
-      <span className="font-mono text-bone-white text-xl mb-0.5">{String(count).padStart(2, '0')}</span>
+      <span className="font-mono text-bone-dim text-xl mb-0.5">{String(count).padStart(2, '0')}</span>
       <span className="font-subdisplay text-[8px] tracking-tighter text-bone-faded uppercase">{label}</span>
     </div>
   );
@@ -343,7 +343,7 @@ export const About: React.FC = () => {
                 {[['Location','Stockholm',false],['Status','Active',true],['Domain','DNB Bank',false],['Focus','Agentic AI',false]].map(([k,v,p]) => (
                   <div key={String(k)} className="flex justify-between items-center py-1.5 border-b border-bone-faded/5 last:border-0">
                     <span className="font-mono text-[9px] text-bone-faded uppercase tracking-widest">{k}</span>
-                    <span className={`font-mono text-[10px] flex items-center gap-1.5 ${p ? 'text-gilt' : 'text-bone-white'}`}>
+                    <span className={`font-mono text-[10px] flex items-center gap-1.5 ${p ? 'text-gilt' : 'text-bone-dim'}`}>
                       {p && <span className="w-1.5 h-1.5 rounded-full bg-gilt animate-pulse inline-block" />}
                       {v}
                     </span>
