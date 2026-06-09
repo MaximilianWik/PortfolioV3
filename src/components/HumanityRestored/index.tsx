@@ -1,239 +1,269 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { motion, useInView } from 'motion/react';
+
+// ─── Canvas particle burst ────────────────────────────────────────────────────
+// One canvas element replaces 60 individual motion.div particles.
+// Additive compositing (lighter) is applied at the canvas level, so no
+// per-particle mix-blend-mode; the GPU composites once per frame total.
+
+const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
+  const ref = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (!active) return;
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W   = canvas.offsetWidth;
+    const H   = canvas.offsetHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const cx = W / 2;
+    const cy = H / 2;
+
+    // Teal, white and faint gilt — matches the site palette while staying
+    // true to the original Soul restoration colour language.
+    const COLORS = ['#FFFFFF', '#76C7A8', '#9FD9C2', '#FFFFFF', '#B8935A', '#76C7A8'];
+
+    type P = {
+      x: number; y: number; vx: number; vy: number;
+      size: number; color: string; life: number; maxLife: number;
+    };
+    const particles: P[] = [];
+
+    // Burst particles — tight horizontal spread, compressed vertical
+    for (let i = 0; i < 140; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 60 + Math.random() * 260;
+      particles.push({
+        x: cx, y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed * 0.35,
+        size: 0.8 + Math.random() * 3,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        life: 0,
+        maxLife: 1.2 + Math.random() * 1.8,
+      });
+    }
+
+    // Drift particles — spawn across the beam, float upward slowly
+    for (let i = 0; i < 90; i++) {
+      const delay = 0.3 + Math.random() * 4;
+      particles.push({
+        x: cx + (Math.random() - 0.5) * W * 0.9,
+        y: cy + (Math.random() - 0.5) * 40,
+        vx: (Math.random() - 0.5) * 25,
+        vy: -15 - Math.random() * 35,
+        size: 0.5 + Math.random() * 1.8,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        life: -delay,
+        maxLife: 3 + Math.random() * 5,
+      });
+    }
+
+    let rafId = 0;
+    let last = performance.now();
+
+    const tick = (now: number) => {
+      rafId = requestAnimationFrame(tick);
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'lighter';
+
+      let alive = false;
+      for (const p of particles) {
+        p.life += dt;
+        if (p.life < 0) continue;
+        const t = p.life / p.maxLife;
+        if (t >= 1) continue;
+        alive = true;
+
+        // Fast ramp-up, gradual decay
+        const alpha = Math.min(1, t * 10) * Math.pow(1 - t, 1.4);
+
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.vx *= Math.pow(0.94, dt * 60);
+        p.vy *= Math.pow(0.97, dt * 60);
+        if (p.vy < 0) p.vy -= 8 * dt; // gentle upward buoyancy
+
+        // Core dot
+        ctx.globalAlpha = alpha * 0.9;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+
+        // Soft halo for larger particles — cheap radial gradient alternative
+        if (p.size > 1.2) {
+          ctx.globalAlpha = alpha * 0.18;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 4.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+      if (!alive) cancelAnimationFrame(rafId);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [active]);
+
+  return (
+    <canvas
+      ref={ref}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ mixBlendMode: 'screen' }}
+    />
+  );
+};
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 
 export const HumanityRestored: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, amount: 0.5 });
+  const isInView = useInView(containerRef, { once: true, amount: 0.4 });
 
-  // Pre-calculate particles
-  const particles = useMemo(() => {
-    return Array.from({ length: 60 }).map((_, i) => {
-      // First third is the initial burst; the rest drift up afterward.
-      const isBurst = i < 20;
-      return {
-        id: i,
-        xStart: 0,
-        yStart: 0,
-        xEnd: (Math.random() - 0.5) * (isBurst ? 250 : 150),
-        yEnd: (Math.random() - 0.5) * (isBurst ? 100 : 180) - (isBurst ? 0 : 80),
-        scale: Math.random() * 2 + 1, // Larger particles
-        delay: isBurst ? Math.random() * 0.1 : Math.random() * 8, // Burst happens instantly
-        duration: isBurst ? 0.8 + Math.random() : 4 + Math.random() * 4,
-      };
-    });
-  }, []);
+  // All animation timing driven off a 9-second master
+  const DUR = 9;
+  const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[60vh] flex items-center justify-center py-32 bg-ink-void z-20"
+      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void"
     >
-      {/* Background Dimming for contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-ink-void via-black to-ink-void opacity-80 pointer-events-none" />
+      {/* Static vignette — no animation, no cost */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,7,10,0.85) 100%)' }} />
 
-      {/* Animation wrapper triggered by scroll */}
-      <div className="relative z-10 w-full flex flex-col items-center justify-center">
+      <div className="relative w-full flex flex-col items-center justify-center overflow-hidden">
         {isInView && (
           <>
-            {/* 1. Deep black/shadow ambient radial swell */}
+            {/* ── L1: Dark ambient backdrop ──────────────────────────────────
+                Opacity only — no filter animation.
+                will-change promotes to its own GPU layer immediately.      */}
             <motion.div
-              initial={{ scaleX: 0, scaleY: 0, opacity: 0 }}
-              animate={{
-                scaleX: [0, 1, 1],
-                scaleY: [0, 1, 0],
-                opacity: [0, 1, 0],
-              }}
-              transition={{ duration: 10, times: [0, 0.15, 0.85, 1], ease: "easeInOut" }}
-              className="absolute h-[250px] w-[150vw]"
+              className="absolute pointer-events-none"
               style={{
-                background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 40%, transparent 70%)',
-                top: '50%',
-                marginTop: '-125px',
-                transformOrigin: 'center',
-                zIndex: 0
+                width: '140vw', height: '280px',
+                top: '50%', marginTop: '-140px',
+                background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.55) 45%, transparent 75%)',
+                filter: 'blur(12px)',           // static — no animation cost
+                willChange: 'opacity, transform',
               }}
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: [0, 1, 1, 0], scaleX: [0, 1, 1, 0] }}
+              transition={{ duration: DUR, times: [0, 0.12, 0.82, 1], ease: 'easeInOut' }}
             />
 
-            {/* 2. Strong solid black horizontal band with vertical fading */}
+            {/* ── L2: Horizontal energy beam ─────────────────────────────────
+                Wide teal glow — scaleX + opacity only.                      */}
             <motion.div
-              initial={{ scaleX: 0, opacity: 0, filter: 'blur(30px)' }}
-              animate={{
-                scaleX: [0, 1.2, 1.2, 0],
-                opacity: [0, 1, 1, 0],
-                filter: ['blur(30px)', 'blur(12px)', 'blur(12px)', 'blur(30px)']
-              }}
-              transition={{ duration: 10, times: [0, 0.1, 0.9, 1], ease: "easeOut" }}
-              className="absolute h-[160px] w-[150vw]"
+              className="absolute pointer-events-none"
               style={{
-                background: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 50%, transparent 85%)',
-                top: '50%',
-                marginTop: '-80px',
-                transformOrigin: 'center',
-                zIndex: 1
-              }}
-            />
-
-            {/* 3. The Teal Horizontal Ethereal Energy Smear - Sharpened */}
-            <motion.div
-              initial={{ scaleX: 0, scaleY: 0.1, opacity: 0, filter: 'blur(20px) brightness(3)' }}
-              animate={{
-                scaleX: [0, 5, 2, 7],
-                scaleY: [0.1, 5, 1, 0],
-                opacity: [0, 1, 0.5, 0],
-                filter: ['blur(20px) brightness(3)', 'blur(6px) brightness(2)', 'blur(12px) brightness(1.5)', 'blur(30px) brightness(0)']
-              }}
-              transition={{ duration: 10, times: [0, 0.05, 0.7, 1], ease: "easeOut" }}
-              className="absolute h-[60px] w-full max-w-[100vw]"
-              style={{
-                background: 'radial-gradient(ellipse at center, rgba(118,199,168,0.9) 0%, rgba(118,199,168,0.4) 40%, transparent 80%)',
-                top: '50%',
-                marginTop: '-30px',
-                transformOrigin: 'center',
+                width: '100vw', height: '90px',
+                top: '50%', marginTop: '-45px',
+                background: 'radial-gradient(ellipse at center, rgba(118,199,168,0.75) 0%, rgba(118,199,168,0.25) 50%, transparent 85%)',
+                filter: 'blur(10px)',           // static
                 mixBlendMode: 'screen',
-                zIndex: 2
+                willChange: 'opacity, transform',
               }}
+              initial={{ opacity: 0, scaleX: 0, scaleY: 0.3 }}
+              animate={{ opacity: [0, 1, 0.6, 0], scaleX: [0, 5, 2.5, 0], scaleY: [0.3, 1.8, 1, 0] }}
+              transition={{ duration: DUR, times: [0, 0.06, 0.72, 1], ease: 'easeOut' }}
             />
 
-            {/* 4. The blinding inner core flash - Sharpened and tightened */}
+            {/* ── L3: White blinding core flash ──────────────────────────────
+                Fast, sharp, pure. No blur whatsoever.                        */}
             <motion.div
-              initial={{ scaleX: 0, scaleY: 0, opacity: 0 }}
-              animate={{
-                scaleX: [0, 3, 1, 0],
-                scaleY: [0, 4, 1, 0],
-                opacity: [0, 1, 0.4, 0],
-              }}
-              transition={{ duration: 10, times: [0, 0.05, 0.8, 1], ease: "easeOut" }}
-              className="absolute h-[8px] w-full max-w-4xl"
+              className="absolute pointer-events-none"
               style={{
-                background: 'radial-gradient(ellipse at center, #FFFFFF 0%, rgba(118, 199, 168, 0.8) 40%, transparent 80%)',
-                boxShadow: '0 0 30px 10px rgba(118, 199, 168, 0.7), 0 0 60px 20px rgba(255, 255, 255, 0.4)',
-                filter: 'blur(2px)',
+                width: '80vw', maxWidth: '900px', height: '6px',
+                top: '50%', marginTop: '-3px',
+                background: 'radial-gradient(ellipse at center, #FFFFFF 0%, rgba(118,199,168,0.85) 45%, transparent 80%)',
+                boxShadow: '0 0 24px 8px rgba(118,199,168,0.65)',
+                willChange: 'opacity, transform',
+              }}
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: [0, 1, 0.7, 0], scaleX: [0, 2.8, 1, 0] }}
+              transition={{ duration: DUR, times: [0, 0.05, 0.75, 1], ease: 'easeOut' }}
+            />
+
+            {/* ── L4: Canvas particle burst ──────────────────────────────── */}
+            <ParticleBurst active />
+
+            {/* ── L5: Text ───────────────────────────────────────────────────
+                Single element — no bloom duplicate.
+                Cinzel (font-subdisplay) is loaded; OptimusPrinceps was not. */}
+            <motion.div
+              className="relative pointer-events-none"
+              style={{ zIndex: 10, willChange: 'opacity, transform' }}
+              initial={{ opacity: 0, scaleX: 3, scale: 0.94 }}
+              animate={{ opacity: [0, 1, 1, 0], scaleX: [3, 1, 1, 3], scale: [0.94, 1.04, 1.08, 1.08] }}
+              transition={{ duration: DUR, times: [0, 0.08, 0.82, 1], ease }}
+            >
+              <h2
+                className="font-subdisplay uppercase text-center leading-none tracking-widest"
+                style={{
+                  fontSize: 'clamp(2.4rem, 7vw, 5.5rem)',
+                  color: '#76C7A8',
+                  transform: 'scaleY(1.25)',
+                  textShadow:
+                    '0 0 18px rgba(118,199,168,0.7), ' +
+                    '0 0 40px rgba(118,199,168,0.35), ' +
+                    '0 8px 32px rgba(0,0,0,1)',
+                  letterSpacing: '0.12em',
+                }}
+              >
+                Humanity Restored
+              </h2>
+            </motion.div>
+
+            {/* ── L6: Floor reflection ──────────────────────────────────────
+                Flipped + mask gradient. Pure opacity animation.             */}
+            <motion.div
+              className="absolute pointer-events-none select-none"
+              style={{
+                zIndex: 9,
                 top: '50%',
-                marginTop: '-4px',
-                zIndex: 3
+                marginTop: 'clamp(56px, 8vw, 100px)',
+                willChange: 'opacity',
+                WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 55%)',
+                maskImage:       'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 55%)',
               }}
-            />
-
-            {/* 4.5. Particles (Ethereal Dust) bursting tracking horizontally and vertically - Allowed to overflow */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-[4] overflow-visible">
-              <div className="relative w-full h-full overflow-visible flex items-center justify-center">
-                {particles.map(p => (
-                  <motion.div
-                    key={p.id}
-                    initial={{ opacity: 0, y: `${p.yStart}vh`, x: `${p.xStart}vw`, scale: 0 }}
-                    animate={{
-                      opacity: [0, 1, 0],
-                      y: [`${p.yStart}vh`, `${p.yEnd}vh`],
-                      x: [`${p.xStart}vw`, `${p.xEnd}vw`],
-                      scale: [0, p.scale, p.scale * 0.2]
-                    }}
-                    transition={{
-                      duration: p.duration,
-                      delay: p.delay,
-                      ease: "easeOut"
-                    }}
-                    className="absolute w-[6px] h-[6px] rounded-full mix-blend-screen"
-                    style={{
-                      background: '#FFFFFF',
-                      boxShadow: '0 0 15px 5px rgba(118,199,168,1), 0 0 30px 10px rgba(118,199,168,0.5)',
-                      filter: 'blur(0.5px)',
-                      willChange: 'transform, opacity'
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* 5. Extreme bloom lens flare overlay - Sharpened */}
-            <motion.div
-              initial={{ scale: 0.95, scaleX: 6, opacity: 0, filter: 'blur(20px) brightness(3)' }}
-              animate={{
-                scale: [0.95, 1.05, 1.1],
-                scaleX: [6, 1, 1, 4],
-                opacity: [0, 1, 0.8, 0],
-                filter: ['blur(20px) brightness(3)', 'blur(4px) brightness(2)', 'blur(8px) brightness(1)', 'blur(30px) brightness(0)']
-              }}
-              transition={{ duration: 10, times: [0, 0.08, 0.85, 1], ease: "easeOut" }}
-              className="absolute z-[9] pointer-events-none mix-blend-screen"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.45, 0.45, 0] }}
+              transition={{ duration: DUR, times: [0, 0.10, 0.80, 1], ease }}
             >
               <h2
-                className="uppercase text-4xl md:text-6xl lg:text-[5.5rem] text-center"
+                className="font-subdisplay uppercase text-center leading-none tracking-widest"
                 style={{
-                  fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
+                  fontSize: 'clamp(2.4rem, 7vw, 5.5rem)',
                   color: '#76C7A8',
-                  letterSpacing: '0.04em',
-                  transform: 'scaleY(1.3)'
+                  transform: 'scaleY(-1.25)',
+                  letterSpacing: '0.12em',
                 }}
               >
                 Humanity Restored
               </h2>
             </motion.div>
 
-            {/* 6. The "HUMANITY RESTORED" Text */}
-            <motion.div
-              initial={{ scale: 0.95, scaleX: 4, opacity: 0, filter: 'blur(25px) brightness(2)' }}
-              animate={{
-                scale: [0.95, 1.05, 1.1],
-                scaleX: [4, 1, 1, 4],
-                opacity: [0, 1, 1, 0],
-                filter: ['blur(25px) brightness(2)', 'blur(0px) brightness(1)', 'blur(0px) brightness(1)', 'blur(20px) brightness(0)']
-              }}
-              transition={{ duration: 10, times: [0, 0.08, 0.85, 1], ease: "easeOut" }}
-              className="relative z-10"
-              style={{ zIndex: 10 }}
-            >
-              <h2
-                className="uppercase text-4xl md:text-6xl lg:text-[5.5rem] text-center"
-                style={{
-                  fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
-                  color: '#76C7A8',
-                  letterSpacing: '0.04em',
-                  textShadow: '0 0 20px rgba(118, 199, 168, 0.6), 0 5px 30px rgba(0, 0, 0, 1), 0 10px 40px rgba(0, 0, 0, 1)',
-                  transform: 'scaleY(1.3)'
-                }}
-              >
-                Humanity Restored
-              </h2>
-            </motion.div>
-
-            {/* 7. The Reflection (Floor bounce) */}
-            <motion.div
-              initial={{ scale: 0.95, scaleX: 4, opacity: 0, filter: 'blur(25px) brightness(2)' }}
-              animate={{
-                scale: [0.95, 1.05, 1.1],
-                scaleX: [4, 1, 1, 4],
-                opacity: [0, 0.5, 0.5, 0],
-                filter: ['blur(25px) brightness(2)', 'blur(8px) brightness(1)', 'blur(8px) brightness(1)', 'blur(25px) brightness(0)']
-              }}
-              transition={{ duration: 10, times: [0, 0.08, 0.85, 1], ease: "easeOut" }}
-              className="absolute z-0 mt-[140px] md:mt-[170px] lg:mt-[200px] pointer-events-none"
-              style={{
-                 transformOrigin: 'top',
-                 WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 60%)',
-                 maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 60%)',
-              }}
-            >
-              <h2
-                className="uppercase text-4xl md:text-6xl lg:text-[5.5rem] text-center"
-                style={{
-                  fontFamily: '"OptimusPrinceps", "Times New Roman", serif',
-                  color: '#76C7A8',
-                  letterSpacing: '0.04em',
-                  transform: 'scaleY(-1.3) skewX(-15deg)', // mirrored and skewed to lay flat
-                }}
-              >
-                Humanity Restored
-              </h2>
-            </motion.div>
           </>
         )}
       </div>
 
-      {/* Space placeholder */}
-      {!isInView && (
-         <div className="h-[150px] w-full" />
-      )}
+      {!isInView && <div style={{ height: '160px' }} />}
     </section>
   );
 };
-
