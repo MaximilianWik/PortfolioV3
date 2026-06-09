@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'motion/react';
 
 // ─── Canvas particle burst ────────────────────────────────────────────────────
@@ -132,7 +132,16 @@ const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
 
 export const HumanityRestored: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, amount: 0.4 });
+  const isInView    = useInView(containerRef, { once: false, amount: 0.4 });
+  const [animKey, setAnimKey] = useState(0);
+  const prevInView  = useRef(false);
+
+  // Increment key on every fresh scroll-in — forces clean remount of all
+  // animation children so the sequence restarts from scratch.
+  useEffect(() => {
+    if (isInView && !prevInView.current) setAnimKey(k => k + 1);
+    prevInView.current = isInView;
+  }, [isInView]);
 
   // All animation timing driven off a 9-second master
   const DUR = 9;
@@ -141,15 +150,16 @@ export const HumanityRestored: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void overflow-x-hidden"
+      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void overflow-x-hidden cursor-pointer select-none"
+      onClick={() => setAnimKey(k => k + 1)}
     >
       {/* Static vignette — no animation, no cost */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,7,10,0.85) 100%)' }} />
 
       <div className="relative w-full flex flex-col items-center justify-center">
-        {isInView && (
-          <>
+        {animKey > 0 && (
+          <React.Fragment key={animKey}>
             {/* ── L1: Dark ambient backdrop ──────────────────────────────────
                 Opacity only — no filter animation.
                 will-change promotes to its own GPU layer immediately.      */}
@@ -259,11 +269,11 @@ export const HumanityRestored: React.FC = () => {
               </h2>
             </motion.div>
 
-          </>
+          </React.Fragment>
         )}
       </div>
 
-      {!isInView && <div style={{ height: '160px' }} />}
+      {animKey === 0 && <div style={{ height: '160px' }} />}
     </section>
   );
 };
