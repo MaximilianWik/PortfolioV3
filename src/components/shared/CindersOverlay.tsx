@@ -96,7 +96,6 @@ interface Particle {
   turbAmp: number;       // 0.04..0.18 — turbulence magnitude
   turbFreq: number;      // 0.6..4.5  — turbulence frequency
   kind: Kind;
-  side: 'L' | 'R';      // which side column this particle belongs to
   rot: number; rotV: number;
 }
 
@@ -198,7 +197,7 @@ export const CindersOverlay: React.FC = () => {
         : Math.floor(Math.random() * TAIL_LENS.length);
       const life = kind === 'spark' ? 140 + Math.random() * 100
                  : kind === 'ash'   ? 480 + Math.random() * 400
-                                    : 600 + Math.random() * 600;
+                                    : (600 + Math.random() * 600) * lifeMult;
       const lift = kind === 'spark' ? -0.9 : kind === 'ash' ? -0.10 : -0.30;
 
       // Per-particle motion — slower frequencies + smaller amplitudes for
@@ -207,12 +206,14 @@ export const CindersOverlay: React.FC = () => {
       const turbAmp  = 0.02 + Math.random() * 0.07;
       const turbFreq = 0.25 + Math.random() * 1.55;
 
-      // Spawn only in the left 30% or right 30% of the viewport to keep
-      // the centre content area clear of particles.
-      const side: 'L' | 'R' = Math.random() < 0.5 ? 'L' : 'R';
-      const spawnX = side === 'L'
-        ? Math.random() * w * 0.30
-        : w * 0.70 + Math.random() * w * 0.30;
+      // V-shape distribution: life scales with distance from centre so
+      // edge particles rise high (tall columns) and centre particles die
+      // low (just a sliver at the bottom). Spawning is uniform across the
+      // full width — the V emerges naturally from the life curve.
+      const spawnX = Math.random() * w;
+      const distFromCentre = w > 0 ? Math.abs(spawnX - w / 2) / (w / 2) : 1;
+      // Life multiplier: 0.18 at dead-centre → 1.0 at the edges
+      const lifeMult = 0.18 + 0.82 * distFromCentre;
 
       return {
         x: spawnX,
@@ -227,7 +228,7 @@ export const CindersOverlay: React.FC = () => {
         size: sizeClass,
         phase: Math.random() * Math.PI * 2,
         windMult, turbAmp, turbFreq,
-        kind, side,
+        kind,
         rot: Math.random() * Math.PI * 2,
         rotV: (Math.random() - 0.5) * 0.025,
       };
@@ -312,10 +313,7 @@ export const CindersOverlay: React.FC = () => {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Recycle if expired, off top/sides, or drifted past the centre
-        // boundary — keeps the middle of the page clear.
-        const pastCentre = p.side === 'L' ? p.x > w * 0.38 : p.x < w * 0.62;
-        if (p.age > p.life || p.y < -80 || p.x < -80 || p.x > w + 80 || pastCentre) {
+        if (p.age > p.life || p.y < -80 || p.x < -60 || p.x > w + 60) {
           recycle(p, w, h);
           continue;
         }
