@@ -216,16 +216,15 @@ export const Contact: React.FC = () => {
 
   return (
     <>
-      <section id="invocation" className="relative min-h-screen flex flex-col justify-center py-24 px-6 overflow-hidden">
+      <section id="invocation" className="relative min-h-screen flex flex-col justify-center py-24 px-6">
 
-        {/* Background — rotating sigil at near-zero opacity */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}>
+        {/* Background — rotating sigil at near-zero opacity, CSS-driven so it never touches the JS scheduler */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          style={{ animation: 'spin 120s linear infinite' }}>
           <Sigil variant="runes"
             className="w-[min(80vw,700px)] h-[min(80vw,700px)] text-bone-faded/[0.025]" />
-        </motion.div>
+        </div>
 
         {/* Radial glow at center */}
         <div className="absolute inset-0 pointer-events-none"
