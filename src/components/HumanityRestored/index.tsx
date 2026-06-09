@@ -141,13 +141,13 @@ export const HumanityRestored: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void"
+      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void overflow-x-hidden"
     >
       {/* Static vignette — no animation, no cost */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,7,10,0.85) 100%)' }} />
 
-      <div className="relative w-full flex flex-col items-center justify-center overflow-hidden">
+      <div className="relative w-full flex flex-col items-center justify-center">
         {isInView && (
           <>
             {/* ── L1: Dark ambient backdrop ──────────────────────────────────
