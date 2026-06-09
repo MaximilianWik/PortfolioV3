@@ -102,7 +102,7 @@ export const Hero: React.FC = () => {
         <Sigil variant="runes" className="w-full h-full animate-[spin_60s_linear_infinite]" />
       </motion.div>
 
-      <div className="z-10 grid grid-cols-1 md:grid-cols-12 gap-12 w-full">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-12 w-full">
         {/* Left Pillar: Bio & Status */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}

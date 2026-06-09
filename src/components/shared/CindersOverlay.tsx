@@ -24,10 +24,11 @@
  * • Compositing:
  *     embers + sparks → globalCompositeOperation = 'lighter' (additive)
  *     ash             → 'source-over' (normal)
- *     The canvas itself sits at zIndex: -1, opacity ~0.55 — behind all page
- *     content, atmospheric not interruptive. No mix-blend-mode (it produces
- *     transparent output when the canvas is in its own fixed-position
- *     stacking context).
+ *     The canvas itself sits at zIndex: 1, opacity ~0.55 — between background
+ *     imagery (which paints with the static section flow) and foreground
+ *     text/cards (which use `relative z-10` to lift above the canvas via
+ *     root stacking context). No mix-blend-mode (it produces transparent
+ *     output when the canvas is in its own fixed-position stacking context).
  *
  * • Erratic motion: a global dual-sinusoid wind field, but each particle
  *   has its own windMult / turbAmp / turbFreq drawn at spawn, so two
@@ -71,11 +72,11 @@ const HEAT: { r: number; g: number; b: number }[] = [
 const HEAD_RADII = [10, 7, 4.5, 2.5];
 const TAIL_MULT  = [7,  6, 4.5, 3.0]; // tail length = headRadius × this
 
-// Physics
-const BUOY_ACC  = 0.020;
+// Physics — gentler buoyancy + wind for slow, atmospheric drift
+const BUOY_ACC  = 0.008;
 const DRAG      = 0.985;
 const VERT_DRAG = 0.992;
-const WIND_AMP  = 0.95;
+const WIND_AMP  = 0.45;
 
 // Mouse repel
 const MOUSE_R = 200;
@@ -190,16 +191,16 @@ export const CindersOverlay: React.FC = () => {
       const sizeClass = kind === 'spark'
         ? 3
         : Math.floor(Math.random() * HEAD_RADII.length);
-      const life = kind === 'spark' ? 50 + Math.random() * 50
-                 : kind === 'ash'   ? 380 + Math.random() * 320
-                                    : 220 + Math.random() * 280;
-      const lift = kind === 'spark' ? -2.4 : kind === 'ash' ? -0.25 : -0.95;
+      const life = kind === 'spark' ? 110 + Math.random() * 90
+                 : kind === 'ash'   ? 480 + Math.random() * 400
+                                    : 380 + Math.random() * 420;
+      const lift = kind === 'spark' ? -1.2 : kind === 'ash' ? -0.15 : -0.45;
 
-      // Per-particle motion — varied response to wind + turbulence so two
-      // particles at the same position move in noticeably different ways.
+      // Per-particle motion — slower frequencies + smaller amplitudes for
+      // smooth, drifting movement instead of jittery uniform wave-form drift.
       const windMult = 0.25 + Math.random() * 1.35;
-      const turbAmp  = 0.04 + Math.random() * 0.14;
-      const turbFreq = 0.6  + Math.random() * 3.9;
+      const turbAmp  = 0.02 + Math.random() * 0.07;
+      const turbFreq = 0.25 + Math.random() * 1.55;
 
       return {
         x: Math.random() * w,
@@ -262,10 +263,10 @@ export const CindersOverlay: React.FC = () => {
       // the trail look on their own.
       ctx.clearRect(0, 0, w, h);
 
-      // Global wind field — sampled once per frame; per-particle windMult and
-      // turbulence applied below.
-      const winRoot1 = Math.sin(t * 0.55)       * WIND_AMP;
-      const winRoot2 = Math.sin(t * 1.30 + 1.7) * WIND_AMP * 0.35;
+      // Global wind field — slow primary cycle (~25s period) plus slower
+      // counter-swirl (~10s). Per-particle windMult applied below.
+      const winRoot1 = Math.sin(t * 0.25)       * WIND_AMP;
+      const winRoot2 = Math.sin(t * 0.62 + 1.7) * WIND_AMP * 0.35;
 
       const m = mouse.current;
 
@@ -308,7 +309,8 @@ export const CindersOverlay: React.FC = () => {
         const stageIdx = Math.min(HEAT.length - 1, Math.floor(ageT * (HEAT.length - 0.001)));
         const sprite = streaks[p.size][stageIdx];
 
-        const flicker = 0.78 + Math.sin(now * 0.022 + p.phase) * 0.22;
+        // Slow flicker — period ~1.5s, gentle 0.78..1.0 brightness oscillation
+        const flicker = 0.78 + Math.sin(now * 0.004 + p.phase) * 0.22;
         const fadeIn  = Math.min(1, ageT * 8);
         const fadeOut = Math.min(1, (1 - ageT) * 2.8);
         ctx.globalAlpha = flicker * fadeIn * fadeOut;
@@ -385,7 +387,7 @@ export const CindersOverlay: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1, opacity: 0.55 }}
+      style={{ zIndex: 1, opacity: 0.55 }}
     />
   );
 };
