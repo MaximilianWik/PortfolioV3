@@ -67,10 +67,11 @@ const HEAT: { r: number; g: number; b: number }[] = [
   { r: 110, g: 28,  b: 16 },
 ];
 
-// Streak head radii (CSS px) and tail-length multipliers per size class.
-// Size class 0 = biggest streak (long tail), class 3 = small (short tail).
-const HEAD_RADII = [10, 7, 4.5, 2.5];
-const TAIL_MULT  = [7,  6, 4.5, 3.0]; // tail length = headRadius × this
+// All ember heads share the same small bright dot radius.
+// Size class only controls tail length — no more blobs from scaled heads.
+// Class 0 = longest tail, class 3 = shortest.
+const HEAD_R     = 3;                     // px, fixed for all embers
+const TAIL_LENS  = [52, 32, 18, 8];       // px, one per size class
 
 // Physics — gentler buoyancy + wind for slow, atmospheric drift
 const BUOY_ACC  = 0.008;
@@ -88,7 +89,7 @@ interface Particle {
   x: number; y: number;
   vx: number; vy: number;
   age: number; life: number;
-  size: number;          // 0..3 size class (index into HEAD_RADII)
+  size: number;          // 0..3 size class (controls tail length only)
   phase: number;
   // Per-particle motion params for erratic, non-uniform drift
   windMult: number;      // 0.25..1.6 — response to global wind
@@ -123,44 +124,47 @@ export const CindersOverlay: React.FC = () => {
     // Each sprite: bright radial head at top + tapered linear tail downward.
     // Drawn at (p.x - W/2, p.y - headR) so the head sits at the particle
     // position and the tail trails below.
+    // Fixed small head (HEAD_R px dot) + variable tail. The head is always
+    // a crisp tiny bright point; only the tail length varies by size class.
+    // This avoids the glowing-blob look that scaled-head sprites produced.
     const buildStreak = (
-      headR: number,
       tailLen: number,
       h: { r: number; g: number; b: number }
     ): { canvas: HTMLCanvasElement; headR: number } => {
-      const w = Math.ceil(headR * 4);
-      const totalH = Math.ceil(headR * 2 + tailLen);
+      const hr    = HEAD_R;
+      const w     = Math.ceil(hr * 6);          // narrow sprite
+      const totalH = Math.ceil(hr * 2 + tailLen);
       const c = document.createElement('canvas');
       c.width = w;
       c.height = totalH;
       const cx2d = c.getContext('2d')!;
       const mx = w / 2;
-      const headCY = headR; // head center y
+      const headCY = hr;
 
-      // Tail: linear gradient inside a narrowing trapezoid
+      // Tail: very thin tapering streak — just 1.5 px wide at the bottom
       const tg = cx2d.createLinearGradient(0, headCY, 0, totalH);
-      tg.addColorStop(0,   `rgba(${h.r}, ${h.g}, ${h.b}, 0.70)`);
-      tg.addColorStop(0.4, `rgba(${h.r}, ${Math.round(h.g * 0.55)}, ${Math.round(h.b * 0.30)}, 0.30)`);
+      tg.addColorStop(0,   `rgba(${h.r}, ${h.g}, ${h.b}, 0.55)`);
+      tg.addColorStop(0.35,`rgba(${h.r}, ${Math.round(h.g * 0.5)}, ${Math.round(h.b * 0.25)}, 0.22)`);
       tg.addColorStop(1,   `rgba(${h.r}, ${h.g}, ${h.b}, 0)`);
       cx2d.fillStyle = tg;
       cx2d.beginPath();
-      cx2d.moveTo(mx - headR * 0.7, headCY);
-      cx2d.lineTo(mx + headR * 0.7, headCY);
-      cx2d.lineTo(mx + headR * 0.15, totalH);
-      cx2d.lineTo(mx - headR * 0.15, totalH);
+      cx2d.moveTo(mx - hr * 0.5,  headCY);
+      cx2d.lineTo(mx + hr * 0.5,  headCY);
+      cx2d.lineTo(mx + 0.75,      totalH);
+      cx2d.lineTo(mx - 0.75,      totalH);
       cx2d.closePath();
       cx2d.fill();
 
-      // Head: radial gradient — white-hot core, colored mid, soft halo
-      const hg = cx2d.createRadialGradient(mx, headCY, 0, mx, headCY, headR * 1.9);
-      hg.addColorStop(0,    'rgba(255, 250, 235, 1)');
-      hg.addColorStop(0.06, `rgba(${h.r}, ${h.g}, ${h.b}, 1)`);
-      hg.addColorStop(0.35, `rgba(${h.r}, ${Math.round(h.g * 0.5)}, ${Math.round(h.b * 0.35)}, 0.55)`);
+      // Head: small tight radial dot — no giant halo, just a crisp bright tip
+      const hg = cx2d.createRadialGradient(mx, headCY, 0, mx, headCY, hr * 2.2);
+      hg.addColorStop(0,    'rgba(255, 252, 240, 1)');
+      hg.addColorStop(0.12, `rgba(${h.r}, ${h.g}, ${h.b}, 1)`);
+      hg.addColorStop(0.45, `rgba(${h.r}, ${Math.round(h.g * 0.5)}, ${Math.round(h.b * 0.3)}, 0.40)`);
       hg.addColorStop(1,    `rgba(${h.r}, ${h.g}, ${h.b}, 0)`);
       cx2d.fillStyle = hg;
-      cx2d.fillRect(0, 0, w, Math.min(totalH, headR * 3));
+      cx2d.fillRect(0, 0, w, Math.min(totalH, hr * 5));
 
-      return { canvas: c, headR };
+      return { canvas: c, headR: hr };
     };
 
     const buildAsh = () => {
@@ -177,9 +181,9 @@ export const CindersOverlay: React.FC = () => {
       return c;
     };
 
-    // streaks[sizeClass][heatStage]
-    const streaks = HEAD_RADII.map((r, i) =>
-      HEAT.map(h => buildStreak(r, r * TAIL_MULT[i], h))
+    // streaks[sizeClass][heatStage] — size only controls tail length now
+    const streaks = TAIL_LENS.map(tl =>
+      HEAT.map(h => buildStreak(tl, h))
     );
     const ash = buildAsh();
 
@@ -190,7 +194,7 @@ export const CindersOverlay: React.FC = () => {
     const seed = (kind: Kind, w: number, h: number, fromBelow = false): Particle => {
       const sizeClass = kind === 'spark'
         ? 3
-        : Math.floor(Math.random() * HEAD_RADII.length);
+        : Math.floor(Math.random() * TAIL_LENS.length);
       const life = kind === 'spark' ? 110 + Math.random() * 90
                  : kind === 'ash'   ? 480 + Math.random() * 400
                                     : 380 + Math.random() * 420;
