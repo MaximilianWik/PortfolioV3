@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.8.0] - 2026-06-09
+
+### The Bearer — colours, interactive Act III, six projects
+
+Colors:
+- "THE BEARER" title changed from bone-white to bone-dim (#9A968B).
+- Act II line 1 words: bone-dim. Line 2 words: bone-dim/70.
+  "the first time" accent kept in gilt. Less harsh against the dark image.
+
+Act III rework — tabbed interactive panel:
+- Left column: portrait image + status panel (unchanged).
+- Right column: four-tab panel — Craft · Rites · Doctrine · Forged.
+  Active tab has a spring-animated underline via Framer Motion layoutId.
+  Tab content switches with AnimatePresence fade + y-slide (mode: wait).
+  - Craft: current role (DNB Bank) + thesis (SEB) + skill tags + stat counters.
+  - Rites: education timeline (Örebro + Nuremberg) with coursework detail and tags.
+  - Doctrine: philosophy quote + full toolkit grid (6 categories).
+  - Forged: all six projects as a hover-slide list with tech tags.
+
+Projects expanded to six:
+  Added Paleblood Vigil (generative N-body art),
+  Studio Panic Attack (R3F 3D immersive web experience),
+  Carpet Eater (Python audio-mangling desktop tool, GitHub-only link).
+
+---
+
 ## [1.7.0] - 2026-06-09
 
 ### The Bearer — Scroll Cinematic (Concept A)
