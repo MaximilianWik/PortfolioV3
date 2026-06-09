@@ -11,7 +11,6 @@ import { CornerBrackets } from '../shared/CornerBrackets';
 import { AnimatedOutline } from '../shared/AnimatedOutline';
 import { useVanillaTilt } from '../../hooks/useVanillaTilt';
 import { PROFILE } from '../../lib/data';
-import { FogBackground } from './FogBackground';
 
 interface DeedItem {
   title: string;
@@ -91,9 +90,6 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen py-20 flex flex-col items-center justify-center overflow-hidden bg-ink-void">
-
-      {/* WebGL fog — sits at z:0, behind sigil (-z-10 overrides it) */}
-      <FogBackground isBonfireLit={isBonfireLit} />
 
       {/* Background Sigil Glow */}
       <motion.div
