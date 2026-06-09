@@ -18,7 +18,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
   motion,
-  useScroll,
+  useMotionValue,
   useTransform,
   useMotionValueEvent,
 } from 'motion/react';
@@ -66,10 +66,35 @@ const Stat: React.FC<{ value: number; label: string; trigger: boolean }> = ({
 export const About: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // Drive progress manually so it works with Lenis's custom RAF loop.
+  // useScroll reads window.scrollY via browser scroll events which fire
+  // one frame after Lenis updates the position — causing missed thresholds.
+  // A raw scroll listener on window always reads the current scrollY.
+  const scrollYProgress = useMotionValue(0);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const compute = () => {
+      const sectionTop    = section.getBoundingClientRect().top + window.scrollY;
+      const sectionHeight = section.offsetHeight;
+      const vh            = window.innerHeight;
+      const raw = (window.scrollY - sectionTop) / (sectionHeight - vh);
+      scrollYProgress.set(Math.max(0, Math.min(1, raw)));
+    };
+
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute, { passive: true });
+    // Delay slightly so the page has finished its first layout pass.
+    const t = setTimeout(compute, 80);
+
+    return () => {
+      window.removeEventListener('scroll', compute);
+      window.removeEventListener('resize', compute);
+      clearTimeout(t);
+    };
+  }, [scrollYProgress]);
 
   // ── Act I — background image + title ────────────────────────────────────────
   const bgOpacity    = useTransform(scrollYProgress, [0, 0.08, 0.50, 0.66], [0, 1, 1, 0]);
