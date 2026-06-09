@@ -64,18 +64,18 @@ void main(){
 
   float fog = clamp(n * 0.72 + n2, 0.0, 1.0);
 
-  // Colours — just barely above ink-void (#07070A)
-  vec3 cool = vec3(0.042, 0.052, 0.080);  // dark navy fog
-  vec3 warm = vec3(0.078, 0.028, 0.016);  // dark ember fog
+  // Colours — clearly visible against ink-void (#07070A = vec3(0.027))
+  vec3 cool = vec3(0.14, 0.18, 0.32);   // dark-navy fog, clearly above ink-void
+  vec3 warm = vec3(0.28, 0.09, 0.05);   // dark-ember fog on bonfire hover
   vec3 col  = mix(cool, warm, u_warmth);
 
   // Edge vignette: pull fog back from viewport edges so hero content pops
   vec2 vig = abs(uv * 2.0 - 1.0);
-  float v  = 1.0 - smoothstep(0.55, 1.0, max(vig.x, vig.y));
+  float v  = 1.0 - smoothstep(0.50, 1.0, max(vig.x, vig.y));
   fog *= v;
 
-  float density = smoothstep(0.28, 0.68, fog);
-  float alpha   = density * 0.72;  // never fully opaque — CSS bg shows through
+  float density = smoothstep(0.08, 0.58, fog);
+  float alpha   = density * 0.82;
 
   // Premultiplied alpha for correct WebGL blending with the page
   fragColor = vec4(col * alpha, alpha);
@@ -106,7 +106,9 @@ export const FogBackground: React.FC<Props> = ({ isBonfireLit }) => {
   }, [isBonfireLit]);
 
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    // Skip only on pure-touch with no fine pointer (same fix applied to CindersOverlay)
+    const hasFine = window.matchMedia('(any-pointer: fine)').matches;
+    if (!hasFine) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;

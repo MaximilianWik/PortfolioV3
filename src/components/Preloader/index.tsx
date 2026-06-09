@@ -158,14 +158,6 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
   const progressRef    = useRef(0);
   onCompleteRef.current = onComplete;
 
-  const shouldSkip = typeof window !== 'undefined' &&
-    window.sessionStorage.getItem('mw_seen') === '1';
-
-  useEffect(() => {
-    if (shouldSkip) { onCompleteRef.current(); return; }
-    try { window.sessionStorage.setItem('mw_seen', '1'); } catch {}
-  }, [shouldSkip]);
-
   const phrases = [
     'Awakening...', 'Challenging the Abyss...', 'Collecting Cursed Echoes...',
     'Kindling the Flame...', 'Binding the Ledger...',
@@ -174,7 +166,6 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     phrases[Math.min(Math.floor((p / 100) * phrases.length), phrases.length - 1)];
 
   useEffect(() => {
-    if (shouldSkip) return;
     let i = 0;
     const full = 'Ashes of automation. Dreams of silicon.';
     const ti = setInterval(() => {
@@ -196,9 +187,7 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
     }, 25);
 
     return () => { clearInterval(ti); clearInterval(pi); if (ct) clearTimeout(ct); };
-  }, [shouldSkip]);
-
-  if (shouldSkip) return null;
+  }, []);
 
   return (
     <motion.div
