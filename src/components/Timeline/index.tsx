@@ -226,7 +226,7 @@ export const Timeline: React.FC = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: gif.opacity }}
             viewport={{ once: true }}
-            animate={{ y: [0, -60, 0] }}
+            animate={{ y: gif.id === 0 ? [0, -60, 0] : [-35, 25, -35] }}
             transition={{
               y: { duration: gif.duration, repeat: Infinity, ease: 'easeInOut' },
               opacity: { duration: 3 },
