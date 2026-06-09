@@ -1,5 +1,38 @@
 # Changelog
 
+## [1.9.0] - 2026-06-09
+
+### The Invocation — full Contact section overhaul
+
+Layout: expanded from max-w-4xl centred column to max-w-6xl two-column grid
+(5/12 info panel + 7/12 form).
+
+Left panel:
+  Quote (border-left ember-blood, italic bone-dim) · Bonfire animation ·
+  Contact links panel with CornerBrackets: each link is a horizontal row
+  (sigil icon / sublabel / value / arrow) with hover-fill + x-translate.
+  Email, LinkedIn, GitHub with real values from PROFILE. Stockholm location
+  with gilt pulse dot. Dark ink-deep/60 bg.
+
+Form (right):
+  Rewritten Field component — floating label via JS state (focused/filled),
+  animated ember-blood scaleX underline on focus, no peer-based CSS hacks.
+  Name + email side-by-side, message textarea (5 rows).
+  Submit button uses AnimatedOutline (ember-blood sweep on sending state),
+  animated spinner glyph (◈ rotating), Framer Motion color transition on hover.
+  Actually functional: builds a mailto: URI from form data and opens the
+  user'''s mail client. Notes "opens your mail client / no data stored here".
+
+Three UI states (idle → sending → sent) via AnimatePresence mode:wait.
+
+Success state: centred panel with CornerBrackets in gilt, slow-rotating
+  compass sigil in a gilt ring with radial glow, "The Bell Has Rung" heading,
+  lore quote, and "Invoke Again" button that resets to idle.
+
+Atmospheric ember-blood radial gradient behind the section.
+
+---
+
 ## [1.8.0] - 2026-06-09
 
 ### The Bearer — colours, interactive Act III, six projects
