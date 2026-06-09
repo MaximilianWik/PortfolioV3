@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.7.0] - 2026-06-09
+
+### The Bearer — Scroll Cinematic (Concept A)
+
+Replaced soul constellation with a three-act sticky scroll cinematic.
+Section height is 280vh; the inner container is `position: sticky, top: 0,
+height: 100svh`. Framer Motion `useScroll` with `offset: start start / end end`
+drives all transforms.
+
+Act I (0.00 – 0.35): blackmaiden.jpg full-bleed, starts blurred + scaled up,
+  sharpens as you scroll. "II." fades in, then "THE BEARER" slams up from 80px
+  below. Both disappear before Act II arrives. Scroll indicator pulses.
+
+Act II (0.32 – 0.66): image fades back. Opening statement fills the void in two
+  lines — large italic serif, centred. Ember-blood divider scaleX-animates
+  between them. "the first time" accented in gilt. Lines disappear before Act III.
+
+Act III (0.63 – 1.00): three staggered columns slide in from below —
+  portrait + status panel / current role + thesis + education / philosophy +
+  side projects + counting stats. Stats triggered via `useMotionValueEvent`
+  once scroll passes 0.72.
+
+Removed: soul constellation (SVG/RAF), discipline cards, DisciplineCard,
+  project cards, usePretextLayout, AnimatePresence, Sigil.
+
+---
+
 ## [1.6.0] - 2026-06-09
 
 ### The Bearer — Soul Constellation (full rework)
