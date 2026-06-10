@@ -24,7 +24,11 @@ export const Navigation: React.FC = () => {
 
   return (
     <>
-      <nav className="flex justify-between items-center px-6 md:px-12 py-4 border-b border-bone-faded/30 sticky top-0 z-[90] bg-ink-void/90 backdrop-blur-sm">
+      {/* Spacer reserves the nav's height in document flow so content doesn't
+          hide behind the fixed bar. Height matches py-4 + ~32px content. */}
+      <div style={{ height: '57px' }} aria-hidden="true" />
+
+      <nav className="flex justify-between items-center px-6 md:px-12 py-4 border-b border-bone-faded/30 fixed top-0 inset-x-0 z-[90] bg-ink-void/90 backdrop-blur-sm">
 
         {/* Left: sigil + name */}
         <motion.div
