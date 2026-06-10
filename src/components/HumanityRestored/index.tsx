@@ -150,12 +150,15 @@ export const HumanityRestored: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void overflow-x-hidden cursor-pointer select-none"
+      className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void overflow-x-clip cursor-pointer select-none"
       onClick={() => setAnimKey(k => k + 1)}
     >
       {/* Static vignette — no animation, no cost */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,7,10,0.85) 100%)' }} />
+
+      {/* Particle canvas fills the full section height, not the inner text div */}
+      {animKey > 0 && <ParticleBurst key={animKey} active />}
 
       <div className="relative w-full flex flex-col items-center justify-center">
         {animKey > 0 && (
@@ -209,9 +212,6 @@ export const HumanityRestored: React.FC = () => {
               animate={{ opacity: [0, 1, 0.7, 0], scaleX: [0, 2.8, 1, 0] }}
               transition={{ duration: DUR, times: [0, 0.05, 0.75, 1], ease: 'easeOut' }}
             />
-
-            {/* ── L4: Canvas particle burst ──────────────────────────────── */}
-            <ParticleBurst active />
 
             {/* ── L5: Text ───────────────────────────────────────────────────
                 Single element — no bloom duplicate.
