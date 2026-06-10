@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — The Bonfire Has Gone Dark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink-void:    #07070A;
+      --ink-deep:    #0D0D12;
+      --ember-blood: #8B1A1A;
+      --gilt:        #B8935A;
+      --bone-white:  #E8E4D8;
+      --bone-dim:    #9A968B;
+      --bone-faded:  #5C584F;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--ink-void);
+      color: var(--bone-dim);
+      font-family: 'Cormorant Garamond', serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Radial ember glow */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(139,26,26,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .numeral {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gilt);
+      opacity: 0.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .code {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(5rem, 18vw, 11rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(184,147,90,0.35);
+      letter-spacing: 0.08em;
+      line-height: 1;
+      margin-bottom: 1rem;
+      animation: flicker 4s ease-in-out infinite;
+    }
+
+    @keyframes flicker {
+      0%, 90%, 100% { opacity: 1; }
+      92%           { opacity: 0.6; }
+      94%           { opacity: 1; }
+      96%           { opacity: 0.4; }
+      98%           { opacity: 1; }
+    }
+
+    .rule {
+      width: 3rem;
+      height: 1px;
+      background: var(--ember-blood);
+      margin: 1.5rem auto;
+      opacity: 0.7;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--bone-dim);
+      margin-bottom: 0.75rem;
+    }
+
+    .sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      color: var(--bone-faded);
+      max-width: 28rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    a.btn {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      border: 1px solid rgba(184,147,90,0.35);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--bone-dim);
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+    }
+
+    a.btn:hover {
+      border-color: var(--gilt);
+      color: var(--gilt);
+      background: rgba(184,147,90,0.05);
+    }
+
+    .coords {
+      position: absolute;
+      bottom: 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--bone-faded);
+      opacity: 0.4;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <p class="numeral">Error // 404</p>
+
+  <div class="code">404</div>
+
+  <div class="rule"></div>
+
+  <h1>The Bonfire Has Gone Dark</h1>
+
+  <p class="sub">
+    "This path leads nowhere. The embers have long since cooled,
+    and whatever was here has been lost to the void."
+  </p>
+
+  <div class="actions">
+    <a href="/" class="btn">Return to the Ledger</a>
+  </div>
+
+  <p class="coords">STHLM // 59.3293° N — Maximilian Wikström</p>
+</body>
+</html>

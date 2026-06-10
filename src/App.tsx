@@ -12,7 +12,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { Preloader } from './components/Preloader';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
-import { Highlights } from './components/Highlights';
 import { Footer } from './components/Footer';
 import { Navigation } from './components/shared/Navigation';
 import { Firelink } from './components/shared/Firelink';
@@ -118,7 +117,6 @@ export default function App() {
             <div className="flex-1 px-6 md:px-12">
               <Hero />
               <About />
-              <Highlights />
               <Firelink />
               <React.Suspense fallback={null}>
                 <Timeline />

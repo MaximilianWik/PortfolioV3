@@ -259,7 +259,7 @@ export const Timeline: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <SectionHeading numeral="IV" title="The Chronicle" sigil="runes" />
+        <SectionHeading numeral="III" title="The Chronicle" sigil="runes" />
 
         <div className="relative mt-20">
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-bone-faded/20 -translate-x-1/2" />

@@ -85,7 +85,7 @@ export const Resume: React.FC = () => {
 
       <div className="relative max-w-6xl mx-auto z-10 drop-shadow-2xl">
         <SectionHeading
-          numeral="VI"
+          numeral="V"
           title="The Formal Hand"
           sigil="eye"
         />

@@ -89,7 +89,7 @@ export const Projects: React.FC = () => {
     <section id="relics" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          numeral="V"
+          numeral="IV"
           title="Relics Unearthed"
           sigil="trefoil"
         />

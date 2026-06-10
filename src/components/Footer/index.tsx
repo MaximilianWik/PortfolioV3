@@ -66,6 +66,14 @@ export const Footer: React.FC = () => {
           Return to the Ledger
         </button>
 
+        <a
+          href="/the-void-calls"
+          className="font-mono text-[8px] text-bone-faded/25 hover:text-ember-blood/50 transition-colors tracking-widest uppercase"
+          title="Test 404 page"
+        >
+          [404]
+        </a>
+
         <div className="font-subdisplay tracking-widest uppercase text-center md:text-right">
           Set in Cormorant & Cinzel // Forged in Shadow
         </div>

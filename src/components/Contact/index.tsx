@@ -50,11 +50,28 @@ const Field: React.FC<{
 const FormModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle');
 
-  const send = (e: React.FormEvent<HTMLFormElement>) => {
+  // ── Replace YOUR_FORMSPREE_ID with your form ID from formspree.io/forms
+  const FORMSPREE = 'YOUR_FORMSPREE_ID';
+
+  const send = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (state !== 'idle') return;
     setState('sending');
+
     const fd = new FormData(e.currentTarget);
+
+    if (FORMSPREE !== 'YOUR_FORMSPREE_ID') {
+      try {
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
+          method: 'POST',
+          body: fd,
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) { setState('sent'); return; }
+      } catch { /* fall through to mailto */ }
+    }
+
+    // Fallback: open mail client
     const name = fd.get('name') as string;
     const mail = fd.get('email') as string;
     const msg  = fd.get('message') as string;
@@ -233,7 +250,7 @@ export const Contact: React.FC = () => {
         <div className="relative z-10 max-w-5xl mx-auto w-full flex flex-col items-center">
 
           {/* Heading */}
-          <SectionHeading numeral="VII" title="The Invocation" sigil="compass" />
+          <SectionHeading numeral="VI" title="The Invocation" sigil="compass" />
 
           {/* Bonfire — hero element, scaled up */}
           <motion.div
