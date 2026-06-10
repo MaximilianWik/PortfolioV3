@@ -42,6 +42,23 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         {title}
       </motion.h2>
 
+      {/* Floor reflection — faint mirror of the title, masked to fade into the floor */}
+      <motion.div
+        initial={{ opacity: 0, scaleY: -1 }}
+        whileInView={{ opacity: 0.22, scaleY: -1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.5, delay: 0.25, ease: "easeOut" }}
+        aria-hidden="true"
+        className="font-display text-4xl md:text-5xl uppercase text-center pointer-events-none select-none -mt-8 mb-8"
+        style={{
+          letterSpacing: '0.25em',
+          WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 50%)',
+          maskImage:       'linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 50%)',
+        }}
+      >
+        {title}
+      </motion.div>
+
       <div className="flex items-center w-full max-w-sm gap-4">
         <div className="h-[1px] flex-1 bg-bone-faded opacity-30" />
         <Sigil variant={sigil} className="w-6 h-6 text-bone-dim" />
