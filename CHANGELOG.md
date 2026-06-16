@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0] - 2026-06-16
+
+### Sharon Shakti relic added
+
+- Added Sharon Shakti as relic I in PROJECTS (src/lib/data.ts)
+- All previous relics renumbered II–XII
+- Repo: github.com/MaximilianWik/Sharon-Shakti · Live: sharon-shakti.vercel.app
+
 ## [1.9.0] - 2026-06-09
 
 ### The Invocation — full Contact section overhaul
