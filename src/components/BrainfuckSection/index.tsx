@@ -41,7 +41,7 @@ export const BrainfuckSection: React.FC = () => (
 
         {/* Subtle hint — lore-flavoured, not a spoiler */}
         <p className="font-mono text-[9px] text-bone-faded/30 text-center uppercase tracking-[0.3em]">
-          Those who know the old codes may find deeper truths elsewhere.
+          ↑↑↓↓←→ — Those who know the old codes may find deeper truths.
         </p>
       </div>
     </RevealOnScroll>

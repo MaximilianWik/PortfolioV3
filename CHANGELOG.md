@@ -1,6 +1,22 @@
 # Changelog
 
-## [1.13.0] - 2026-06-17
+## [1.13.2] - 2026-06-17
+
+### Shorten Konami sequence to ↑↑↓↓←→
+
+- Trigger reduced from ↑↑↓↓←→←→ to ↑↑↓↓←→ (6 keys).
+- Updated all hint text accordingly.
+
+
+
+### Konami easter egg — easier trigger + hint
+
+- Shortened trigger sequence from ↑↑↓↓←→←→BA to ↑↑↓↓←→←→ (drop B A).
+- Added a subtle hint strip between Hero and About: shows "Hidden Rite",
+  the arrow sequence, and "Arrow keys only" in muted bone-faded mono text.
+- Updated overlay footer and BrainfuckSection hint copy to match new sequence.
+
+
 
 ### Brainfuck visualizer + Konami easter egg
 

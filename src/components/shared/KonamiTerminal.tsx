@@ -8,11 +8,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { BrainfuckVisualizer } from './BrainfuckVisualizer';
 import { BF_YOU_DIED } from './BrainfuckEngine';
 
-// ↑ ↑ ↓ ↓ ← → ← → B A
+// ↑ ↑ ↓ ↓ ← →
 const KONAMI: string[] = [
   'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-  'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-  'b', 'a',
+  'ArrowLeft', 'ArrowRight',
 ];
 
 /**
@@ -112,7 +111,7 @@ export const KonamiTerminal: React.FC = () => {
             {/* ── Footer hint ────────────────────────────────────────────── */}
             <div className="flex justify-between items-center">
               <div className="font-mono text-[8px] text-bone-faded/40 uppercase tracking-widest">
-                ↑↑↓↓←→←→BA
+                ↑↑↓↓←→
               </div>
               <div className="font-mono text-[8px] text-bone-faded/40 uppercase tracking-widest">
                 [ ESC OR CLICK OUTSIDE TO DISPEL ]
