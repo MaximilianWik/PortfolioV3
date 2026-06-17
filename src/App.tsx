@@ -126,15 +126,12 @@ export default function App() {
 
               {/* Konami hint */}
               <div className="flex flex-col items-center gap-3 py-8 -mt-8">
-                <div className="flex flex-col items-center gap-3 border border-bone-faded/20 px-8 py-5 relative">
-                  <p className="font-subdisplay text-[10px] text-bone-faded uppercase tracking-[0.4em]">
+                <div className="flex flex-col items-center gap-3 border border-ember-blood/20 px-8 py-5 relative">
+                  <p className="font-subdisplay text-[10px] text-ember-blood/50 uppercase tracking-[0.4em]">
                     Hidden Rite
                   </p>
-                  <p className="font-mono text-xl text-bone-white tracking-[0.6em] select-none">
+                  <p className="font-mono text-xl text-ember-blood/70 tracking-[0.6em] select-none">
                     ↑ ↑ ↓ ↓ ← →
-                  </p>
-                  <p className="font-mono text-[9px] text-gilt uppercase tracking-[0.3em]">
-                    Arrow keys · Unlocks The Arcane Tongue
                   </p>
                 </div>
               </div>
