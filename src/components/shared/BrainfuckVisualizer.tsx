@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  compileBF, runBF,
+  compileBF, runBF, textToBF,
   BF_HELLO_WORLD, BF_YOU_DIED,
   type BFSnapshot,
 } from './BrainfuckEngine';
@@ -68,7 +68,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   initialSpeed = 80,
 }) => {
   const [presetKey, setPresetKey] = useState<string>('hello');
-  const [customCode, setCustomCode] = useState('');
+  const [customText, setCustomText] = useState('');
   const [showCustom, setShowCustom] = useState(false);
   const [step, setStep] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -80,7 +80,8 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   const activeCharRef = useRef<HTMLSpanElement | null>(null);
   const activeCellRef = useRef<HTMLDivElement | null>(null);
 
-  const code = lockedCode ?? (showCustom ? customCode : PRESETS[presetKey].code);
+  const generatedBF = useMemo(() => textToBF(customText), [customText]);
+  const code = lockedCode ?? (showCustom ? generatedBF : PRESETS[presetKey].code);
 
   const prog = useMemo(() => compileBF(code), [code]);
 
@@ -234,15 +235,35 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 py-3 border-b border-bone-faded/15">
-              <textarea
-                className="w-full bg-ink-void border border-bone-faded/20 font-mono text-xs text-bone-white p-2 resize-none outline-none focus:border-gilt/50 placeholder:text-bone-faded/30"
-                rows={3}
-                value={customCode}
-                onChange={e => setCustomCode(e.target.value)}
-                placeholder="++++++++++[>++++++++<-]>++."
-                spellCheck={false}
-              />
+            <div className="px-4 py-3 border-b border-bone-faded/15 flex flex-col gap-3">
+              {/* Plain-text input */}
+              <div>
+                <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-1.5">
+                  Your message
+                </div>
+                <input
+                  type="text"
+                  className="w-full bg-ink-void border border-bone-faded/20 font-mono text-sm text-bone-white px-3 py-2 outline-none focus:border-gilt/50 placeholder:text-bone-faded/30"
+                  value={customText}
+                  onChange={e => setCustomText(e.target.value)}
+                  placeholder="Type anything…"
+                  spellCheck={false}
+                />
+              </div>
+
+              {/* Generated BF — read-only, shown so the user can see what was compiled */}
+              {customText && (
+                <div>
+                  <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-1.5">
+                    Generated Brainfuck
+                  </div>
+                  <div className="bg-ink-void border border-bone-faded/10 px-3 py-2 overflow-x-auto">
+                    <pre className="font-mono text-[11px] text-gilt/80 whitespace-pre-wrap break-all leading-relaxed">
+                      {generatedBF}
+                    </pre>
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -252,7 +273,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
         <div className="px-4 py-6 font-mono text-xs text-ember-blood">{prog.error}</div>
       ) : !prog.clean ? (
         <div className="px-4 py-8 font-mono text-xs text-bone-faded/50 text-center">
-          Enter a Brainfuck program above.
+          {showCustom ? 'Type a message above to generate Brainfuck.' : 'No program loaded.'}
         </div>
       ) : (
         <>

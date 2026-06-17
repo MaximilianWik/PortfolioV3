@@ -124,6 +124,66 @@ export function runBF(program: BFProgram, input = ''): BFSnapshot[] {
   return snapshots;
 }
 
+// ── Text → Brainfuck compiler ────────────────────────────────────────────────
+
+/**
+ * Find the best (a, b, remainder) such that `a * b + r = v`, minimising
+ * total BF characters needed (a counter increments + b inner increments + |r|).
+ */
+function bestFactors(v: number): { a: number; b: number; r: number } {
+  // Baseline: pure direct increments (no loop), cost = v
+  let bestA = 1, bestB = v, bestR = 0, bestCost = v;
+
+  for (let a = 2; a <= Math.ceil(Math.sqrt(v)) + 2; a++) {
+    const b = Math.round(v / a);
+    if (b < 1) continue;
+    const r = v - a * b;
+    const cost = a + b + Math.abs(r);
+    if (cost < bestCost) {
+      bestA = a; bestB = b; bestR = r; bestCost = cost;
+    }
+  }
+
+  return { a: bestA, b: bestB, r: bestR };
+}
+
+/**
+ * Compile a plain-text string into a Brainfuck program that prints it.
+ *
+ * Uses two cells: cell[0] as the loop counter (scratch), cell[1] as the
+ * output register. For each character the pointer bounces between them,
+ * making the tape animation visually interesting.
+ *
+ * Pattern per character:
+ *   - (not first) `[-]<`     reset output cell, return to scratch cell
+ *   - if loop:    `+`×a `[>` `+`×b `<-]` `>` `+/-`×r `.`
+ *   - if direct:  `>` `+`×v `.`   (for very small ASCII values)
+ */
+export function textToBF(text: string): string {
+  let out = '';
+
+  for (let i = 0; i < text.length; i++) {
+    const v = text.charCodeAt(i);
+    if (v > 255) continue; // skip non-Latin-1
+
+    if (i > 0) out += '[-]<'; // reset output cell → back to scratch
+
+    const { a, b, r } = bestFactors(v);
+
+    if (a === 1) {
+      // Direct: move to output cell and increment
+      out += '>' + '+'.repeat(v) + '.';
+    } else {
+      out += '+'.repeat(a) + '[>' + '+'.repeat(b) + '<-]>';
+      if (r > 0) out += '+'.repeat(r);
+      else if (r < 0) out += '-'.repeat(-r);
+      out += '.';
+    }
+  }
+
+  return out;
+}
+
 // ── Preset programs ──────────────────────────────────────────────────────────
 
 /**

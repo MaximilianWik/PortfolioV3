@@ -1,6 +1,19 @@
 # Changelog
 
-## [1.13.2] - 2026-06-17
+## [1.13.3] - 2026-06-17
+
+### Custom BF: text-to-Brainfuck compiler
+
+- `textToBF()` added to `BrainfuckEngine.ts`: compiles any plain-text string
+  into valid Brainfuck using a two-cell loop pattern (cell[0] counter,
+  cell[1] output). For each character, finds optimal (a, b, r) such that
+  a×b+r = ASCII value, minimising total instruction count. Pointer bounces
+  between the two cells making the tape animation visually interesting.
+- Custom mode in `BrainfuckVisualizer` reworked: text input replaces BF
+  textarea. Generated BF code is shown read-only below the input (gilt-tinted
+  monospace). Running the visualizer then executes the generated program.
+
+
 
 ### Shorten Konami sequence to ↑↑↓↓←→
 
