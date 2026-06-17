@@ -124,17 +124,19 @@ export default function App() {
             <div className="flex-1 px-6 md:px-12">
               <Hero />
 
-              {/* Konami hint — sits between Hero and About as a subtle nudge */}
-              <div className="flex flex-col items-center gap-2 py-6 -mt-8">
-                <p className="font-mono text-[9px] text-bone-faded/40 uppercase tracking-[0.3em]">
-                  Hidden Rite
-                </p>
-                <p className="font-mono text-sm text-bone-faded/25 tracking-[0.5em] select-none">
-                  ↑ ↑ ↓ ↓ ← →
-                </p>
-                <p className="font-mono text-[8px] text-bone-faded/20 uppercase tracking-widest">
-                  Arrow keys only
-                </p>
+              {/* Konami hint */}
+              <div className="flex flex-col items-center gap-3 py-8 -mt-8">
+                <div className="flex flex-col items-center gap-3 border border-bone-faded/20 px-8 py-5 relative">
+                  <p className="font-subdisplay text-[10px] text-bone-faded uppercase tracking-[0.4em]">
+                    Hidden Rite
+                  </p>
+                  <p className="font-mono text-xl text-bone-white tracking-[0.6em] select-none">
+                    ↑ ↑ ↓ ↓ ← →
+                  </p>
+                  <p className="font-mono text-[9px] text-gilt uppercase tracking-[0.3em]">
+                    Arrow keys · Unlocks The Arcane Tongue
+                  </p>
+                </div>
               </div>
 
               <About />

@@ -21,7 +21,7 @@ export const BrainfuckSection: React.FC = () => (
     />
 
     <SectionHeading
-      numeral="VII"
+      numeral="V"
       title="The Arcane Tongue"
       sigil="runes"
       subtitle="Eight sigils. Infinite torment. A Turing-complete incantation older than modern thought."

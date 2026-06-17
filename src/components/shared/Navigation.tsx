@@ -8,13 +8,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { RotatingSigil3D } from './RotatingSigil3D';
 
 const NAV_LINKS = [
-  { label: 'I. The Ashen One', href: '#' },
-  { label: 'II. The Bearer',   href: '#about' },
-  { label: 'III. The Chronicle', href: '#chronicle' },
-  { label: 'IV. Relics',       href: '#relics' },
-  { label: 'V. The Formal Hand', href: '#resume' },
-  { label: 'VI. The Invocation', href: '#invocation' },
-  { label: 'VII. The Arcane Tongue', href: '#arcane' },
+  { label: 'I. The Ashen One',      href: '#' },
+  { label: 'II. The Bearer',        href: '#about' },
+  { label: 'III. The Chronicle',    href: '#chronicle' },
+  { label: 'IV. Relics',            href: '#relics' },
+  { label: 'V. The Arcane Tongue',  href: '#arcane' },
+  { label: 'VI. The Formal Hand',   href: '#resume' },
+  { label: 'VII. The Invocation',   href: '#invocation' },
 ];
 
 // Ordered section ids matched against the viewport probe line for active-chapter

@@ -20,10 +20,10 @@ const PRESETS: Record<string, { label: string; code: string }> = {
 const TAPE_CELLS = 16;
 
 const SPEED_LABELS: Record<number, string> = {
-  400: 'SLOW',
-  150: 'NORMAL',
-  50: 'FAST',
-  10: 'OVERDRIVE',
+  80: 'SLOW',
+  20: 'NORMAL',
+  6: 'FAST',
+  1: 'OVERDRIVE',
 };
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -65,7 +65,7 @@ interface BrainfuckVisualizerProps {
 export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   lockedCode,
   autoPlay = false,
-  initialSpeed = 150,
+  initialSpeed = 20,
 }) => {
   const [presetKey, setPresetKey] = useState<string>('hello');
   const [customText, setCustomText] = useState('');
@@ -133,33 +133,22 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
     }
   }, []);
 
-  // ── Advance to the next snapshot where output changes (or program ends) ──
-  // This makes the speed control represent "ms per output character" rather
-  // than "ms per BF instruction" — consistent regardless of program complexity.
-  const nextOutputStep = useCallback((from: number): number => {
-    const prevOutput = snapshots[from]?.output ?? '';
-    let next = from + 1;
-    while (next <= maxStep && snapshots[next]?.output === prevOutput && !snapshots[next]?.done) {
-      next++;
-    }
-    return Math.min(next, maxStep);
-  }, [snapshots, maxStep]);
-
   useEffect(() => {
     if (!isRunning) { clearTimer(); return; }
 
     intervalRef.current = setInterval(() => {
       setStep(s => {
-        const next = nextOutputStep(s);
-        if (snapshots[next]?.done || next >= maxStep) {
+        const next = s + 1;
+        if (next > maxStep || snapshots[next]?.done) {
           setIsRunning(false);
+          return Math.min(next, maxStep);
         }
         return next;
       });
     }, speed);
 
     return clearTimer;
-  }, [isRunning, speed, maxStep, snapshots, clearTimer, nextOutputStep]);
+  }, [isRunning, speed, maxStep, snapshots, clearTimer]);
 
   // Auto-start if requested
   useEffect(() => {
@@ -177,8 +166,8 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   const handleStepForward = useCallback(() => {
     clearTimer();
     setIsRunning(false);
-    setStep(s => nextOutputStep(s));
-  }, [clearTimer, nextOutputStep]);
+    setStep(s => Math.min(s + 1, maxStep));
+  }, [clearTimer, maxStep]);
 
   const handlePreset = (key: string) => {
     setPresetKey(key);

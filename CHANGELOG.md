@@ -1,6 +1,17 @@
 # Changelog
 
-## [1.13.4] - 2026-06-17
+## [1.13.5] - 2026-06-17
+
+### Revert to step-by-step BF instruction animation
+
+- Output-jump approach removed; interval advances one BF instruction per tick
+  so every +, -, [, ], . etc. is visible in the source highlighter.
+- Speed presets recalibrated for per-instruction rate:
+  SLOW 80ms, NORMAL 20ms, FAST 6ms, OVERDRIVE 1ms.
+- Section default 20ms (Hello World ~18s, visible throughout).
+- Konami terminal 30ms (YOU DIED ~4s, dramatic step-through).
+
+
 
 ### Fix: letter-by-letter output for all programs
 
