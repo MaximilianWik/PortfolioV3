@@ -11,21 +11,20 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
-const svgPath = join(root, "public", "favicon.svg");
-const svgBuffer = readFileSync(svgPath);
+const srcPath = join(root, "public", "favicon-source.jpeg");
+const srcBuffer = readFileSync(srcPath);
 
 const sizes = [
-  { name: "favicon-48.png",  size: 48  },
-  { name: "favicon-192.png", size: 192 },
-  { name: "favicon-512.png", size: 512 },
-  // Apple touch icon — must be exactly 180×180
+  { name: "favicon-48.png",       size: 48  },
+  { name: "favicon-192.png",      size: 192 },
+  { name: "favicon-512.png",      size: 512 },
   { name: "apple-touch-icon.png", size: 180 },
 ];
 
 for (const { name, size } of sizes) {
   const dest = join(root, "public", name);
-  await sharp(svgBuffer, { density: Math.round((size / 64) * 96) })
-    .resize(size, size)
+  await sharp(srcBuffer)
+    .resize(size, size, { fit: "contain", background: { r: 7, g: 7, b: 10, alpha: 1 } })
     .png()
     .toFile(dest);
   console.log(`✓ public/${name}  (${size}×${size})`);
