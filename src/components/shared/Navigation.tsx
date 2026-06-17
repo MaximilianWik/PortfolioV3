@@ -14,11 +14,12 @@ const NAV_LINKS = [
   { label: 'IV. Relics',       href: '#relics' },
   { label: 'V. The Formal Hand', href: '#resume' },
   { label: 'VI. The Invocation', href: '#invocation' },
+  { label: 'VII. The Arcane Tongue', href: '#arcane' },
 ];
 
 // Ordered section ids matched against the viewport probe line for active-chapter
 // detection. Hero is the implicit top chapter ('#').
-const SECTION_IDS = ['about', 'chronicle', 'relics', 'resume', 'invocation'];
+const SECTION_IDS = ['about', 'chronicle', 'relics', 'arcane', 'resume', 'invocation'];
 
 export const Navigation: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);

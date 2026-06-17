@@ -20,6 +20,9 @@ const Timeline = React.lazy(() => import('./components/Timeline').then(m => ({ d
 const Projects = React.lazy(() => import('./components/Projects').then(m => ({ default: m.Projects })));
 const Resume = React.lazy(() => import('./components/Resume').then(m => ({ default: m.Resume })));
 const Contact = React.lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
+const BrainfuckSection = React.lazy(() =>
+  import('./components/BrainfuckSection').then(m => ({ default: m.BrainfuckSection })),
+);
 const HumanityRestored = React.lazy(() =>
   import('./components/HumanityRestored').then(m => ({ default: m.HumanityRestored })),
 );
@@ -32,6 +35,9 @@ const CustomCursor = React.lazy(() =>
 );
 const CindersOverlay = React.lazy(() =>
   import('./components/shared/CindersOverlay').then(m => ({ default: m.CindersOverlay })),
+);
+const KonamiTerminal = React.lazy(() =>
+  import('./components/shared/KonamiTerminal').then(m => ({ default: m.KonamiTerminal })),
 );
 
 export default function App() {
@@ -106,6 +112,7 @@ export default function App() {
       <React.Suspense fallback={null}>
         <CustomCursor />
         <CindersOverlay />
+        <KonamiTerminal />
       </React.Suspense>
 
       <AnimatePresence mode="wait">
@@ -121,6 +128,7 @@ export default function App() {
               <React.Suspense fallback={null}>
                 <Timeline />
                 <Projects />
+                <BrainfuckSection />
                 <Resume />
                 <Contact />
               </React.Suspense>

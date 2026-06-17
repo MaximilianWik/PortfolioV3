@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.13.0] - 2026-06-17
+
+### Brainfuck visualizer + Konami easter egg
+
+New section — VII. The Arcane Tongue:
+- `BrainfuckEngine.ts`: pure TS Brainfuck interpreter. Compiles source to a
+  `BFProgram` (bracket map precomputed), then `runBF()` returns a full
+  `BFSnapshot[]` — one entry per step — capped at 20 000 steps.
+- `BrainfuckVisualizer.tsx`: interactive tape visualizer. Shows the cleaned
+  source with the current instruction lit in ember-blood, a 16-cell sliding
+  tape window (index + value + ASCII glyph per cell), accumulated output in
+  gilt, and RUN / PAUSE / STEP / RESET controls with four speed presets
+  (SLOW 200 ms → OVERDRIVE 4 ms). Custom code textarea also included.
+  Exposes `lockedCode` + `autoPlay` props for use in the Konami overlay.
+- `BrainfuckSection/index.tsx`: lazy-loaded section VII between Relics and
+  the Formal Hand. Nav link "VII. The Arcane Tongue" → `#arcane`. Subtle
+  hint copy nudges observant visitors toward the easter egg without spoiling it.
+
+New global easter egg — Konami Terminal:
+- `KonamiTerminal.tsx`: listens globally for ↑↑↓↓←→←→BA. On match, a
+  fullscreen `AnimatePresence` overlay slides in running the "YOU DIED"
+  Brainfuck program (`BF_YOU_DIED`) in auto-play mode at 60 ms/step.
+  Dismiss with ESC or click-outside.
+- `BF_YOU_DIED`: compact loop-based BF that prints `YOU DIED` using three
+  tape cells with pointer movement; verified hand-computed.
+
+Navigation:
+- Added `#arcane` to `NAV_LINKS` and `SECTION_IDS` (between relics and resume).
+
 ## [1.12.0] - 2026-06-17
 
 ### Audit pass — fixes, dead-code removal, perf, a11y, new nav feature
