@@ -54,7 +54,7 @@ const TapeCell: React.FC<{ index: number; value: number; active: boolean }> = ({
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface BrainfuckVisualizerProps {
-  /** If set, lock to this preset and hide the preset/custom selector. */
+  /** If set, lock to this preset and hide the selector. */
   lockedCode?: string;
   /** Auto-start on mount. Default false. */
   autoPlay?: boolean;
@@ -75,28 +75,54 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   const [speed, setSpeed] = useState(initialSpeed);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const codeContainerRef = useRef<HTMLDivElement>(null);
+  const tapeContainerRef = useRef<HTMLDivElement>(null);
   const activeCharRef = useRef<HTMLSpanElement | null>(null);
   const activeCellRef = useRef<HTMLDivElement | null>(null);
 
   const code = lockedCode ?? (showCustom ? customCode : PRESETS[presetKey].code);
 
+  const prog = useMemo(() => compileBF(code), [code]);
+
   const snapshots = useMemo<BFSnapshot[]>(() => {
-    const prog = compileBF(code);
     if (prog.error) return [];
     return runBF(prog);
-  }, [code]);
+  }, [prog]);
 
   const maxStep = snapshots.length - 1;
-  const current: BFSnapshot | undefined = snapshots[Math.min(step, maxStep)];
+  const current: BFSnapshot | undefined = snapshots[Math.min(step, Math.max(0, maxStep))];
 
-  // ── Scroll active char into view ─────────────────────────────────────────
+  // ── Scroll active char/cell within their container (never touches page scroll) ─
   useEffect(() => {
-    activeCharRef.current?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-  }, [current?.ip]);
+    if (step === 0) return;
+    const container = codeContainerRef.current;
+    const el = activeCharRef.current;
+    if (!container || !el) return;
+    const targetLeft = el.offsetLeft - container.offsetLeft;
+    container.scrollLeft = targetLeft - container.clientWidth / 2 + el.offsetWidth / 2;
+  }, [step]);
 
   useEffect(() => {
-    activeCellRef.current?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-  }, [current?.dp]);
+    if (step === 0) return;
+    const container = tapeContainerRef.current;
+    const el = activeCellRef.current;
+    if (!container || !el) return;
+    const targetLeft = el.offsetLeft - container.offsetLeft;
+    container.scrollLeft = targetLeft - container.clientWidth / 2 + el.offsetWidth / 2;
+  }, [step]);
+
+  // ── Reset to step 0 whenever the source code changes ─────────────────────
+  const prevCodeRef = useRef(code);
+  useEffect(() => {
+    if (prevCodeRef.current === code) return;
+    prevCodeRef.current = code;
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setIsRunning(false);
+    setStep(0);
+  }, [code]);
 
   // ── Auto-play interval ───────────────────────────────────────────────────
   const clearTimer = useCallback(() => {
@@ -114,7 +140,6 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
         const next = s + 1;
         if (next > maxStep || snapshots[next]?.done) {
           setIsRunning(false);
-          clearTimer();
           return Math.min(next, maxStep);
         }
         return next;
@@ -127,7 +152,8 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   // Auto-start if requested
   useEffect(() => {
     if (autoPlay && snapshots.length > 0) setIsRunning(true);
-  }, [autoPlay, snapshots]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally run once
 
   // ── Controls ─────────────────────────────────────────────────────────────
   const reset = useCallback(() => {
@@ -145,20 +171,21 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
   const handlePreset = (key: string) => {
     setPresetKey(key);
     setShowCustom(false);
-    reset();
-  };
-
-  const handleCustomSubmit = () => {
-    reset();
+    // step reset handled by the code-change effect
   };
 
   // ── Tape window: keep dp visible ─────────────────────────────────────────
   const dp = current?.dp ?? 0;
-  const windowStart = Math.max(0, Math.min(dp - Math.floor(TAPE_CELLS / 2), (current?.tape.length ?? TAPE_CELLS) - TAPE_CELLS));
-  const visibleCells = current ? current.tape.slice(windowStart, windowStart + TAPE_CELLS) : Array(TAPE_CELLS).fill(0);
+  const windowStart = Math.max(
+    0,
+    Math.min(dp - Math.floor(TAPE_CELLS / 2), (current?.tape.length ?? TAPE_CELLS) - TAPE_CELLS),
+  );
+  const visibleCells = current
+    ? current.tape.slice(windowStart, windowStart + TAPE_CELLS)
+    : Array(TAPE_CELLS).fill(0) as number[];
 
-  const prog = useMemo(() => compileBF(code), [code]);
-  const error = prog.error;
+  const isDone = current?.done ?? false;
+  const isNotStarted = step === 0;
 
   return (
     <div className="relative bg-ink-deep border border-bone-faded/20 overflow-hidden w-full">
@@ -167,7 +194,6 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
       {/* ── Header bar ─────────────────────────────────────────────────── */}
       {!lockedCode && (
         <div className="flex flex-wrap items-center gap-3 px-4 py-3 border-b border-bone-faded/15">
-          {/* Presets */}
           {Object.entries(PRESETS).map(([key, p]) => (
             <button
               key={key}
@@ -182,7 +208,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
             </button>
           ))}
           <button
-            onClick={() => { setShowCustom(c => !c); reset(); }}
+            onClick={() => setShowCustom(c => !c)}
             className={`font-subdisplay text-[9px] tracking-widest uppercase border px-3 py-1 transition-colors
               ${showCustom
                 ? 'border-gilt text-gilt'
@@ -193,7 +219,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
           </button>
 
           <span className="ml-auto font-mono text-[9px] text-bone-faded">
-            STEP {step}/{maxStep}
+            STEP {step}/{maxStep > 0 ? maxStep : '—'}
           </span>
         </div>
       )}
@@ -208,41 +234,39 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 py-3 border-b border-bone-faded/15 flex gap-2">
+            <div className="px-4 py-3 border-b border-bone-faded/15">
               <textarea
-                className="flex-1 bg-ink-void border border-bone-faded/20 font-mono text-xs text-bone-white p-2 resize-none outline-none focus:border-gilt/50 placeholder:text-bone-faded/30"
+                className="w-full bg-ink-void border border-bone-faded/20 font-mono text-xs text-bone-white p-2 resize-none outline-none focus:border-gilt/50 placeholder:text-bone-faded/30"
                 rows={3}
                 value={customCode}
-                onChange={e => { setCustomCode(e.target.value); reset(); }}
-                placeholder="+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+                onChange={e => setCustomCode(e.target.value)}
+                placeholder="++++++++++[>++++++++<-]>++."
                 spellCheck={false}
               />
-              <button
-                onClick={handleCustomSubmit}
-                className="font-subdisplay text-[9px] tracking-widest uppercase border border-bone-faded/30 text-bone-faded hover:text-gilt hover:border-gilt px-3 transition-colors self-start"
-              >
-                LOAD
-              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {error ? (
-        <div className="px-4 py-6 font-mono text-xs text-ember-blood">{error}</div>
+      {prog.error ? (
+        <div className="px-4 py-6 font-mono text-xs text-ember-blood">{prog.error}</div>
+      ) : !prog.clean ? (
+        <div className="px-4 py-8 font-mono text-xs text-bone-faded/50 text-center">
+          Enter a Brainfuck program above.
+        </div>
       ) : (
         <>
           {/* ── Code display ─────────────────────────────────────────────── */}
           <div className="px-4 pt-4 pb-2">
             <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-1.5">Source</div>
-            <div className="overflow-x-auto pb-1">
+            <div ref={codeContainerRef} className="overflow-x-auto pb-1">
               <div className="font-mono text-sm leading-loose whitespace-nowrap">
                 {prog.clean.split('').map((ch, i) => {
-                  const isActive = current && i === current.ip && !current.done;
+                  const isActive = current && i === current.ip && !isDone;
                   return (
                     <span
                       key={i}
-                      ref={isActive ? (el => { activeCharRef.current = el; }) : undefined}
+                      ref={isActive ? el => { activeCharRef.current = el; } : undefined}
                       className={`transition-all duration-75 rounded-sm px-[1px]
                         ${isActive
                           ? 'bg-ember-blood text-bone-white shadow-[0_0_8px_rgba(139,26,26,0.8)]'
@@ -264,7 +288,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
             <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-2">
               Memory Tape — DP: {dp}
             </div>
-            <div className="overflow-x-auto">
+            <div ref={tapeContainerRef} className="overflow-x-auto">
               <div className="flex gap-1 pb-1">
                 {visibleCells.map((val, i) => {
                   const cellIdx = windowStart + i;
@@ -272,7 +296,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
                   return (
                     <div
                       key={cellIdx}
-                      ref={isActive ? (el => { activeCellRef.current = el; }) : undefined}
+                      ref={isActive ? el => { activeCellRef.current = el; } : undefined}
                     >
                       <TapeCell index={cellIdx} value={val} active={isActive} />
                     </div>
@@ -286,29 +310,32 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
           <div className="px-4 py-3 border-t border-bone-faded/10">
             <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-1.5">Output</div>
             <div className="font-mono text-base text-gilt min-h-[1.5rem] tracking-wider">
-              {current?.output || <span className="text-bone-faded/30">·</span>}
+              {current?.output
+                ? current.output
+                : <span className="text-bone-faded/30">·</span>
+              }
             </div>
           </div>
 
           {/* ── Controls ─────────────────────────────────────────────────── */}
           <div className="px-4 py-3 border-t border-bone-faded/10 flex flex-wrap items-center gap-3">
-            {/* Run / Pause */}
+            {/* Run / Stop / Restart */}
             <motion.button
               whileHover={{ borderColor: '#B8935A', color: '#B8935A' }}
               onClick={() => {
-                if (current?.done || step >= maxStep) { reset(); setIsRunning(true); return; }
+                if (isDone) { reset(); setTimeout(() => setIsRunning(true), 0); return; }
                 setIsRunning(r => !r);
               }}
               className="font-subdisplay text-[10px] tracking-widest uppercase border border-bone-faded/40 text-bone-white px-4 py-2 min-w-[80px] transition-colors"
             >
-              {isRunning ? 'PAUSE' : current?.done ? 'RESTART' : 'RUN'}
+              {isRunning ? 'STOP' : isDone ? 'RESTART' : 'RUN'}
             </motion.button>
 
-            {/* Step */}
+            {/* Step — only when paused and not done */}
             <motion.button
               whileHover={{ borderColor: '#B8935A', color: '#B8935A' }}
               onClick={handleStepForward}
-              disabled={current?.done}
+              disabled={isDone || isRunning}
               className="font-subdisplay text-[10px] tracking-widest uppercase border border-bone-faded/40 text-bone-dim px-4 py-2 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               STEP
@@ -318,7 +345,8 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
             <motion.button
               whileHover={{ borderColor: '#8B1A1A', color: '#8B1A1A' }}
               onClick={reset}
-              className="font-subdisplay text-[10px] tracking-widest uppercase border border-bone-faded/30 text-bone-faded px-4 py-2 transition-colors"
+              disabled={isNotStarted}
+              className="font-subdisplay text-[10px] tracking-widest uppercase border border-bone-faded/30 text-bone-faded px-4 py-2 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               RESET
             </motion.button>
@@ -329,7 +357,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
                 {SPEED_LABELS[speed] ?? 'CUSTOM'}
               </span>
               <div className="flex gap-1">
-                {Object.entries(SPEED_LABELS).map(([ms, label]) => (
+                {(Object.entries(SPEED_LABELS) as [string, string][]).map(([ms, label]) => (
                   <button
                     key={ms}
                     onClick={() => setSpeed(Number(ms))}
