@@ -6,6 +6,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { CornerBrackets } from '../shared/CornerBrackets';
+import { STATS } from '../../lib/data';
 
 // ─── Stat counter ─────────────────────────────────────────────────────────────
 
@@ -97,9 +98,9 @@ const CraftTab: React.FC = () => (
       </p>
     </div>
     <div className="grid grid-cols-3 gap-2 pt-2">
-      <Stat value={6}  label="Years Active" />
-      <Stat value={19} label="Systems Tamed" />
-      <Stat value={8}  label="Lingua Franca" />
+      <Stat value={STATS.yearsActive}  label="Years Active" />
+      <Stat value={STATS.systemsTamed} label="Systems Tamed" />
+      <Stat value={STATS.linguaFranca} label="Lingua Franca" />
     </div>
   </div>
 );
@@ -136,10 +137,11 @@ const RitesTab: React.FC = () => (
 
 const DoctrineTab: React.FC = () => (
   <div className="space-y-6">
-    <blockquote className="border-l-2 border-ember-blood/50 pl-5">
+    <blockquote className="relative pl-10">
+      <span aria-hidden="true" className="absolute left-0 -top-4 font-display text-6xl text-ember-blood/40 leading-none select-none pointer-events-none">“</span>
       <p className="font-body text-bone-dim text-lg italic leading-relaxed">
-        "Software that is well-specified, well-verified, and built to outlast 
-        the people who wrote it."
+        Software that is well-specified, well-verified, and built to outlast
+        the people who wrote it.
       </p>
     </blockquote>
     <p className="font-body text-bone-dim/70 text-sm italic leading-relaxed pl-5">
@@ -203,13 +205,14 @@ const TAB_CONTENT: Record<TabId, React.FC> = {
   craft: CraftTab, rites: RitesTab, doctrine: DoctrineTab, forged: ForgedTab,
 };
 
+// Split once at module load — stable across renders.
+const STATEMENT_LINE_1 = 'I build AI agents and automation systems for regulated environments.'.split(' ');
+const STATEMENT_LINE_2 = 'Places where code has to be right the first time — and every time after.'.split(' ');
+
 // ─── About ────────────────────────────────────────────────────────────────────
 
 export const About: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>('craft');
-
-  const line1 = 'I build AI agents and automation systems for regulated environments.'.split(' ');
-  const line2 = 'Places where code has to be right the first time — and every time after.'.split(' ');
 
   const ActiveContent = TAB_CONTENT[activeTab];
 
@@ -288,7 +291,7 @@ export const About: React.FC = () => {
             viewport={{ once: false, amount: 0.5 }}
             className="flex flex-wrap justify-center gap-x-[0.28em] gap-y-1"
             style={{ fontSize: 'clamp(1.3rem, 3.2vw, 2.4rem)' }}>
-            {line1.map((w, i) => (
+            {STATEMENT_LINE_1.map((w, i) => (
               <motion.span key={i} variants={word} className="font-body italic text-bone-dim inline-block">{w}</motion.span>
             ))}
           </motion.div>
@@ -302,7 +305,7 @@ export const About: React.FC = () => {
             viewport={{ once: false, amount: 0.5 }}
             style={{ fontSize: 'clamp(1rem, 2.6vw, 1.85rem)' } as React.CSSProperties}
             className="flex flex-wrap justify-center gap-x-[0.28em] gap-y-1">
-            {line2.map((w, i) => {
+            {STATEMENT_LINE_2.map((w, i) => {
               const accent = w === 'first' || w === 'time';
               return (
                 <motion.span key={i} variants={word}

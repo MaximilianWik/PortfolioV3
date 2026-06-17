@@ -56,7 +56,8 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-bone-white/60 pointer-events-none z-[9999] hidden md:block"
+      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-bone-white/60 pointer-events-none z-cursor hidden md:block"
+      aria-hidden="true"
       style={{
         x: cursorX,
         y: cursorY,

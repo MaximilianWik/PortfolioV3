@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 interface RevealOnScrollProps {
   children: React.ReactNode;
@@ -19,6 +19,8 @@ export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
   direction = 'up',
   className = ""
 }) => {
+  const reduce = useReducedMotion();
+
   const directions = {
     up: { y: 30 },
     down: { y: -30 },
@@ -26,20 +28,18 @@ export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
     right: { x: -30 },
   };
 
+  // Reduced motion: crossfade only — no translation.
+  const initial = reduce
+    ? { opacity: 0 }
+    : { opacity: 0, ...directions[direction] };
+
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        ...directions[direction]
-      }}
-      whileInView={{
-        opacity: 1,
-        x: 0,
-        y: 0
-      }}
+      initial={initial}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{
-        duration: 1.2,
+        duration: reduce ? 0.4 : 1.2,
         delay,
         ease: [0.2, 0.8, 0.2, 1]
       }}

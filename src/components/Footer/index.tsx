@@ -5,8 +5,23 @@
 
 import React from 'react';
 
+// Integer → Roman numeral. Used for the "Last Sync" stamp so it stays correct
+// across year boundaries without manual edits.
+const toRoman = (n: number): string => {
+  const table: [number, string][] = [
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+    [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  for (const [value, symbol] of table) {
+    while (n >= value) { out += symbol; n -= value; }
+  }
+  return out;
+};
+
 export const Footer: React.FC = () => {
-  const currentYearRoman = "MMXXVI"; // Manual for 2026 as per prompt, or I could use a helper
+  const currentYearRoman = toRoman(new Date().getFullYear());
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

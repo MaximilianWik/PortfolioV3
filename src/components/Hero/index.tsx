@@ -10,7 +10,7 @@ import { DispersingText } from '../shared/DispersingText';
 import { CornerBrackets } from '../shared/CornerBrackets';
 import { AnimatedOutline } from '../shared/AnimatedOutline';
 import { useVanillaTilt } from '../../hooks/useVanillaTilt';
-import { PROFILE } from '../../lib/data';
+import { PROFILE, STATS } from '../../lib/data';
 
 interface DeedItem {
   title: string;
@@ -129,11 +129,11 @@ export const Hero: React.FC = () => {
           <div className="mt-12 space-y-8">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 relative bg-ink-deep border border-bone-faded/10">
-                <div className="font-mono text-2xl text-bone-white">06</div>
+                <div className="font-mono text-2xl text-bone-white">{String(STATS.yearsActive).padStart(2, '0')}</div>
                 <div className="font-subdisplay text-[9px] tracking-tighter text-bone-faded uppercase">Years Active</div>
               </div>
               <div className="p-4 relative bg-ink-deep border border-bone-faded/10">
-                <div className="font-mono text-2xl text-bone-white">14</div>
+                <div className="font-mono text-2xl text-bone-white">{String(STATS.systemsTamed).padStart(2, '0')}</div>
                 <div className="font-subdisplay text-[9px] tracking-tighter text-bone-faded uppercase">Systems Tamed</div>
               </div>
             </div>

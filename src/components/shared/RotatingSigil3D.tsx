@@ -9,6 +9,7 @@
  */
 
 import React, { useRef, useEffect, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 
 // ── Icosahedron geometry (computed once at module level) ──────────────────────
 
@@ -53,6 +54,7 @@ export const RotatingSigil3D: React.FC<Props> = ({
   const [hovered, setHovered] = useState(false);
   const hovRef    = useRef(false);
   const burstRef  = useRef(0); // remaining burst frames
+  const reduce    = useReducedMotion();
 
   useEffect(() => { hovRef.current = hovered; }, [hovered]);
 
@@ -76,6 +78,7 @@ export const RotatingSigil3D: React.FC<Props> = ({
     let angleX = 0.35; // slight permanent tilt so it reads as 3D
     let rafId  = 0;
     let last   = performance.now();
+    let paused = false;
 
     const project = (v: [number, number, number]): [number, number, number] => {
       // Rotate around Y axis
@@ -91,19 +94,7 @@ export const RotatingSigil3D: React.FC<Props> = ({
       return [cx + x1 * radius * scale, cy - y2 * radius * scale, z2];
     };
 
-    const tick = (now: number) => {
-      rafId = requestAnimationFrame(tick);
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
-
-      const speed = hovRef.current ? baseSpeed * 3.5 : baseSpeed;
-      if (burstRef.current > 0) {
-        angleY  += dt * baseSpeed * 8;
-        burstRef.current -= dt;
-      } else {
-        angleY += dt * speed;
-      }
-
+    const draw = () => {
       ctx.clearRect(0, 0, size, size);
 
       // Project all vertices
@@ -153,9 +144,39 @@ export const RotatingSigil3D: React.FC<Props> = ({
       }
     };
 
+    // Reduced motion: render one static frame, no rotation loop.
+    if (reduce) {
+      draw();
+      return;
+    }
+
+    const tick = (now: number) => {
+      rafId = requestAnimationFrame(tick);
+      if (paused) { last = now; return; }
+
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      const speed = hovRef.current ? baseSpeed * 3.5 : baseSpeed;
+      if (burstRef.current > 0) {
+        angleY  += dt * baseSpeed * 8;
+        burstRef.current -= dt;
+      } else {
+        angleY += dt * speed;
+      }
+
+      draw();
+    };
+
+    const onVis = () => { paused = document.visibilityState === 'hidden'; };
+    document.addEventListener('visibilitychange', onVis);
+
     rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [size, baseSpeed]);
+    return () => {
+      cancelAnimationFrame(rafId);
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [size, baseSpeed, reduce]);
 
   const handleClick = () => {
     burstRef.current = 0.5; // spin burst for 0.5s
@@ -167,11 +188,17 @@ export const RotatingSigil3D: React.FC<Props> = ({
       ref={canvasRef}
       width={size}
       height={size}
+      role="button"
+      aria-label="Return to top"
+      tabIndex={0}
       className={`cursor-pointer ${className}`}
       style={{ width: size, height: size }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); }
+      }}
     />
   );
 };

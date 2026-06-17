@@ -50,28 +50,14 @@ const Field: React.FC<{
 const FormModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle');
 
-  // ── Replace YOUR_FORMSPREE_ID with your form ID from formspree.io/forms
-  const FORMSPREE = 'YOUR_FORMSPREE_ID';
-
-  const send = async (e: React.FormEvent<HTMLFormElement>) => {
+  // No backend — the invocation composes a pre-filled message and hands off to
+  // the visitor's own mail client. Nothing is stored or transmitted by the site.
+  const send = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (state !== 'idle') return;
     setState('sending');
 
-    const fd = new FormData(e.currentTarget);
-
-    if (FORMSPREE !== 'YOUR_FORMSPREE_ID') {
-      try {
-        const res = await fetch(`https://formspree.io/f/${FORMSPREE}`, {
-          method: 'POST',
-          body: fd,
-          headers: { Accept: 'application/json' },
-        });
-        if (res.ok) { setState('sent'); return; }
-      } catch { /* fall through to mailto */ }
-    }
-
-    // Fallback: open mail client
+    const fd   = new FormData(e.currentTarget);
     const name = fd.get('name') as string;
     const mail = fd.get('email') as string;
     const msg  = fd.get('message') as string;

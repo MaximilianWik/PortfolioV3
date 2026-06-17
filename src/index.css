@@ -50,3 +50,35 @@
   overflow: hidden;
 }
 
+/* ── Keyframes ──────────────────────────────────────────────────────────────
+   Defined explicitly so they survive regardless of Tailwind utility usage.
+   `spin` is referenced both via Tailwind arbitrary utilities (Hero sigil) and
+   raw inline styles (Contact background sigil) — the latter is invisible to
+   Tailwind's scanner, so the keyframe must live here. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gif-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-60px);
+  }
+}
+
+/* ── Semantic z-index scale ─────────────────────────────────────────────────
+   content (z-10) < nav (90) < menu (95) < modal (200) < cursor < preloader.
+   Keeps overlay ordering legible and avoids magic 9999-style values. */
+@layer utilities {
+  .z-cursor {
+    z-index: 300;
+  }
+  .z-preloader {
+    z-index: 400;
+  }
+}
+

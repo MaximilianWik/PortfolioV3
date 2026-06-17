@@ -1,5 +1,57 @@
 # Changelog
 
+## [1.12.0] - 2026-06-17
+
+### Audit pass — fixes, dead-code removal, perf, a11y, new nav feature
+
+New feature — Navigation:
+- Scroll-progress ember bar along the nav's lower edge (pure `scaleX` transform).
+- Active-chapter highlight: rAF-throttled scroll/resize handler probes live
+  section rects (handles lazy-mounted sections) and lights the current link in
+  gilt with a shared-layout underline. Mirrored in the mobile menu.
+
+Bugs:
+- Stat figures now sourced from a single `STATS` const in `data.ts` — Hero and
+  About can no longer disagree (was 14 vs 19 "Systems Tamed").
+- Footer "Last Sync" year is computed via a `toRoman()` helper instead of the
+  hardcoded `"MMXXVI"`.
+- `@keyframes spin` + `gif-float` moved into `index.css` so they survive
+  regardless of Tailwind utility scanning (Contact's inline-style `spin` and
+  Timeline's float are now guaranteed); removed the runtime-injected `<style>`.
+- Favicon: scalable `favicon.svg` is now primary, JPEG kept as legacy fallback.
+
+Dead code / deps:
+- Removed `@chenglou/pretext` dependency and the unused `usePretextLayout` hook.
+- Dropped unused `experimentalDecorators` / `useDefineForClassFields` from
+  tsconfig and the unused `@` path alias from both tsconfig and vite.config.
+- Removed the dead Formspree branch in the contact modal (always fell through
+  to `mailto:`); simplified `send` to the mail-client hand-off.
+- `Bonfire` `Particle.update` dropped its unused `t` param and now uses the RAF
+  timestamp instead of a second `Date.now()` call per particle per frame.
+- `Timeline` `bgGifs` `useMemo` → module const; About statement lines hoisted
+  to module consts.
+
+Performance:
+- Visibility-change pause added to `Bonfire` and `RotatingSigil3D` RAF loops.
+- `DispersingText` now pauses its per-character loop when off-screen
+  (IntersectionObserver) or on a hidden tab.
+- `SectionHeading` no longer animates `letterSpacing` (reflow) — static tracking
+  + opacity/translate settle.
+
+Accessibility:
+- `prefers-reduced-motion` honored across `RevealOnScroll`, `DispersingText`,
+  `Bonfire` (static ember frame), `RotatingSigil3D` (static sigil), and
+  `SectionHeading`.
+- `aria-hidden` on the decorative `CindersOverlay`, `Bonfire`, and `CustomCursor`
+  canvases; `RotatingSigil3D` gained `role="button"`, `aria-label`, focus, and
+  keyboard activation.
+- Semantic `z-cursor` / `z-preloader` utilities replace magic `z-[9999]` /
+  `z-[10000]`.
+
+### Design
+- DoctrineTab quote restyled from a 2px ember side-stripe to a glyph-led pull
+  quote (the only `border-left` exceeding 1px).
+
 ## [1.11.0] - 2026-06-17
 
 ### Custom flame favicon

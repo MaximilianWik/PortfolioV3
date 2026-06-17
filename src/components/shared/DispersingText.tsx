@@ -4,7 +4,7 @@
  */
 
 import React, { useRef, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'motion/react';
 
 interface InteractiveTextProps {
   text: string;
@@ -42,6 +42,7 @@ export const DispersingText: React.FC<InteractiveTextProps> = ({
 }) => {
   const containerRef = useRef<HTMLElement>(null);
   const mouseRef = useRef({ x: -9999, y: -9999 });
+  const reduce = useReducedMotion();
 
   const charRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const charCenters = useRef<Array<{ x: number; y: number }>>([]);
@@ -51,6 +52,10 @@ export const DispersingText: React.FC<InteractiveTextProps> = ({
   const words = text.split(' ');
 
   useEffect(() => {
+    // Reduced motion: render static text — no pointer tracking, no RAF, no
+    // springs firing. Characters sit at rest (force 0) at their base color.
+    if (reduce) return;
+
     const measure = () => {
       charCenters.current = charRefs.current.map((el) => {
         if (!el) return { x: 0, y: 0 };
@@ -71,7 +76,26 @@ export const DispersingText: React.FC<InteractiveTextProps> = ({
     const maxDist = 120;
     let rafId = 0;
 
+    // Pause the hot loop when the text is off-screen or the tab is hidden.
+    // `wasPaused` lets us push every character back to rest exactly once on
+    // the transition into the paused state, then leave the springs idle.
+    let offScreen = false;
+    let wasPaused = false;
+
+    const resetAll = () => {
+      const setterList = setters.current;
+      for (let i = 0; i < setterList.length; i++) setterList[i]?.(0, 0, 0);
+    };
+
     const tick = () => {
+      const paused = offScreen || document.hidden;
+      if (paused) {
+        if (!wasPaused) { resetAll(); wasPaused = true; }
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      wasPaused = false;
+
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
       const centers = charCenters.current;
@@ -107,6 +131,20 @@ export const DispersingText: React.FC<InteractiveTextProps> = ({
       ro.observe(containerRef.current);
     }
 
+    // Visibility gate: skip the per-character work entirely when scrolled out
+    // of view. Re-measure on re-entry so positions are fresh.
+    let io: IntersectionObserver | undefined;
+    if (containerRef.current && typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          offScreen = !entry.isIntersecting;
+          if (entry.isIntersecting) measure();
+        },
+        { rootMargin: '120px' },
+      );
+      io.observe(containerRef.current);
+    }
+
     rafId = requestAnimationFrame(tick);
 
     return () => {
@@ -116,8 +154,9 @@ export const DispersingText: React.FC<InteractiveTextProps> = ({
       window.removeEventListener('scroll', measure);
       window.removeEventListener('resize', measure);
       ro?.disconnect();
+      io?.disconnect();
     };
-  }, [text]);
+  }, [text, reduce]);
 
   const isNoWrap = className.includes('flex-nowrap');
 

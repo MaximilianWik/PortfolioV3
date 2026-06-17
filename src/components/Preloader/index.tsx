@@ -57,7 +57,7 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
-      className="fixed inset-0 z-[10000] bg-ink-void flex flex-col items-center justify-center font-subdisplay"
+      className="fixed inset-0 z-preloader bg-ink-void flex flex-col items-center justify-center font-subdisplay"
     >
       <div className="text-bone-white text-lg tracking-[0.4em] uppercase mb-8 h-8">
         {text}

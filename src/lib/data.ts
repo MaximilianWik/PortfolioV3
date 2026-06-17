@@ -13,6 +13,14 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/maximilian-wikström/?locale=en",
 };
 
+// Single source of truth for the headline figures. Consumed by Hero and About
+// so the two surfaces can never drift out of sync.
+export const STATS = {
+  yearsActive:  6,   // 2020 → present
+  systemsTamed: 19,
+  linguaFranca: 8,   // C#, Java, TS, JS, Python, SQL, HTML, CSS
+} as const;
+
 export const EXPERIENCE = [
   {
     year: "2026—PRESENT",
@@ -137,8 +145,8 @@ export const PROJECTS = [
   {
     id: "VIII",
     title: "PortfolioV3 - Soulsborne-Inspired Personal Portfolio",
-    subtitle: "This very site. A hand-crafted, theatrical personal portfolio built on React 19, Vite 6, and Tailwind CSS 4, leaning into a deliberately ceremonial soulsborne-inspired visual language — ember-blood accents on ink-void, Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono typography, and a bonfire-lit hero. Features declarative motion choreography via motion/react, parallax card tilt with vanilla-tilt, smooth inertial scrolling through Lenis, pre-measured paragraph layout via @chenglou/pretext, code-split sections, ambient audio handling, and Vercel Analytics for deploy-side metrics. All content is centralized in a single typed data module.",
-    tech: ["TypeScript", "React 19", "Vite 6", "Tailwind CSS 4", "motion/react", "vanilla-tilt", "lenis", "@chenglou/pretext", "Vercel Analytics", "Code Splitting", "Vercel", "Git"],
+    subtitle: "This very site. A hand-crafted, theatrical personal portfolio built on React 19, Vite 6, and Tailwind CSS 4, leaning into a deliberately ceremonial soulsborne-inspired visual language — ember-blood accents on ink-void, Cormorant Garamond / Cinzel / EB Garamond / JetBrains Mono typography, and a bonfire-lit hero. Features declarative motion choreography via motion/react, parallax card tilt with vanilla-tilt, smooth inertial scrolling through Lenis, a pointer-reactive dispersing-text engine, code-split sections, ambient audio handling, and Vercel Analytics for deploy-side metrics. All content is centralized in a single typed data module.",
+    tech: ["TypeScript", "React 19", "Vite 6", "Tailwind CSS 4", "motion/react", "vanilla-tilt", "lenis", "Canvas 2D", "Vercel Analytics", "Code Splitting", "Vercel", "Git"],
     link: "https://github.com/MaximilianWik/PortfolioV3"
   },
   {

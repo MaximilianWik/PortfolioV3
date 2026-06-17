@@ -4,11 +4,12 @@
  */
 
 import React, { useRef, useEffect, useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const reduce = useReducedMotion();
   // Mirror hovered state into a ref so the animation loop can read it without
   // the effect tearing down + spinning up a fresh RAF on every hover toggle.
   const isHoveredRef = useRef(false);
@@ -23,7 +24,41 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    canvas.width = 200;
+    canvas.height = 300;
+
+    const drawSilhouette = () => {
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#1A1A20';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - 5, canvas.height - 20);
+      ctx.lineTo(canvas.width / 2 + 5, canvas.height - 180);
+      ctx.stroke();
+    };
+
+    // Reduced motion: paint a single static frame — a soft ember glow plus the
+    // coiled-sword silhouette — and never start the RAF loop.
+    if (reduce) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const g = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height - 50, 4,
+        canvas.width / 2, canvas.height - 50, 80,
+      );
+      g.addColorStop(0,   'rgba(184,147,90,0.55)');
+      g.addColorStop(0.5, 'rgba(139,26,26,0.30)');
+      g.addColorStop(1,   'rgba(139,26,26,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height - 50, 80, 0, Math.PI * 2);
+      ctx.fill();
+      drawSilhouette();
+      return;
+    }
+
     let animationFrameId: number;
+    let paused = false;
     let particles: Particle[] = [];
 
     class Particle {
@@ -49,9 +84,9 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
         this.flicker = Math.random();
       }
 
-      update(intensity: number, t: number) {
+      update(intensity: number, now: number) {
         this.y += this.speedY * intensity;
-        this.x += (this.speedX + Math.sin(Date.now() * 0.01 + this.flicker)) * 0.5 * intensity;
+        this.x += (this.speedX + Math.sin(now * 0.01 + this.flicker)) * 0.5 * intensity;
         this.life--;
         this.size *= 0.96;
       }
@@ -73,10 +108,10 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
       }
     }
 
-    canvas.width = 200;
-    canvas.height = 300;
+    const animate = (now: number) => {
+      animationFrameId = requestAnimationFrame(animate);
+      if (paused) return;
 
-    const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.shadowBlur = 0;
 
@@ -89,9 +124,8 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
         particles.push(new Particle(canvas.width / 2 + (Math.random() - 0.5) * 40, canvas.height - 50, false));
       }
 
-      const t = Date.now();
       for (let i = 0; i < particles.length; i++) {
-        particles[i].update(intensity, t);
+        particles[i].update(intensity, now);
         particles[i].draw(ctx);
         if (particles[i].life <= 0 || particles[i].size < 0.5) {
           particles.splice(i, 1);
@@ -100,22 +134,19 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
       }
 
       // Coiled sword silhouette
-      ctx.globalAlpha = 1;
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = '#1A1A20';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(canvas.width / 2 - 5, canvas.height - 20);
-      ctx.lineTo(canvas.width / 2 + 5, canvas.height - 180);
-      ctx.stroke();
-
-      animationFrameId = requestAnimationFrame(animate);
+      drawSilhouette();
     };
 
-    animate();
+    const onVis = () => { paused = document.visibilityState === 'hidden'; };
+    document.addEventListener('visibilitychange', onVis);
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [reduce]);
 
   return (
     <div
@@ -123,7 +154,7 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <canvas ref={canvasRef} className="block mx-auto" />
+      <canvas ref={canvasRef} aria-hidden="true" className="block mx-auto" />
       <motion.div
         animate={{ opacity: isHovered ? 1 : 0 }}
         className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap font-subdisplay text-[10px] tracking-[0.4em] text-gilt/60 uppercase"

@@ -392,6 +392,7 @@ export const CindersOverlay: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       className="fixed inset-0 pointer-events-none"
       style={{ zIndex: 1, opacity: 0.45 }}
     />

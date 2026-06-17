@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
@@ -207,21 +207,21 @@ const TimelineEntry: React.FC<EntryProps> = ({
   );
 };
 
+// Two drifting background GIFs — static layout config, defined once.
+const BG_GIFS = [
+  { id: 0, x: 15, y: 20, size: 600, rotate: 15,  opacity: 0.4, duration: 45, mirrored: false },
+  { id: 1, x: 65, y: 50, size: 700, rotate: -15, opacity: 0.4, duration: 60, mirrored: true  },
+] as const;
+
 export const Timeline: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const bgGifs = useMemo(() => [
-    { id: 0, x: 15, y: 20, size: 600, rotate: 15,  opacity: 0.4, duration: 45, mirrored: false },
-    { id: 1, x: 65, y: 50, size: 700, rotate: -15, opacity: 0.4, duration: 60, mirrored: true  },
-  ], []);
-
   return (
     <section id="chronicle" className="relative py-32 px-6 overflow-hidden">
-      <style>{`@keyframes gif-float { from { transform: translateY(0); } to { transform: translateY(-60px); } }`}</style>
 
       {/* Background GIFs */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        {bgGifs.map((gif) => (
+        {BG_GIFS.map((gif) => (
           <motion.div
             key={gif.id}
             initial={{ opacity: 0 }}

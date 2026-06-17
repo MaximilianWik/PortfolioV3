@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Sigil } from './Sigil';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 interface SectionHeadingProps {
   numeral: string;
@@ -20,6 +20,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   subtitle,
   sigil = 'trefoil'
 }) => {
+  const reduce = useReducedMotion();
+
   return (
     <div className="flex flex-col items-center mb-20">
       <motion.div
@@ -32,12 +34,14 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         {numeral}.
       </motion.div>
 
+      {/* Tracking is static (0.25em) so it never reflows; the settle is carried
+          by opacity + a subtle upward translate instead of animating letter-spacing. */}
       <motion.h2
-        initial={{ opacity: 0, letterSpacing: '0.1em' }}
-        whileInView={{ opacity: 1, letterSpacing: '0.25em' }}
+        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="font-display text-4xl md:text-5xl uppercase text-center mb-8"
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        className="font-display text-4xl md:text-5xl uppercase text-center mb-8 tracking-[0.25em]"
       >
         {title}
       </motion.h2>
