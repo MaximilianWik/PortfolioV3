@@ -2,10 +2,10 @@
 
 ## [1.11.0] - 2026-06-17
 
-### PNG favicons for Google Search icon
+### Custom flame favicon
 
-- Added `scripts/generate-favicon.mjs` — one-shot Node script (requires `sharp`) that bakes `favicon-48.png`, `favicon-192.png`, `favicon-512.png`, and `apple-touch-icon.png` from the existing `favicon.svg`
-- Updated `index.html`: added `<link rel="icon" type="image/png">` tags (192px + 48px) and a proper `<link rel="apple-touch-icon">` pointing to the 180px PNG; Google Search requires a raster PNG to display the bonfire icon in search results
+- Added `public/favicon.jpeg` — custom favicon image
+- Updated `index.html`: `<link rel="icon" type="image/jpeg" href="/favicon.jpeg">` + apple-touch-icon; Vercel serves it directly, no build step needed
 
 ## [1.10.0] - 2026-06-16
 
