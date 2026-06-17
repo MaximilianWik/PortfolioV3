@@ -1,6 +1,19 @@
 # Changelog
 
-## [1.13.3] - 2026-06-17
+## [1.13.4] - 2026-06-17
+
+### Fix: letter-by-letter output for all programs
+
+- Interval now advances to the next output-change snapshot instead of one BF
+  step at a time. Speed setting now means "ms per output character" — consistent
+  regardless of computational density (Hello World: ~70 steps/char;
+  YOU DIED: ~15 steps/char; both now letter-by-letter at the same pace).
+- STEP button similarly advances to the next output character.
+- Speed values recalibrated for character-rate semantics: SLOW 400ms,
+  NORMAL 150ms, FAST 50ms, OVERDRIVE 10ms. Default and Konami initialSpeed
+  both set to 150ms.
+
+
 
 ### Custom BF: text-to-Brainfuck compiler
 

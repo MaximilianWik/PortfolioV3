@@ -105,7 +105,7 @@ export const KonamiTerminal: React.FC = () => {
             <BrainfuckVisualizer
               lockedCode={BF_YOU_DIED}
               autoPlay
-              initialSpeed={60}
+              initialSpeed={150}
             />
 
             {/* ── Footer hint ────────────────────────────────────────────── */}
