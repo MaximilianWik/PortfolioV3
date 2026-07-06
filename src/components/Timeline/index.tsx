@@ -7,8 +7,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
-import { AnimatedOutline } from '../shared/AnimatedOutline';
-import { CornerBrackets } from '../shared/CornerBrackets';
+
 import { useVanillaTilt } from '../../hooks/useVanillaTilt';
 import { EXPERIENCE } from '../../lib/data';
 
@@ -94,28 +93,12 @@ const TimelineEntry: React.FC<EntryProps> = ({
           isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'
         }`}
       >
-        {/* Tilt wrapper — relative+overflow-hidden for AnimatedOutline */}
+        {/* Tilt wrapper */}
         <div
           ref={tiltRef}
           className="relative p-6 overflow-hidden"
           style={{ transformStyle: 'preserve-3d' }}
         >
-
-          {/* Sweep border on hover */}
-          <AnimatedOutline
-            active={isActive}
-            colorClass="bg-gilt"
-            durationMs={250}
-            zClass="z-20"
-          />
-
-          {/* Corner brackets */}
-          <CornerBrackets
-            className={`transition-colors duration-500 ${
-              isActive ? 'text-gilt' : 'text-transparent'
-            }`}
-            size={14}
-          />
 
           {/* Ember glow backdrop */}
           <motion.div
