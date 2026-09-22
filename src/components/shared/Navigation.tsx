@@ -83,11 +83,14 @@ const CindersToggle: React.FC<{ on: boolean; onToggle: () => void; size?: number
 interface NavigationProps {
   cindersOn: boolean;
   onToggleCinders: () => void;
+  showBearer: boolean;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders }) => {
+export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders, showBearer }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('#');
+  const navLinks = showBearer ? NAV_LINKS : NAV_LINKS.filter(link => link.href !== '#about');
+  const sectionIds = showBearer ? SECTION_IDS : SECTION_IDS.filter(id => id !== 'about');
 
   // rAF-throttled scroll/resize handler drives the active-chapter highlight.
   // Sections are queried live each frame so lazily-mounted ones
@@ -98,7 +101,7 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
       raf = 0;
       const probe = window.innerHeight * 0.4;
       let current = '#';
-      for (const id of SECTION_IDS) {
+      for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (!el) continue;
         const r = el.getBoundingClientRect();
@@ -115,7 +118,7 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [showBearer]);
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   const close = () => setMenuOpen(false);
@@ -145,7 +148,7 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
 
         {/* Desktop nav links */}
         <div className="hidden md:flex gap-6 lg:gap-8 font-subdisplay text-[10px] tracking-widest text-bone-dim">
-          {NAV_LINKS.map(l => {
+          {navLinks.map(l => {
             const active = activeHref === l.href;
             return (
               <a
@@ -224,7 +227,7 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
             <div className="absolute bottom-0 left-0 right-0 h-px bg-ember-blood/20" />
 
             <nav className="flex flex-col items-center gap-8" onClick={e => e.stopPropagation()}>
-              {NAV_LINKS.map((l, i) => {
+              {navLinks.map((l, i) => {
                 const active = activeHref === l.href;
                 return (
                   <motion.a
@@ -247,7 +250,7 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.07 }}
+                transition={{ duration: 0.3, delay: navLinks.length * 0.07 }}
                 className="flex flex-col items-center gap-2"
               >
                 <CindersToggle on={cindersOn} onToggle={onToggleCinders} size={44} />

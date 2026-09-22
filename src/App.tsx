@@ -39,6 +39,9 @@ const KonamiTerminal = React.lazy(() =>
   import('./components/shared/KonamiTerminal').then(m => ({ default: m.KonamiTerminal })),
 );
 
+// Keep the Bearer section available in source without publishing it.
+const SHOW_BEARER = false;
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -138,7 +141,11 @@ export default function App() {
           <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
         ) : (
           <div key="content" className="flex-1 flex flex-col">
-            <Navigation cindersOn={cindersOn} onToggleCinders={() => setCindersOn(v => !v)} />
+            <Navigation
+              cindersOn={cindersOn}
+              onToggleCinders={() => setCindersOn(v => !v)}
+              showBearer={SHOW_BEARER}
+            />
             <div className="flex-1 px-6 md:px-12">
               <Hero />
 
@@ -154,8 +161,12 @@ export default function App() {
                 </div>
               </div>
 
-              <About />
-              <Firelink />
+              {SHOW_BEARER && (
+                <>
+                  <About />
+                  <Firelink />
+                </>
+              )}
               <React.Suspense fallback={null}>
                 <Timeline />
                 <Projects />

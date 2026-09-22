@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.5] - 2026-09-22
+
+### Hide the Bearer section behind a feature flag
+
+- Added `SHOW_BEARER` in App.tsx, defaulting to false.
+- About and Firelink remain in source but do not render while the flag is off.
+- Navigation removes the Bearer link and active-section probe while hidden.
+
 ## [1.14.4] - 2026-09-22
 
 ### Unify the global page surface
