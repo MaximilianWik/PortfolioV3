@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.13.7] - 2026-09-22
+
+### Add navbar toggle for cinders overlay
+
+- New Cinders toggle button in Navigation (desktop bar + mobile menu),
+  wired to a `cindersOn` state lifted to App.tsx.
+- App.tsx conditionally mounts CindersOverlay only when cindersOn is true.
+- Preference persisted to localStorage (`cinders-enabled`) so it survives
+  a reload; defaults to on.
+
 ## [1.13.6] - 2026-09-22
 
 ### Add Kitty Mesh relic

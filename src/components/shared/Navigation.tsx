@@ -21,7 +21,12 @@ const NAV_LINKS = [
 // detection. Hero is the implicit top chapter ('#').
 const SECTION_IDS = ['about', 'chronicle', 'relics', 'arcane', 'resume', 'invocation'];
 
-export const Navigation: React.FC = () => {
+interface NavigationProps {
+  cindersOn: boolean;
+  onToggleCinders: () => void;
+}
+
+export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [activeHref, setActiveHref] = useState('#');
@@ -117,8 +122,21 @@ export const Navigation: React.FC = () => {
           })}
         </div>
 
-        {/* Right: coordinates + mobile hamburger */}
+        {/* Right: cinders toggle + coordinates + mobile hamburger */}
         <div className="flex items-center gap-4">
+          <button
+            onClick={onToggleCinders}
+            aria-pressed={cindersOn}
+            aria-label="Toggle cinders overlay"
+            title="Toggle cinders overlay"
+            className="hidden md:flex items-center gap-2 font-subdisplay text-[9px] tracking-[0.25em] uppercase text-bone-faded hover:text-gilt transition-colors duration-300"
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${cindersOn ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
+            />
+            Cinders
+          </button>
+
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -188,6 +206,22 @@ export const Navigation: React.FC = () => {
                   </motion.a>
                 );
               })}
+
+              <motion.button
+                onClick={onToggleCinders}
+                aria-pressed={cindersOn}
+                aria-label="Toggle cinders overlay"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.07 }}
+                className="flex items-center gap-2 font-subdisplay text-sm tracking-[0.3em] uppercase text-bone-dim hover:text-gilt transition-colors"
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${cindersOn ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
+                />
+                Cinders {cindersOn ? 'On' : 'Off'}
+              </motion.button>
 
               <motion.div
                 initial={{ opacity: 0 }}

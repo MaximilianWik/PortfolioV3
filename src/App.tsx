@@ -44,6 +44,23 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Cinders overlay toggle — persisted so the choice survives a reload.
+  const [cindersOn, setCindersOn] = useState(() => {
+    try {
+      return localStorage.getItem('cinders-enabled') !== 'off';
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('cinders-enabled', cindersOn ? 'on' : 'off');
+    } catch {
+      // localStorage unavailable (private mode, etc.) — toggle still works in-session.
+    }
+  }, [cindersOn]);
+
   // Set initial volume when the <audio> element is created.
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = 0.4;
@@ -111,7 +128,7 @@ export default function App() {
 
       <React.Suspense fallback={null}>
         <CustomCursor />
-        <CindersOverlay />
+        {cindersOn && <CindersOverlay />}
         <KonamiTerminal />
       </React.Suspense>
 
@@ -120,7 +137,7 @@ export default function App() {
           <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
         ) : (
           <div key="content" className="flex-1 flex flex-col">
-            <Navigation />
+            <Navigation cindersOn={cindersOn} onToggleCinders={() => setCindersOn(v => !v)} />
             <div className="flex-1 px-6 md:px-12">
               <Hero />
 
