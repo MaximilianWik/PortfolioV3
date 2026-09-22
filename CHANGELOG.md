@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.13.6] - 2026-09-22
+
+### Add Kitty Mesh relic
+
+- New PROJECTS entry (id XIV): Kitty Mesh, browser-only MediaPipe
+  face/hand/pose vision cockpit with sixteen-state gesture classifier
+  and fake retro IDE UI.
+- Links to live deploy (kittymesh.vercel.app) and source repo
+  (github.com/MaximilianWik/Kitty-Mesh).
+
 ## [1.13.5] - 2026-06-17
 
 ### Revert to step-by-step BF instruction animation
