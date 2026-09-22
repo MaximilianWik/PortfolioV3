@@ -221,7 +221,6 @@ export const Timeline: React.FC = () => {
               height: 'auto',
               transform: `rotate(${gif.rotate}deg)${gif.mirrored ? ' scaleX(-1)' : ''}`,
               filter: 'grayscale(60%)',
-              mixBlendMode: 'lighten',
               maskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
               WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
             }}
@@ -234,8 +233,8 @@ export const Timeline: React.FC = () => {
               animationDelay: gif.id === 0 ? '0s' : `-${gif.duration}s`,
               willChange: isInView ? 'transform' : 'auto',
             }}>
-              <img src="/HumanityNoBg.gif" alt="" loading="lazy" decoding="async"
-                className="w-full h-auto opacity-100" referrerPolicy="no-referrer" />
+              <img src="/HumanityNoBg.webp" alt="" loading="lazy" decoding="async"
+                className="w-full h-auto opacity-100" />
             </div>
           </motion.div>
         ))}

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.14.3] - 2026-09-22
+
+### Remove Chronicle GIF dark rectangle
+
+- Added `HumanityNoBg.webp`, an animated WebP with its near-black source
+  background converted to transparency.
+- Switched Timeline to the transparent animation and removed blend-mode
+  compensation, eliminating the viewport-sized dark rectangle.
+- Audited other image surfaces. Firelink, Hero, About, and Resume already
+  use masks, edge fades, or compatible image treatment.
+
 ## [1.14.2] - 2026-09-22
 
 ### Spread Humanity Restored particles across the beam
