@@ -22,11 +22,11 @@ const NAV_LINKS = [
 const SECTION_IDS = ['about', 'chronicle', 'relics', 'arcane', 'resume', 'invocation'];
 
 interface NavigationProps {
-  cindersOn: boolean;
-  onToggleCinders: () => void;
+  cindersLevel: number;
+  onCindersLevelChange: (level: number) => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders }) => {
+export const Navigation: React.FC<NavigationProps> = ({ cindersLevel, onCindersLevelChange }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('#');
 
@@ -108,20 +108,30 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
           })}
         </div>
 
-        {/* Right: cinders toggle + coordinates + mobile hamburger */}
+        {/* Right: cinders slider + coordinates + mobile hamburger */}
         <div className="flex items-center gap-4">
-          <button
-            onClick={onToggleCinders}
-            aria-pressed={cindersOn}
-            aria-label="Toggle cinders overlay"
-            title="Toggle cinders overlay"
-            className="hidden md:flex items-center gap-2 font-subdisplay text-[9px] tracking-[0.25em] uppercase text-bone-faded hover:text-gilt transition-colors duration-300"
-          >
+          <div className="hidden md:flex items-center gap-2">
             <span
-              className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${cindersOn ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
+              className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 flex-shrink-0 ${cindersLevel > 0 ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
+              aria-hidden="true"
             />
-            Cinders
-          </button>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <span className="font-subdisplay text-[9px] tracking-[0.25em] uppercase text-bone-faded">
+                Cinders
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={1}
+                value={cindersLevel}
+                onChange={(e) => onCindersLevelChange(Number(e.target.value))}
+                aria-label="Cinders density"
+                className="w-16 h-1 accent-ember-blood cursor-pointer"
+                style={{ accentColor: '#8B1A1A' }}
+              />
+            </label>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -193,21 +203,32 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
                 );
               })}
 
-              <motion.button
-                onClick={onToggleCinders}
-                aria-pressed={cindersOn}
-                aria-label="Toggle cinders overlay"
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.07 }}
-                className="flex items-center gap-2 font-subdisplay text-sm tracking-[0.3em] uppercase text-bone-dim hover:text-gilt transition-colors"
+                className="flex flex-col items-center gap-3"
               >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${cindersOn ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
+                <span className="flex items-center gap-2 font-subdisplay text-sm tracking-[0.3em] uppercase text-bone-dim">
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${cindersLevel > 0 ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
+                    aria-hidden="true"
+                  />
+                  Cinders {cindersLevel}%
+                </span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={cindersLevel}
+                  onChange={(e) => onCindersLevelChange(Number(e.target.value))}
+                  aria-label="Cinders density"
+                  className="w-40 h-1 cursor-pointer"
+                  style={{ accentColor: '#8B1A1A' }}
                 />
-                Cinders {cindersOn ? 'On' : 'Off'}
-              </motion.button>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0 }}

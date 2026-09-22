@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.13.9] - 2026-09-22
+
+### Turn cinders toggle into a density slider
+
+- CindersOverlay now accepts a `density` prop (0..1) that scales the
+  particle pool via totalCount(); a `reinitRef` re-runs init() on prop
+  change so dragging the slider resizes particles without rebuilding
+  the sprite atlas or event listeners.
+- App.tsx: replaced the boolean `cindersOn` with a numeric `cindersLevel`
+  (0-100, persisted as `cinders-level` in localStorage). 0 unmounts the
+  overlay entirely; otherwise CindersOverlay is mounted with density =
+  cindersLevel / 100.
+- Navigation: replaced the on/off toggle button with a `<input type="range">`
+  (0-100) in both the desktop bar and mobile menu, ember-colored via
+  accentColor, with a live dot indicator and (mobile) percentage label.
+
 ## [1.13.8] - 2026-09-22
 
 ### Reorder relics, remove scroll-progress bar

@@ -44,22 +44,25 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Cinders overlay toggle — persisted so the choice survives a reload.
-  const [cindersOn, setCindersOn] = useState(() => {
+  // Cinders overlay density slider (0-100) — persisted so the choice survives
+  // a reload. 0 unmounts the overlay entirely; otherwise it scales particle count.
+  const [cindersLevel, setCindersLevel] = useState(() => {
     try {
-      return localStorage.getItem('cinders-enabled') !== 'off';
+      const stored = localStorage.getItem('cinders-level');
+      const n = stored === null ? 100 : Number(stored);
+      return Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 100;
     } catch {
-      return true;
+      return 100;
     }
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem('cinders-enabled', cindersOn ? 'on' : 'off');
+      localStorage.setItem('cinders-level', String(cindersLevel));
     } catch {
-      // localStorage unavailable (private mode, etc.) — toggle still works in-session.
+      // localStorage unavailable (private mode, etc.) — slider still works in-session.
     }
-  }, [cindersOn]);
+  }, [cindersLevel]);
 
   // Set initial volume when the <audio> element is created.
   useEffect(() => {
@@ -128,7 +131,7 @@ export default function App() {
 
       <React.Suspense fallback={null}>
         <CustomCursor />
-        {cindersOn && <CindersOverlay />}
+        {cindersLevel > 0 && <CindersOverlay density={cindersLevel / 100} />}
         <KonamiTerminal />
       </React.Suspense>
 
@@ -137,7 +140,7 @@ export default function App() {
           <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
         ) : (
           <div key="content" className="flex-1 flex flex-col">
-            <Navigation cindersOn={cindersOn} onToggleCinders={() => setCindersOn(v => !v)} />
+            <Navigation cindersLevel={cindersLevel} onCindersLevelChange={setCindersLevel} />
             <div className="flex-1 px-6 md:px-12">
               <Hero />
 

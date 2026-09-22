@@ -47,6 +47,10 @@
  *
  * • Respects prefers-reduced-motion ONLY when the device also has no fine
  *   pointer (i.e. pure-touch + reduce-motion). Pauses on hidden tab.
+ *
+ * • `density` prop (0..1, default 1) scales the particle pool linearly via
+ *   totalCount(); driven by the navbar cinders slider. Changing it re-runs
+ *   init() to resize particles in place without rebuilding the sprite atlas.
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -99,9 +103,12 @@ interface Particle {
   rot: number; rotV: number;
 }
 
-export const CindersOverlay: React.FC = () => {
+export const CindersOverlay: React.FC<{ density?: number }> = ({ density = 1 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouse = useRef({ x: -10000, y: -10000, on: false });
+  const densityRef = useRef(density);
+  densityRef.current = density;
+  const reinitRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -228,7 +235,10 @@ export const CindersOverlay: React.FC = () => {
     };
 
     const totalCount = (w: number, h: number) =>
-      Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, Math.floor(w * h * TARGET_DENSITY)));
+      Math.round(
+        Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, Math.floor(w * h * TARGET_DENSITY)))
+        * densityRef.current
+      );
 
     const init = () => {
       cssW = window.innerWidth;
@@ -379,6 +389,7 @@ export const CindersOverlay: React.FC = () => {
     document.addEventListener('visibilitychange', onVis);
 
     init();
+    reinitRef.current = init;
 
     return () => {
       window.removeEventListener('mousemove', onMove);
@@ -388,6 +399,12 @@ export const CindersOverlay: React.FC = () => {
       cancelAnimationFrame(raf);
     };
   }, []);
+
+  // Slider-driven density change: resize the particle pool in place without
+  // rebuilding the sprite atlas or re-registering event listeners.
+  useEffect(() => {
+    reinitRef.current();
+  }, [density]);
 
   return (
     <canvas
