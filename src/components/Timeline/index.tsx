@@ -80,7 +80,7 @@ const TimelineEntry: React.FC<EntryProps> = ({
             variant="runes"
             className={`w-8 h-8 p-1 rounded-full border transition-colors duration-500 ${
               isActive
-                ? 'text-gilt bg-ink-deep border-gilt/50'
+                ? 'text-gilt bg-ink-void border-gilt/50'
                 : 'text-bone-dim bg-ink-void border-bone-faded/20'
             }`}
           />
@@ -202,7 +202,7 @@ export const Timeline: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section ref={sectionRef} id="chronicle" className="relative py-32 px-6 overflow-hidden">
+    <section ref={sectionRef} id="chronicle" className="relative py-32 px-6 overflow-hidden bg-ink-void">
 
       {/* Background GIFs */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -221,6 +221,7 @@ export const Timeline: React.FC = () => {
               height: 'auto',
               transform: `rotate(${gif.rotate}deg)${gif.mirrored ? ' scaleX(-1)' : ''}`,
               filter: 'grayscale(60%)',
+              mixBlendMode: 'screen',
               maskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
               WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 80%)',
             }}

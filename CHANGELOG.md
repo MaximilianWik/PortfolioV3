@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.1] - 2026-09-22
+
+### Match Chronicle background surfaces
+
+- Set the Chronicle section and active timeline sigil to the page's
+  `ink-void` surface color.
+- Changed the decorative Timeline GIF layer to screen blending, so its black
+  pixels do not darken the section or create a rectangular cutoff.
+
 ## [1.14.0] - 2026-09-22
 
 ### Cleanup and runtime performance pass
