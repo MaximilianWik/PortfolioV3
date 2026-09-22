@@ -58,12 +58,20 @@ const TABS = [
 type TabId = typeof TABS[number]['id'];
 
 const PROJECTS = [
+  { name: 'Kitty Mesh',           desc: 'Browser-only face, hand and pose gesture cockpit.',      tags: ['TypeScript', 'MediaPipe'],               href: 'https://kittymesh.vercel.app/' },
+  { name: 'MW-Finance',           desc: 'Personal finance terminal wired to real bank data.',      tags: ['Next.js 15', 'Drizzle ORM'],             href: 'https://mw-finance-six.vercel.app/' },
+  { name: 'Sharon Shakti',        desc: 'Horror-realism tattoo portfolio with live booking.',      tags: ['Next.js 14', 'React Three Fiber'],       href: 'https://sharon-shakti.vercel.app/' },
+  { name: 'Paleblood Vigil',      desc: 'Generative N-body attractor algorithmic art.',           tags: ['p5.js', 'Seeded PRNG'],                  href: 'https://paleblood-vigil.vercel.app/' },
+  { name: 'Carpet Eater',         desc: 'Audio-mangling desktop tool for an artist.',             tags: ['Python', 'PySide6', 'NumPy'],            href: 'https://github.com/MaximilianWik/Carpet-Eater' },
+  { name: 'Studio Panic Attack',  desc: 'GPU-accelerated 3D immersive web experience.',           tags: ['React Three Fiber', 'GSAP'],             href: 'https://studio-panic-attack-maximilian.vercel.app/' },
+  { name: 'Subdermal',            desc: 'Collaborative canvas behind a QR tattoo.',               tags: ['React 19', 'Cloudflare D1'],             href: 'https://max-wik.com/' },
   { name: 'Tessera',              desc: 'ISO/IEC 18004 verified QR generator for tattoo QRs.',    tags: ['JavaScript', 'ISO/IEC 18004'],           href: 'https://tessera-neon.vercel.app/' },
   { name: 'Cursed Echoes',        desc: 'Dark Souls–flavored browser typing survival.',            tags: ['TypeScript', 'React 19'],                href: 'https://cursedechoes.vercel.app/' },
-  { name: 'Subdermal',            desc: 'Collaborative canvas behind a QR tattoo.',               tags: ['React 19', 'Cloudflare D1'],             href: 'https://max-wik.com/' },
-  { name: 'Paleblood Vigil',      desc: 'Generative N-body attractor algorithmic art.',           tags: ['p5.js', 'Seeded PRNG'],                  href: 'https://paleblood-vigil.vercel.app/' },
-  { name: 'Studio Panic Attack',  desc: 'GPU-accelerated 3D immersive web experience.',           tags: ['React Three Fiber', 'GSAP'],             href: 'https://studio-panic-attack-maximilian.vercel.app/' },
-  { name: 'Carpet Eater',         desc: 'Audio-mangling desktop tool for an artist.',             tags: ['Python', 'PySide6', 'NumPy'],            href: 'https://github.com/MaximilianWik/Carpet-Eater' },
+  { name: 'PortfolioV3',          desc: 'This very site — soulsborne-inspired personal portfolio.', tags: ['React 19', 'Vite 6'],                    href: 'https://github.com/MaximilianWik/PortfolioV3' },
+  { name: 'Podd App',             desc: 'RSS feed podcast manager for Windows.',                  tags: ['C#', '.NET 6'],                          href: 'https://github.com/MaximilianWik/Podd-App-RSS-FEED.git' },
+  { name: 'CV Portal',            desc: 'Full-stack CV builder and job-seeker network.',           tags: ['C#', 'ASP.NET Core'],                     href: 'https://github.com/MaximilianWik/CVPortal-Asp.Net.git' },
+  { name: 'MIB Project',          desc: 'Java Swing app for managing agents and aliens.',          tags: ['Java', 'MySQL'],                          href: 'https://github.com/MaximilianWik/MIB-projekt-Java-Winframe.git' },
+  { name: 'Hattfabriken',         desc: 'Custom hat factory order and inventory system.',          tags: ['C#', 'ASP.NET Core'],                     href: 'https://github.com/hannesmalm/Hattfabriken' },
 ] as const;
 
 // ─── Tab content ──────────────────────────────────────────────────────────────

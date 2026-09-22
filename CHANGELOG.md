@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.10] - 2026-09-22
+
+### List every artifact in the About / Forged tab
+
+- Forged tab's local PROJECTS array (src/components/About/index.tsx) now
+  lists all fourteen relics instead of six: added Kitty Mesh, MW-Finance,
+  Sharon Shakti, PortfolioV3, Podd App, CV Portal, MIB Project, and
+  Hattfabriken, each with a short desc, two tags, and its live/repo href.
+
 ## [1.13.9] - 2026-09-22
 
 ### Turn cinders toggle into a density slider
