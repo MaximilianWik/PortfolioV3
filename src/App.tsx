@@ -161,12 +161,8 @@ export default function App() {
                 </div>
               </div>
 
-              {SHOW_BEARER && (
-                <>
-                  <About />
-                  <Firelink />
-                </>
-              )}
+              {SHOW_BEARER && <About />}
+              <Firelink />
               <React.Suspense fallback={null}>
                 <Timeline />
                 <Projects />
