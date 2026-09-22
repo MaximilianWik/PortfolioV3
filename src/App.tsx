@@ -44,25 +44,22 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Cinders overlay density slider (0-100) — persisted so the choice survives
-  // a reload. 0 unmounts the overlay entirely; otherwise it scales particle count.
-  const [cindersLevel, setCindersLevel] = useState(() => {
+  // Cinders overlay toggle — off by default, persisted so the choice survives a reload.
+  const [cindersOn, setCindersOn] = useState(() => {
     try {
-      const stored = localStorage.getItem('cinders-level');
-      const n = stored === null ? 100 : Number(stored);
-      return Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 100;
+      return localStorage.getItem('cinders-enabled') === 'on';
     } catch {
-      return 100;
+      return false;
     }
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem('cinders-level', String(cindersLevel));
+      localStorage.setItem('cinders-enabled', cindersOn ? 'on' : 'off');
     } catch {
-      // localStorage unavailable (private mode, etc.) — slider still works in-session.
+      // localStorage unavailable (private mode, etc.) — toggle still works in-session.
     }
-  }, [cindersLevel]);
+  }, [cindersOn]);
 
   // Set initial volume when the <audio> element is created.
   useEffect(() => {
@@ -131,7 +128,7 @@ export default function App() {
 
       <React.Suspense fallback={null}>
         <CustomCursor />
-        {cindersLevel > 0 && <CindersOverlay density={cindersLevel / 100} />}
+        {cindersOn && <CindersOverlay />}
         <KonamiTerminal />
       </React.Suspense>
 
@@ -140,7 +137,7 @@ export default function App() {
           <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
         ) : (
           <div key="content" className="flex-1 flex flex-col">
-            <Navigation cindersLevel={cindersLevel} onCindersLevelChange={setCindersLevel} />
+            <Navigation cindersOn={cindersOn} onToggleCinders={() => setCindersOn(v => !v)} />
             <div className="flex-1 px-6 md:px-12">
               <Hero />
 

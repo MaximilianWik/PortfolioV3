@@ -21,12 +21,71 @@ const NAV_LINKS = [
 // detection. Hero is the implicit top chapter ('#').
 const SECTION_IDS = ['about', 'chronicle', 'relics', 'arcane', 'resume', 'invocation'];
 
+// ─── Cinders toggle — a small glowing flame button ─────────────────────────────
+// Off by default. A soft ember pulse ring breathes outward while off to draw
+// the eye toward the control; once lit, the flame itself flickers in place.
+const CindersToggle: React.FC<{ on: boolean; onToggle: () => void; size?: number }> = ({
+  on, onToggle, size = 30,
+}) => (
+  <motion.button
+    onClick={onToggle}
+    aria-pressed={on}
+    aria-label="Toggle cinders overlay"
+    title={on ? 'Cinders: burning' : 'Cinders: dormant — click to ignite'}
+    className="relative flex items-center justify-center rounded-full flex-shrink-0"
+    style={{ width: size, height: size }}
+    whileHover={{ scale: 1.15 }}
+    whileTap={{ scale: 0.88 }}
+  >
+    {/* Attention-drawing pulse ring — only while dormant */}
+    {!on && (
+      <motion.span
+        aria-hidden="true"
+        className="absolute inset-0 rounded-full border"
+        style={{ borderColor: 'rgba(139,26,26,0.7)' }}
+        animate={{ scale: [1, 1.8], opacity: [0.65, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeOut' }}
+      />
+    )}
+
+    {/* Base ring + glow */}
+    <span
+      aria-hidden="true"
+      className="absolute inset-0 rounded-full border transition-colors duration-500"
+      style={{
+        borderColor: on ? '#B8935A' : 'rgba(92,88,79,0.55)',
+        background: on
+          ? 'radial-gradient(circle, rgba(139,26,26,0.5), rgba(139,26,26,0.05) 70%)'
+          : 'transparent',
+        boxShadow: on ? '0 0 14px 2px rgba(139,26,26,0.55)' : 'none',
+      }}
+    />
+
+    {/* Flame glyph — flickers continuously once lit */}
+    <motion.svg
+      viewBox="0 0 24 24"
+      width={size * 0.5}
+      height={size * 0.5}
+      className="relative z-10"
+      animate={on ? { opacity: [0.82, 1, 0.82], scale: [1, 1.1, 1] } : { opacity: 0.5, scale: 1 }}
+      transition={on ? { duration: 1.3, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.4 }}
+    >
+      <path
+        d="M12 2C9 6 6 9 6 13a6 6 0 1 0 12 0c0-4-3-7-6-11z"
+        fill={on ? '#F0A25C' : 'none'}
+        stroke={on ? '#B8935A' : '#5C584F'}
+        strokeWidth={1.4}
+      />
+    </motion.svg>
+  </motion.button>
+);
+
 interface NavigationProps {
-  cindersLevel: number;
-  onCindersLevelChange: (level: number) => void;
+  cindersOn: boolean;
+  onToggleCinders: () => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ cindersLevel, onCindersLevelChange }) => {
+export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('#');
 
@@ -108,29 +167,10 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersLevel, onCindersL
           })}
         </div>
 
-        {/* Right: cinders slider + coordinates + mobile hamburger */}
+        {/* Right: cinders toggle + coordinates + mobile hamburger */}
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-2">
-            <span
-              className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 flex-shrink-0 ${cindersLevel > 0 ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
-              aria-hidden="true"
-            />
-            <label className="flex items-center gap-2 cursor-pointer">
-              <span className="font-subdisplay text-[9px] tracking-[0.25em] uppercase text-bone-faded">
-                Cinders
-              </span>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={1}
-                value={cindersLevel}
-                onChange={(e) => onCindersLevelChange(Number(e.target.value))}
-                aria-label="Cinders density"
-                className="w-16 h-1 accent-ember-blood cursor-pointer"
-                style={{ accentColor: '#8B1A1A' }}
-              />
-            </label>
+          <div className="hidden md:block">
+            <CindersToggle on={cindersOn} onToggle={onToggleCinders} size={30} />
           </div>
 
           <motion.div
@@ -208,26 +248,12 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersLevel, onCindersL
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.07 }}
-                className="flex flex-col items-center gap-3"
+                className="flex flex-col items-center gap-2"
               >
-                <span className="flex items-center gap-2 font-subdisplay text-sm tracking-[0.3em] uppercase text-bone-dim">
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${cindersLevel > 0 ? 'bg-ember-blood shadow-[0_0_6px_rgba(139,26,26,0.9)]' : 'bg-bone-faded/30'}`}
-                    aria-hidden="true"
-                  />
-                  Cinders {cindersLevel}%
+                <CindersToggle on={cindersOn} onToggle={onToggleCinders} size={44} />
+                <span className="font-subdisplay text-[10px] tracking-[0.3em] uppercase text-bone-faded">
+                  Cinders {cindersOn ? 'Burning' : 'Dormant'}
                 </span>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={cindersLevel}
-                  onChange={(e) => onCindersLevelChange(Number(e.target.value))}
-                  aria-label="Cinders density"
-                  className="w-40 h-1 cursor-pointer"
-                  style={{ accentColor: '#8B1A1A' }}
-                />
               </motion.div>
 
               <motion.div

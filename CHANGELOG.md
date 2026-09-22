@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.13.11] - 2026-09-22
+
+### Revert cinders slider to a glowing toggle button, off by default
+
+- App.tsx: cindersLevel (0-100 slider) replaced back with a boolean
+  cindersOn, now defaulting to false (was true). Persisted as
+  cinders-enabled in localStorage.
+- CindersOverlay: reverted to no props — density prop, densityRef, and
+  reinitRef removed; totalCount() back to its original fixed calculation.
+- Navigation: new CindersToggle sub-component — a small circular flame-glyph
+  button. While dormant, an ember pulse ring breathes outward on a loop to
+  draw the eye; once lit, the flame flickers in place with a glowing ember
+  ring and radial background. Replaces the range slider in both the desktop
+  bar and mobile menu.
+
 ## [1.13.10] - 2026-09-22
 
 ### List every artifact in the About / Forged tab
