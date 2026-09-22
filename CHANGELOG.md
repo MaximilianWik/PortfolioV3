@@ -6,8 +6,8 @@
 
 - Set the Chronicle section and active timeline sigil to the page's
   `ink-void` surface color.
-- Changed the decorative Timeline GIF layer to screen blending, so its black
-  pixels do not darken the section or create a rectangular cutoff.
+- Changed the decorative Timeline GIF layer to lighten blending, so its black
+  pixels leave the page surface unchanged and cannot create a rectangular cutoff.
 
 ## [1.14.0] - 2026-09-22
 
