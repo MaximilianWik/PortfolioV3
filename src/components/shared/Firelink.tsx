@@ -21,13 +21,26 @@ export const Firelink: React.FC = () => {
           alt="Fire Keeper"
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity"
-          style={{ filter: 'blur(clamp(2px, 0.3vw, 6px)) grayscale(50%)', transform: 'scale(1.02)' }}
+          className="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity grayscale-[50%]"
         />
 
-        {/* Edge fades - same technique as the Hero bonfire image: soft
-            gradient bands so the parallax crop never shows a hard edge,
-            at any viewport size. */}
+        {/* Blurred duplicate is masked to the perimeter. The centre image stays crisp. */}
+        <img
+          src={firekeeperImg}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-30 mix-blend-luminosity grayscale-[50%] pointer-events-none"
+          style={{
+            filter: 'blur(clamp(3px, 0.45vw, 9px))',
+            transform: 'scale(1.03)',
+            maskImage: 'radial-gradient(ellipse at center, transparent 56%, black 100%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 56%, black 100%)',
+          }}
+        />
+
+        {/* Edge fades match the Hero bonfire treatment and hide crop boundaries. */}
         <div className="absolute inset-x-0 top-0 h-24 sm:h-32 md:h-40 bg-gradient-to-b from-ink-void to-transparent pointer-events-none" />
         <div className="absolute inset-x-0 bottom-0 h-24 sm:h-32 md:h-40 bg-gradient-to-t from-ink-void to-transparent pointer-events-none" />
         <div className="absolute inset-y-0 left-0 w-16 sm:w-24 md:w-32 bg-gradient-to-r from-ink-void to-transparent pointer-events-none" />

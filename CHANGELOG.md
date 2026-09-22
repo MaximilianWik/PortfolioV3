@@ -21,11 +21,9 @@
 
 - Added responsive gradient edge fades to all four sides of the Firelink
   parallax image, matching the Hero bonfire treatment.
-- Applied the responsive blur pattern (`clamp(2px, 0.3vw, 6px)`) to the
-  image and scaled it to 102%, so its blurred pixels extend beyond the
-  crop rather than ending in a sharp black edge.
-- The 64px to 128px side fades and 96px to 160px top/bottom fades blend
-  remaining crop edges into ink-void across viewport sizes.
+- Kept the primary Firelink image sharp. A masked, blurred duplicate now renders
+  only at the perimeter, while the existing responsive fades blend crop edges
+  into ink-void across viewport sizes.
 
 ## [1.13.11] - 2026-09-22
 
