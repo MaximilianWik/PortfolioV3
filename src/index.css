@@ -53,7 +53,7 @@
 /* ── Keyframes ──────────────────────────────────────────────────────────────
    Defined explicitly so they survive regardless of Tailwind utility usage.
    `spin` is referenced both via Tailwind arbitrary utilities (Hero sigil) and
-   raw inline styles (Contact background sigil) — the latter is invisible to
+   raw inline styles (Contact background sigil) - the latter is invisible to
    Tailwind's scanner, so the keyframe must live here. */
 @keyframes spin {
   to {

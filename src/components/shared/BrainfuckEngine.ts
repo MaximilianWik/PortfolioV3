@@ -188,14 +188,14 @@ export function textToBF(text: string): string {
 
 /**
  * Prints "Hello, World!\n".
- * Classic — interesting tape movement due to nested loops.
+ * Classic - interesting tape movement due to nested loops.
  */
 export const BF_HELLO_WORLD =
   '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.';
 
 /**
  * Prints "YOU DIED".
- * Uses cells 0–2; pointer dances between them — designed for visual appeal.
+ * Uses cells 0–2; pointer dances between them - designed for visual appeal.
  *
  * Verified output: Y(89) O(79) U(85) sp(32) D(68) I(73) E(69) D(68)
  */

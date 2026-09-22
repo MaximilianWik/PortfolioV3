@@ -26,7 +26,7 @@ const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
     const cx = W / 2;
     const cy = H / 2;
 
-    // Teal, white and faint gilt — matches the site palette while staying
+    // Teal, white and faint gilt - matches the site palette while staying
     // true to the original Soul restoration colour language.
     const COLORS = ['#FFFFFF', '#76C7A8', '#9FD9C2', '#FFFFFF', '#B8935A', '#76C7A8'];
 
@@ -36,7 +36,7 @@ const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
     };
     const particles: P[] = [];
 
-    // Burst particles — tight horizontal spread, compressed vertical
+    // Burst particles - tight horizontal spread, compressed vertical
     for (let i = 0; i < 140; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = 60 + Math.random() * 260;
@@ -51,7 +51,7 @@ const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
       });
     }
 
-    // Drift particles — spawn across the beam, float upward slowly
+    // Drift particles - spawn across the beam, float upward slowly
     for (let i = 0; i < 90; i++) {
       const delay = 0.3 + Math.random() * 4;
       particles.push({
@@ -101,7 +101,7 @@ const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
         ctx.fillStyle = p.color;
         ctx.fill();
 
-        // Soft halo for larger particles — cheap radial gradient alternative
+        // Soft halo for larger particles - cheap radial gradient alternative
         if (p.size > 1.2) {
           ctx.globalAlpha = alpha * 0.18;
           ctx.beginPath();
@@ -136,7 +136,7 @@ export const HumanityRestored: React.FC = () => {
   const [animKey, setAnimKey] = useState(0);
   const prevInView  = useRef(false);
 
-  // Increment key on every fresh scroll-in — forces clean remount of all
+  // Increment key on every fresh scroll-in - forces clean remount of all
   // animation children so the sequence restarts from scratch.
   useEffect(() => {
     if (isInView && !prevInView.current) setAnimKey(k => k + 1);
@@ -153,7 +153,7 @@ export const HumanityRestored: React.FC = () => {
       className="relative min-h-[65vh] flex items-center justify-center py-32 bg-ink-void overflow-x-clip cursor-pointer select-none"
       onClick={() => setAnimKey(k => k + 1)}
     >
-      {/* Static vignette — no animation, no cost */}
+      {/* Static vignette - no animation, no cost */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(7,7,10,0.85) 100%)' }} />
 
@@ -164,7 +164,7 @@ export const HumanityRestored: React.FC = () => {
         {animKey > 0 && (
           <React.Fragment key={animKey}>
             {/* ── L1: Dark ambient backdrop ──────────────────────────────────
-                Opacity only — no filter animation.
+                Opacity only - no filter animation.
                 will-change promotes to its own GPU layer immediately.      */}
             <motion.div
               className="absolute pointer-events-none"
@@ -172,7 +172,7 @@ export const HumanityRestored: React.FC = () => {
                 width: '140vw', height: '280px',
                 top: '50%', marginTop: '-140px',
                 background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.55) 45%, transparent 75%)',
-                filter: 'blur(12px)',           // static — no animation cost
+                filter: 'blur(12px)',           // static - no animation cost
                 willChange: 'opacity, transform',
               }}
               initial={{ opacity: 0, scaleX: 0 }}
@@ -181,7 +181,7 @@ export const HumanityRestored: React.FC = () => {
             />
 
             {/* ── L2: Horizontal energy beam ─────────────────────────────────
-                Wide teal glow — scaleX + opacity only.                      */}
+                Wide teal glow - scaleX + opacity only.                      */}
             <motion.div
               className="absolute pointer-events-none"
               style={{
@@ -214,7 +214,7 @@ export const HumanityRestored: React.FC = () => {
             />
 
             {/* ── L5: Text ───────────────────────────────────────────────────
-                Single element — no bloom duplicate.
+                Single element - no bloom duplicate.
                 Cinzel (font-subdisplay) is loaded; OptimusPrinceps was not. */}
             <motion.div
               className="relative pointer-events-none"

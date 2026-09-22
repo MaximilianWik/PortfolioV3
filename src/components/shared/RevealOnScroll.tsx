@@ -28,7 +28,7 @@ export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
     right: { x: -30 },
   };
 
-  // Reduced motion: crossfade only — no translation.
+  // Reduced motion: crossfade only - no translation.
   const initial = reduce
     ? { opacity: 0 }
     : { opacity: 0, ...directions[direction] };

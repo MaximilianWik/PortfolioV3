@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="px-6 md:px-12 py-8 md:py-6 border-t border-bone-faded/30 flex flex-col gap-6 text-[10px] font-mono text-bone-faded">
-      {/* Cross-links to my other shrines — bidirectional identity graph for SEO. */}
+      {/* Cross-links to my other shrines - bidirectional identity graph for SEO. */}
       <nav
         aria-label="Other works by Maximilian Wikström"
         className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 md:gap-6 pb-4 border-b border-bone-faded/15"

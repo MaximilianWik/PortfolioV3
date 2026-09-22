@@ -12,7 +12,7 @@ export const CustomCursor: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Avoid putting isVisible in the effect deps — we only need a stable ref
+  // Avoid putting isVisible in the effect deps - we only need a stable ref
   // guard to flip it once on first mouse activity.
   const visibleRef = useRef(false);
 

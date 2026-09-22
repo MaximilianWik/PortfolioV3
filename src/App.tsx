@@ -27,9 +27,8 @@ const HumanityRestored = React.lazy(() =>
   import('./components/HumanityRestored').then(m => ({ default: m.HumanityRestored })),
 );
 
-// CustomCursor and CindersOverlay are pure ambience — defer them so they don't
-// compete with the hero bundle on first paint. They mount after the preloader
-// resolves anyway, and a lazy import keeps them out of the entry chunk.
+// Ambient effects load only after the preloader completes. This keeps their
+// listeners and canvas work out of the first render.
 const CustomCursor = React.lazy(() =>
   import('./components/shared/CustomCursor').then(m => ({ default: m.CustomCursor })),
 );
@@ -44,7 +43,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Cinders overlay toggle — off by default, persisted so the choice survives a reload.
+  // Cinders overlay toggle - off by default, persisted so the choice survives a reload.
   const [cindersOn, setCindersOn] = useState(() => {
     try {
       return localStorage.getItem('cinders-enabled') === 'on';
@@ -57,7 +56,7 @@ export default function App() {
     try {
       localStorage.setItem('cinders-enabled', cindersOn ? 'on' : 'off');
     } catch {
-      // localStorage unavailable (private mode, etc.) — toggle still works in-session.
+      // localStorage unavailable (private mode, etc.) - toggle still works in-session.
     }
   }, [cindersOn]);
 
@@ -68,7 +67,7 @@ export default function App() {
 
   // Lazy audio start: preload="none" keeps the 6.6MB mp3 off the network until
   // the user signals intent. A single pointerdown listener is enough for
-  // autoplay gating — it self-removes on the first real interaction.
+  // autoplay gating - it self-removes on the first real interaction.
   useEffect(() => {
     if (isLoading) return;
 
@@ -78,7 +77,7 @@ export default function App() {
       const el = audioRef.current;
       if (!el || !el.paused) return;
       el.play().catch(() => {
-        // Browser still blocks — re-arm until the next interaction.
+        // Browser still blocks - re-arm until the next interaction.
         window.addEventListener('pointerdown', start, { once: true, passive: true });
         window.addEventListener('keydown', start, { once: true });
       });
@@ -93,7 +92,7 @@ export default function App() {
     };
   }, [isLoading]);
 
-  // Smooth scroll — opt-out for users who prefer reduced motion. Lenis adds a
+  // Smooth scroll - opt-out for users who prefer reduced motion. Lenis adds a
   // rAF loop that runs every frame regardless of user input, so gating it on
   // the OS preference is both a perf and accessibility win.
   useEffect(() => {
@@ -123,14 +122,16 @@ export default function App() {
 
   return (
     <main className="min-h-screen overflow-x-clip selection:bg-ember-blood/30 flex flex-col">
-      {/* Ambient music. preload="none" — we never fetch the file until the user interacts. */}
+      {/* Ambient music. preload="none" - we never fetch the file until the user interacts. */}
       <audio ref={audioRef} src="/DarkSouls3.mp3" loop preload="none" />
 
-      <React.Suspense fallback={null}>
-        <CustomCursor />
-        {cindersOn && <CindersOverlay />}
-        <KonamiTerminal />
-      </React.Suspense>
+      {!isLoading && (
+        <React.Suspense fallback={null}>
+          <CustomCursor />
+          {cindersOn && <CindersOverlay />}
+          <KonamiTerminal />
+        </React.Suspense>
+      )}
 
       <AnimatePresence mode="wait">
         {isLoading ? (

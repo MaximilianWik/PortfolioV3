@@ -8,7 +8,7 @@ import React from 'react';
 interface CornerBracketsProps {
   /**
    * Classes applied to the inner wrapper. Use a `text-*` utility to set the
-   * bracket color — the bracket edges use `border-current`, so any Tailwind
+   * bracket color - the bracket edges use `border-current`, so any Tailwind
    * text color (including text utilities with an opacity modifier) will drive
    * the border tint.
    */
@@ -20,7 +20,7 @@ interface CornerBracketsProps {
  * Four L-shaped corner brackets layered over the parent.
  *
  * Color is driven by the `currentColor` of this element, via `border-current`
- * on each bracket. Pass a `text-*` class (e.g. `text-gilt/20`, `text-gilt`) —
+ * on each bracket. Pass a `text-*` class (e.g. `text-gilt/20`, `text-gilt`) -
  * do not rely on `border-*` classes on the outer wrapper, they will not be
  * inherited through `border-inherit`.
  */

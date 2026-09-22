@@ -6,7 +6,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { CornerBrackets } from '../shared/CornerBrackets';
-import { STATS } from '../../lib/data';
+import { STATS, PROJECTS as PORTFOLIO_PROJECTS } from '../../lib/data';
 
 // ─── Stat counter ─────────────────────────────────────────────────────────────
 
@@ -57,22 +57,12 @@ const TABS = [
 ] as const;
 type TabId = typeof TABS[number]['id'];
 
-const PROJECTS = [
-  { name: 'Kitty Mesh',           desc: 'Browser-only face, hand and pose gesture cockpit.',      tags: ['TypeScript', 'MediaPipe'],               href: 'https://kittymesh.vercel.app/' },
-  { name: 'MW-Finance',           desc: 'Personal finance terminal wired to real bank data.',      tags: ['Next.js 15', 'Drizzle ORM'],             href: 'https://mw-finance-six.vercel.app/' },
-  { name: 'Sharon Shakti',        desc: 'Horror-realism tattoo portfolio with live booking.',      tags: ['Next.js 14', 'React Three Fiber'],       href: 'https://sharon-shakti.vercel.app/' },
-  { name: 'Paleblood Vigil',      desc: 'Generative N-body attractor algorithmic art.',           tags: ['p5.js', 'Seeded PRNG'],                  href: 'https://paleblood-vigil.vercel.app/' },
-  { name: 'Carpet Eater',         desc: 'Audio-mangling desktop tool for an artist.',             tags: ['Python', 'PySide6', 'NumPy'],            href: 'https://github.com/MaximilianWik/Carpet-Eater' },
-  { name: 'Studio Panic Attack',  desc: 'GPU-accelerated 3D immersive web experience.',           tags: ['React Three Fiber', 'GSAP'],             href: 'https://studio-panic-attack-maximilian.vercel.app/' },
-  { name: 'Subdermal',            desc: 'Collaborative canvas behind a QR tattoo.',               tags: ['React 19', 'Cloudflare D1'],             href: 'https://max-wik.com/' },
-  { name: 'Tessera',              desc: 'ISO/IEC 18004 verified QR generator for tattoo QRs.',    tags: ['JavaScript', 'ISO/IEC 18004'],           href: 'https://tessera-neon.vercel.app/' },
-  { name: 'Cursed Echoes',        desc: 'Dark Souls–flavored browser typing survival.',            tags: ['TypeScript', 'React 19'],                href: 'https://cursedechoes.vercel.app/' },
-  { name: 'PortfolioV3',          desc: 'This very site — soulsborne-inspired personal portfolio.', tags: ['React 19', 'Vite 6'],                    href: 'https://github.com/MaximilianWik/PortfolioV3' },
-  { name: 'Podd App',             desc: 'RSS feed podcast manager for Windows.',                  tags: ['C#', '.NET 6'],                          href: 'https://github.com/MaximilianWik/Podd-App-RSS-FEED.git' },
-  { name: 'CV Portal',            desc: 'Full-stack CV builder and job-seeker network.',           tags: ['C#', 'ASP.NET Core'],                     href: 'https://github.com/MaximilianWik/CVPortal-Asp.Net.git' },
-  { name: 'MIB Project',          desc: 'Java Swing app for managing agents and aliens.',          tags: ['Java', 'MySQL'],                          href: 'https://github.com/MaximilianWik/MIB-projekt-Java-Winframe.git' },
-  { name: 'Hattfabriken',         desc: 'Custom hat factory order and inventory system.',          tags: ['C#', 'ASP.NET Core'],                     href: 'https://github.com/hannesmalm/Hattfabriken' },
-] as const;
+const FORGED_PROJECTS = PORTFOLIO_PROJECTS.map((project) => ({
+  name: project.title.split(' - ')[0],
+  desc: project.subtitle,
+  tags: project.tech.slice(0, 2),
+  href: project.liveLink ?? project.link,
+}));
 
 // ─── Tab content ──────────────────────────────────────────────────────────────
 
@@ -84,7 +74,7 @@ const CraftTab: React.FC = () => (
         AI & Automation Specialist
       </div>
       <div className="font-subdisplay text-[10px] text-bone-faded tracking-widest mb-3">
-        Consulting IT — DNB Bank
+        Consulting IT - DNB Bank
       </div>
       <p className="font-body text-bone-dim/80 text-sm italic leading-relaxed mb-3">
         Copilot Studio agents, Power Automate workflows, SailPoint identity governance. 
@@ -97,7 +87,7 @@ const CraftTab: React.FC = () => (
       </div>
     </div>
     <div className="border-l border-ember-blood/25 pl-5">
-      <div className="font-mono text-[9px] text-ember-blood/60 uppercase tracking-widest mb-1.5">Thesis — SEB</div>
+      <div className="font-mono text-[9px] text-ember-blood/60 uppercase tracking-widest mb-1.5">Thesis - SEB</div>
       <div className="font-display text-base text-bone-dim uppercase tracking-wider mb-1">
         Agentic AI in Regulated Finance
       </div>
@@ -118,13 +108,13 @@ const RitesTab: React.FC = () => (
     {[
       {
         period: '2023–2026', place: 'Örebro University',
-        title: 'BSc — Information Systems',
+        title: 'BSc - Information Systems',
         body: 'Full-stack systems in C# / .NET and Java. PDF invoicing, ASP.NET Core Identity, role-based access control, team-based delivery. BI internship modernising Power BI along Medallion principles.',
         tags: ['C# / .NET', 'Java', 'ASP.NET Core', 'Power BI', 'SQL'],
       },
       {
         period: '2024–2025', place: 'Nuremberg Institute of Technology',
-        title: 'Exchange — International Business',
+        title: 'Exchange - International Business',
         body: 'Exchange semester in Germany. International management, business strategy, and cross-cultural systems thinking.',
         tags: ['International Management', 'Exchange'],
       },
@@ -179,7 +169,7 @@ const DoctrineTab: React.FC = () => (
 
 const ForgedTab: React.FC = () => (
   <div className="grid grid-cols-1 gap-1">
-    {PROJECTS.map(({ name, desc, tags, href }) => (
+    {FORGED_PROJECTS.map(({ name, desc, tags, href }) => (
       <motion.a
         key={name}
         href={href}
@@ -213,9 +203,9 @@ const TAB_CONTENT: Record<TabId, React.FC> = {
   craft: CraftTab, rites: RitesTab, doctrine: DoctrineTab, forged: ForgedTab,
 };
 
-// Split once at module load — stable across renders.
+// Split once at module load - stable across renders.
 const STATEMENT_LINE_1 = 'I build AI agents and automation systems for regulated environments.'.split(' ');
-const STATEMENT_LINE_2 = 'Places where code has to be right the first time — and every time after.'.split(' ');
+const STATEMENT_LINE_2 = 'Places where code has to be right the first time - and every time after.'.split(' ');
 
 // ─── About ────────────────────────────────────────────────────────────────────
 
@@ -227,7 +217,7 @@ export const About: React.FC = () => {
   return (
     <section id="about">
 
-      {/* ── ACT I — The Arrival ─────────────────────────────────────────────── */}
+      {/* ── ACT I - The Arrival ─────────────────────────────────────────────── */}
       <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <motion.div
           initial={{ scale: 1.08, opacity: 0 }}
@@ -286,7 +276,7 @@ export const About: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* ── ACT II — The Statement ──────────────────────────────────────────── */}
+      {/* ── ACT II - The Statement ──────────────────────────────────────────── */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 pointer-events-none opacity-[0.07]">
           <img src="/blackmaiden.jpg" alt="" aria-hidden="true"
@@ -326,7 +316,7 @@ export const About: React.FC = () => {
         </div>
       </div>
 
-      {/* ── ACT III — The Identity ──────────────────────────────────────────── */}
+      {/* ── ACT III - The Identity ──────────────────────────────────────────── */}
       <div className="relative py-24 overflow-hidden">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-12 gap-10 items-start">
@@ -395,7 +385,7 @@ export const About: React.FC = () => {
                 })}
               </div>
 
-              {/* Tab content — animated on switch */}
+              {/* Tab content - animated on switch */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}

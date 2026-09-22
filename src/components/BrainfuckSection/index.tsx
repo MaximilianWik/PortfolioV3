@@ -32,16 +32,16 @@ export const BrainfuckSection: React.FC = () => (
         {/* Lore blurb */}
         <p className="font-body italic text-bone-dim text-center text-sm leading-relaxed">
           In 1993, Urban Müller forged a language of eight commands and nothing else.
-          No variables. No types. No mercy. Behold the machine laid bare — every
+          No variables. No types. No mercy. Behold the machine laid bare - every
           instruction, every cell, every step of the computation visible and unadorned.
         </p>
 
         {/* The visualizer */}
         <BrainfuckVisualizer />
 
-        {/* Subtle hint — lore-flavoured, not a spoiler */}
+        {/* Subtle hint - lore-flavoured, not a spoiler */}
         <p className="font-mono text-[9px] text-bone-faded/30 text-center uppercase tracking-[0.3em]">
-          ↑↑↓↓←→ — Those who know the old codes may find deeper truths.
+          ↑↑↓↓←→ - Those who know the old codes may find deeper truths.
         </p>
       </div>
     </RevealOnScroll>

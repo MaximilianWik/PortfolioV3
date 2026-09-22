@@ -20,7 +20,7 @@ interface AnimatedOutlineProps {
  * is true. Used on hover for Hero deed cards, Highlights deed cards, and
  * Projects relic cards.
  *
- * The parent must be `relative` and clip overflow — this component only renders
+ * The parent must be `relative` and clip overflow - this component only renders
  * absolutely-positioned edge lines. It intentionally does not add its own
  * wrapper so it can coexist with other absolutely-positioned overlays.
  */

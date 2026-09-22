@@ -38,8 +38,8 @@ export const Bonfire: React.FC<{ className?: string }> = ({ className }) => {
       ctx.stroke();
     };
 
-    // Reduced motion: paint a single static frame — a soft ember glow plus the
-    // coiled-sword silhouette — and never start the RAF loop.
+    // Reduced motion: paint a single static frame - a soft ember glow plus the
+    // coiled-sword silhouette - and never start the RAF loop.
     if (reduce) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const g = ctx.createRadialGradient(

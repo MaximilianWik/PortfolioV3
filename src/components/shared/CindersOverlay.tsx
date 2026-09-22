@@ -2,12 +2,12 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  *
- * Cinders — fullscreen ember/spark/ash overlay. Burning, behind everything.
+ * Cinders - fullscreen ember/spark/ash overlay. Burning, behind everything.
  *
  * Architecture
  * ────────────
  * • Streak sprite atlas (built once on mount): each ember/spark draws a
- *   pre-rendered streak shape — bright radial-gradient head with a tapered
+ *   pre-rendered streak shape - bright radial-gradient head with a tapered
  *   linear-gradient tail. The streak shape IS the trail, so we don't need a
  *   per-frame full-viewport destination-out pass (the previous version's
  *   single biggest perf cost). 4 streak lengths × 5 heat stages = 20 sprites,
@@ -17,14 +17,14 @@
  *   trail buffer, no shadowBlur, no per-frame radial gradients.
  *
  * • Three particle classes:
- *     ember — slow rising streaks that cool through 5 heat stages
- *     spark — small, fast, brief; bright pop, short streak
- *     ash   — dark drifting flecks, normal-blended, tumble + fade
+ *     ember - slow rising streaks that cool through 5 heat stages
+ *     spark - small, fast, brief; bright pop, short streak
+ *     ash   - dark drifting flecks, normal-blended, tumble + fade
  *
  * • Compositing:
  *     embers + sparks → globalCompositeOperation = 'lighter' (additive)
  *     ash             → 'source-over' (normal)
- *     The canvas itself sits at zIndex: 1, opacity ~0.45 — between background
+ *     The canvas itself sits at zIndex: 1, opacity ~0.45 - between background
  *     imagery (which paints with the static section flow) and foreground
  *     text/cards (which use `relative z-10` to lift above the canvas via
  *     root stacking context). No mix-blend-mode (it produces transparent
@@ -39,7 +39,7 @@
  *
  * • Mouse repel: cursor pushes particles outward inside MOUSE_R falloff.
  *
- * • Particle pool: dead particles recycle in place via Object.assign — no
+ * • Particle pool: dead particles recycle in place via Object.assign - no
  *   allocations per frame after init.
  *
  * • DPR clamped to 1 (was 1.5). Fullscreen ambient effect; halving pixel
@@ -68,12 +68,12 @@ const HEAT: { r: number; g: number; b: number }[] = [
 ];
 
 // All ember heads share the same small bright dot radius.
-// Size class only controls tail length — no more blobs from scaled heads.
+// Size class only controls tail length - no more blobs from scaled heads.
 // Class 0 = longest tail, class 3 = shortest.
 const HEAD_R     = 3;                     // px, fixed for all embers
 const TAIL_LENS  = [52, 32, 18, 8];       // px, one per size class
 
-// Physics — gentler buoyancy + wind for slow, atmospheric drift
+// Physics - gentler buoyancy + wind for slow, atmospheric drift
 const BUOY_ACC  = 0.005;
 const DRAG      = 0.985;
 const VERT_DRAG = 0.992;
@@ -92,9 +92,9 @@ interface Particle {
   size: number;          // 0..3 size class (controls tail length only)
   phase: number;
   // Per-particle motion params for erratic, non-uniform drift
-  windMult: number;      // 0.25..1.6 — response to global wind
-  turbAmp: number;       // 0.04..0.18 — turbulence magnitude
-  turbFreq: number;      // 0.6..4.5  — turbulence frequency
+  windMult: number;      // 0.25..1.6 - response to global wind
+  turbAmp: number;       // 0.04..0.18 - turbulence magnitude
+  turbFreq: number;      // 0.6..4.5  - turbulence frequency
   kind: Kind;
   rot: number; rotV: number;
 }
@@ -110,13 +110,13 @@ export const CindersOverlay: React.FC = () => {
     if (!ctx) return;
 
     // Only short-circuit if BOTH reduce-motion is on AND there's no fine
-    // pointer — i.e. pure-touch users who explicitly asked for less motion.
+    // pointer - i.e. pure-touch users who explicitly asked for less motion.
     // Mouse-repel is gated separately at runtime via mouse.on.
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasFinePointer = window.matchMedia('(any-pointer: fine)').matches;
     if (reduce && !hasFinePointer) return;
 
-    // DPR 1 — half the pixels of native 1.5x; the effect is intentionally
+    // DPR 1 - half the pixels of native 1.5x; the effect is intentionally
     // soft, sub-pixel detail is wasted here.
     const dpr = 1;
 
@@ -141,7 +141,7 @@ export const CindersOverlay: React.FC = () => {
       const mx = w / 2;
       const headCY = hr;
 
-      // Tail: very thin tapering streak — just 1.5 px wide at the bottom
+      // Tail: very thin tapering streak - just 1.5 px wide at the bottom
       const tg = cx2d.createLinearGradient(0, headCY, 0, totalH);
       tg.addColorStop(0,   `rgba(${h.r}, ${h.g}, ${h.b}, 0.55)`);
       tg.addColorStop(0.35,`rgba(${h.r}, ${Math.round(h.g * 0.5)}, ${Math.round(h.b * 0.25)}, 0.22)`);
@@ -155,7 +155,7 @@ export const CindersOverlay: React.FC = () => {
       cx2d.closePath();
       cx2d.fill();
 
-      // Head: small tight radial dot — no giant halo, just a crisp bright tip
+      // Head: small tight radial dot - no giant halo, just a crisp bright tip
       const hg = cx2d.createRadialGradient(mx, headCY, 0, mx, headCY, hr * 2.2);
       hg.addColorStop(0,    'rgba(255, 252, 240, 1)');
       hg.addColorStop(0.12, `rgba(${h.r}, ${h.g}, ${h.b}, 1)`);
@@ -181,7 +181,7 @@ export const CindersOverlay: React.FC = () => {
       return c;
     };
 
-    // streaks[sizeClass][heatStage] — size only controls tail length now
+    // streaks[sizeClass][heatStage] - size only controls tail length now
     const streaks = TAIL_LENS.map(tl =>
       HEAT.map(h => buildStreak(tl, h))
     );
@@ -264,12 +264,12 @@ export const CindersOverlay: React.FC = () => {
       const w = cssW, h = cssH;
       const t = now * 0.001;
 
-      // Clear rather than trail-decay — clearRect is dramatically cheaper than
+      // Clear rather than trail-decay - clearRect is dramatically cheaper than
       // a full-viewport destination-out fillRect and the streak sprites give
       // the trail look on their own.
       ctx.clearRect(0, 0, w, h);
 
-      // Global wind field — slow primary cycle (~25s period) plus slower
+      // Global wind field - slow primary cycle (~25s period) plus slower
       // counter-swirl (~10s). Per-particle windMult applied below.
       const winRoot1 = Math.sin(t * 0.25)       * WIND_AMP;
       const winRoot2 = Math.sin(t * 0.62 + 1.7) * WIND_AMP * 0.35;
@@ -315,7 +315,7 @@ export const CindersOverlay: React.FC = () => {
         const stageIdx = Math.min(HEAT.length - 1, Math.floor(ageT * (HEAT.length - 0.001)));
         const sprite = streaks[p.size][stageIdx];
 
-        // Slow flicker — period ~1.5s, gentle 0.78..1.0 brightness oscillation
+        // Slow flicker - period ~1.5s, gentle 0.78..1.0 brightness oscillation
         const flicker = 0.78 + Math.sin(now * 0.004 + p.phase) * 0.22;
         const fadeIn  = Math.min(1, ageT * 8);
         const fadeOut = Math.min(1, (1 - ageT) * 4.5);

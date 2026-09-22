@@ -25,7 +25,7 @@ export const Firelink: React.FC = () => {
           style={{ filter: 'blur(clamp(2px, 0.3vw, 6px)) grayscale(50%)', transform: 'scale(1.02)' }}
         />
 
-        {/* Edge fades — same technique as the Hero bonfire image: soft
+        {/* Edge fades - same technique as the Hero bonfire image: soft
             gradient bands so the parallax crop never shows a hard edge,
             at any viewport size. */}
         <div className="absolute inset-x-0 top-0 h-24 sm:h-32 md:h-40 bg-gradient-to-b from-ink-void to-transparent pointer-events-none" />

@@ -46,7 +46,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         {title}
       </motion.h2>
 
-      {/* Floor reflection — faint mirror of the title, masked to fade into the floor */}
+      {/* Floor reflection - faint mirror of the title, masked to fade into the floor */}
       <motion.div
         initial={{ opacity: 0, scaleY: -1 }}
         whileInView={{ opacity: 0.22, scaleY: -1 }}

@@ -10,7 +10,7 @@ export default defineConfig({
     hmr: process.env.DISABLE_HMR !== 'true',
   },
   build: {
-    // Modern evergreen browsers — drops legacy polyfills, smaller output.
+    // Modern evergreen browsers - drops legacy polyfills, smaller output.
     target: 'es2022',
     rollupOptions: {
       output: {

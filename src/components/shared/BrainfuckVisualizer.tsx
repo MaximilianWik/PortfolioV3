@@ -220,7 +220,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
           </button>
 
           <span className="ml-auto font-mono text-[9px] text-bone-faded">
-            STEP {step}/{maxStep > 0 ? maxStep : '—'}
+            STEP {step}/{maxStep > 0 ? maxStep : '-'}
           </span>
         </div>
       )}
@@ -251,7 +251,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
                 />
               </div>
 
-              {/* Generated BF — read-only, shown so the user can see what was compiled */}
+              {/* Generated BF - read-only, shown so the user can see what was compiled */}
               {customText && (
                 <div>
                   <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-1.5">
@@ -307,7 +307,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
           {/* ── Tape ─────────────────────────────────────────────────────── */}
           <div className="px-4 py-3 border-t border-bone-faded/10">
             <div className="font-mono text-[9px] text-bone-faded uppercase tracking-widest mb-2">
-              Memory Tape — DP: {dp}
+              Memory Tape - DP: {dp}
             </div>
             <div ref={tapeContainerRef} className="overflow-x-auto">
               <div className="flex gap-1 pb-1">
@@ -352,7 +352,7 @@ export const BrainfuckVisualizer: React.FC<BrainfuckVisualizerProps> = ({
               {isRunning ? 'STOP' : isDone ? 'RESTART' : 'RUN'}
             </motion.button>
 
-            {/* Step — only when paused and not done */}
+            {/* Step - only when paused and not done */}
             <motion.button
               whileHover={{ borderColor: '#B8935A', color: '#B8935A' }}
               onClick={handleStepForward}

@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  *
- * RotatingSigil3D — a tiny canvas rendering a rotating 3D icosahedron
+ * RotatingSigil3D - a tiny canvas rendering a rotating 3D icosahedron
  * wireframe. Pure Canvas 2D with manual 3D→2D perspective projection.
  * Zero extra dependencies. On hover: rotation accelerates + glow intensifies.
  * On click: triggers a burst effect.
@@ -107,7 +107,7 @@ export const RotatingSigil3D: React.FC<Props> = ({
         return za - zb;
       });
 
-      // Draw edges — depth-tinted: back = faded, front = bright
+      // Draw edges - depth-tinted: back = faded, front = bright
       const isHov = hovRef.current;
       for (const [i, j] of sortedEdges) {
         const [x1, y1, z1] = projected[i];

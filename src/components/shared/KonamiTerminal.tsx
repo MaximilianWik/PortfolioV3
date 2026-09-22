@@ -16,7 +16,7 @@ const KONAMI: string[] = [
 
 /**
  * Global easter egg overlay.
- * Mount once in App. Listens for the Konami code — when matched, slides in a
+ * Mount once in App. Listens for the Konami code - when matched, slides in a
  * fullscreen BF interpreter running "YOU DIED". ESC or click-outside dismisses.
  */
 export const KonamiTerminal: React.FC = () => {
@@ -43,7 +43,7 @@ export const KonamiTerminal: React.FC = () => {
           setProgress(next);
         }
       } else {
-        // Wrong key — restart sequence, but check if this key starts a new attempt
+        // Wrong key - restart sequence, but check if this key starts a new attempt
         const restart = e.key.toLowerCase() === KONAMI[0].toLowerCase() || e.key === KONAMI[0];
         setProgress(restart ? 1 : 0);
       }
@@ -70,7 +70,7 @@ export const KonamiTerminal: React.FC = () => {
           <div className="absolute top-0 left-0 right-0 h-px bg-ember-blood/50 shadow-[0_0_12px_rgba(139,26,26,0.8)]" />
           <div className="absolute bottom-0 left-0 right-0 h-px bg-ember-blood/30" />
 
-          {/* Panel — stop propagation so clicks inside don't dismiss */}
+          {/* Panel - stop propagation so clicks inside don't dismiss */}
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

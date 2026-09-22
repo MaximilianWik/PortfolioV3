@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import React, { useRef, useState } from 'react';
+import { motion, useInView } from 'motion/react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { Sigil } from '../shared/Sigil';
 
@@ -24,7 +24,7 @@ const TimelineEntry: React.FC<EntryProps> = ({
 }) => {
   const isLeft = index % 2 === 0;
 
-  // VanillaTilt only on the card content — gives depth on the main block
+  // VanillaTilt only on the card content - gives depth on the main block
   const tiltRef = useVanillaTilt<HTMLDivElement>({
     max: 6,
     speed: 500,
@@ -132,7 +132,7 @@ const TimelineEntry: React.FC<EntryProps> = ({
               {entry.role}
             </motion.h4>
 
-            {/* Ember underline — draws from origin side */}
+            {/* Ember underline - draws from origin side */}
             <motion.div
               animate={{ scaleX: isActive ? 1 : 0 }}
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -161,7 +161,7 @@ const TimelineEntry: React.FC<EntryProps> = ({
               {entry.description}
             </motion.p>
 
-            {/* Skills — staggered */}
+            {/* Skills - staggered */}
             <div className={`flex flex-wrap gap-2 ${isLeft ? 'md:justify-end' : 'md:justify-start'}`}>
               {entry.skills.map((skill, i) => (
                 <motion.span
@@ -190,17 +190,19 @@ const TimelineEntry: React.FC<EntryProps> = ({
   );
 };
 
-// Two drifting background GIFs — static layout config, defined once.
+// Two drifting background GIFs - static layout config, defined once.
 const BG_GIFS = [
   { id: 0, x: 15, y: 20, size: 600, rotate: 15,  opacity: 0.4, duration: 45, mirrored: false },
   { id: 1, x: 65, y: 50, size: 700, rotate: -15, opacity: 0.4, duration: 60, mirrored: true  },
 ] as const;
 
 export const Timeline: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.1 });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section id="chronicle" className="relative py-32 px-6 overflow-hidden">
+    <section ref={sectionRef} id="chronicle" className="relative py-32 px-6 overflow-hidden">
 
       {/* Background GIFs */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -227,9 +229,9 @@ export const Timeline: React.FC = () => {
                 Negative delay = true phase offset: GIF 0 starts at bottom
                 (ascending), GIF 1 starts at top (descending). */}
             <div style={{
-              animation: `gif-float ${gif.duration}s ease-in-out infinite alternate`,
+              animation: isInView ? `gif-float ${gif.duration}s ease-in-out infinite alternate` : 'none',
               animationDelay: gif.id === 0 ? '0s' : `-${gif.duration}s`,
-              willChange: 'transform',
+              willChange: isInView ? 'transform' : 'auto',
             }}>
               <img src="/HumanityNoBg.gif" alt="" loading="lazy" decoding="async"
                 className="w-full h-auto opacity-100" referrerPolicy="no-referrer" />

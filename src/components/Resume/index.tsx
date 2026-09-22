@@ -3,15 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { SectionHeading } from '../shared/SectionHeading';
 import { PROFILE, EDUCATION } from '../../lib/data';
-import { motion } from 'motion/react';
+import { motion, useInView } from 'motion/react';
 import { RevealOnScroll } from '../shared/RevealOnScroll';
 
 export const Resume: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.1 });
+
   return (
-    <section id="resume" className="relative py-32 overflow-hidden">
+    <section ref={sectionRef} id="resume" className="relative py-32 overflow-hidden">
       {/* Background Eclipse */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden">
         <motion.div
@@ -32,10 +35,10 @@ export const Resume: React.FC = () => {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[40%] flex flex-col items-center">
             {/* Inner Core Glow */}
             <motion.div
-              animate={{
+              animate={isInView ? {
                 opacity: [0.3, 0.6, 0.3],
                 scale: [1, 1.1, 1],
-              }}
+              } : { opacity: 0.3, scale: 1 }}
               transition={{
                 duration: 4,
                 repeat: Infinity,
@@ -46,10 +49,10 @@ export const Resume: React.FC = () => {
 
             {/* Outer Soft Bloom */}
             <motion.div
-              animate={{
+              animate={isInView ? {
                 opacity: [0.1, 0.3, 0.1],
                 scale: [1, 1.2, 1],
-              }}
+              } : { opacity: 0.1, scale: 1 }}
               transition={{
                 duration: 6,
                 repeat: Infinity,
@@ -61,10 +64,10 @@ export const Resume: React.FC = () => {
 
             {/* Pulsing Light Spire/Rays */}
             <motion.div
-              animate={{
+              animate={isInView ? {
                 opacity: [0.2, 0.4, 0.2],
                 scaleY: [0.9, 1.1, 0.9],
-              }}
+              } : { opacity: 0.2, scaleY: 0.9 }}
               transition={{
                 duration: 8,
                 repeat: Infinity,

@@ -48,11 +48,11 @@ export const DispersingText: React.FC<InteractiveTextProps> = ({
   const charCenters = useRef<Array<{ x: number; y: number }>>([]);
   const setters = useRef<Array<CharSetter | null>>([]);
 
-  // Split once per text change — cheap, stable indices for registration.
+  // Split once per text change - cheap, stable indices for registration.
   const words = text.split(' ');
 
   useEffect(() => {
-    // Reduced motion: render static text — no pointer tracking, no RAF, no
+    // Reduced motion: render static text - no pointer tracking, no RAF, no
     // springs firing. Characters sit at rest (force 0) at their base color.
     if (reduce) return;
 
@@ -208,7 +208,7 @@ const Character: React.FC<CharacterProps> = ({ char, baseColor, registerEl, regi
   useEffect(() => {
     const setter: CharSetter = (tx, ty, f) => {
       // Short-circuit when character is already at rest and the new target is
-      // also zero — keeps the spring solver idle.
+      // also zero - keeps the spring solver idle.
       if (f === 0 && force.get() === 0) return;
       mouseX.set(tx);
       mouseY.set(ty);

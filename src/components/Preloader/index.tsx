@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 
 export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [text, setText] = useState('');
-  const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
 
   const phrases = [
     'Awakening...',
@@ -26,31 +24,38 @@ export const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
   };
 
   useEffect(() => {
-    let i = 0;
     const fullText = 'Ashes of automation. Dreams of silicon.';
-    const typingInterval = setInterval(() => {
-      if (i < fullText.length) { setText(fullText.slice(0, ++i)); }
-      else clearInterval(typingInterval);
-    }, 50);
+    const duration = 1250;
+    let frame = 0;
+    let completionTimeout = 0;
+    let completed = false;
+    const start = performance.now();
 
-    let completionTimeout: ReturnType<typeof setTimeout> | null = null;
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          completionTimeout = setTimeout(() => onCompleteRef.current(), 300);
-          return 100;
-        }
-        return prev + 2;
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const nextProgress = Math.min(100, Math.floor((elapsed / duration) * 50) * 2);
+      const textLength = Math.min(fullText.length, Math.floor(elapsed / 50));
+
+      setProgress(current => current === nextProgress ? current : nextProgress);
+      setText(current => {
+        const next = fullText.slice(0, textLength);
+        return current === next ? current : next;
       });
-    }, 25);
 
-    return () => {
-      clearInterval(typingInterval);
-      clearInterval(progressInterval);
-      if (completionTimeout !== null) clearTimeout(completionTimeout);
+      if (elapsed < duration) {
+        frame = requestAnimationFrame(tick);
+      } else if (!completed) {
+        completed = true;
+        completionTimeout = window.setTimeout(onComplete, 300);
+      }
     };
-  }, []);
+
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(completionTimeout);
+    };
+  }, [onComplete]);
 
   return (
     <motion.div

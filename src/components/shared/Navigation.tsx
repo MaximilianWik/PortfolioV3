@@ -21,7 +21,7 @@ const NAV_LINKS = [
 // detection. Hero is the implicit top chapter ('#').
 const SECTION_IDS = ['about', 'chronicle', 'relics', 'arcane', 'resume', 'invocation'];
 
-// ─── Cinders toggle — a small glowing flame button ─────────────────────────────
+// ─── Cinders toggle - a small glowing flame button ─────────────────────────────
 // Off by default. A soft ember pulse ring breathes outward while off to draw
 // the eye toward the control; once lit, the flame itself flickers in place.
 const CindersToggle: React.FC<{ on: boolean; onToggle: () => void; size?: number }> = ({
@@ -31,13 +31,13 @@ const CindersToggle: React.FC<{ on: boolean; onToggle: () => void; size?: number
     onClick={onToggle}
     aria-pressed={on}
     aria-label="Toggle cinders overlay"
-    title={on ? 'Cinders: burning' : 'Cinders: dormant — click to ignite'}
+    title={on ? 'Cinders: burning' : 'Cinders: dormant - click to ignite'}
     className="relative flex items-center justify-center rounded-full flex-shrink-0"
     style={{ width: size, height: size }}
     whileHover={{ scale: 1.15 }}
     whileTap={{ scale: 0.88 }}
   >
-    {/* Attention-drawing pulse ring — only while dormant */}
+    {/* Attention-drawing pulse ring - only while dormant */}
     {!on && (
       <motion.span
         aria-hidden="true"
@@ -61,7 +61,7 @@ const CindersToggle: React.FC<{ on: boolean; onToggle: () => void; size?: number
       }}
     />
 
-    {/* Flame glyph — flickers continuously once lit */}
+    {/* Flame glyph - flickers continuously once lit */}
     <motion.svg
       viewBox="0 0 24 24"
       width={size * 0.5}
@@ -181,7 +181,7 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
             STHLM // 59.3293° N
           </motion.div>
 
-          {/* Hamburger — mobile only */}
+          {/* Hamburger - mobile only */}
           <button
             className="md:hidden flex flex-col justify-center items-center gap-[5px] w-8 h-8 z-[110] relative"
             onClick={() => setMenuOpen(o => !o)}

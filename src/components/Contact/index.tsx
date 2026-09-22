@@ -50,7 +50,7 @@ const Field: React.FC<{
 const FormModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle');
 
-  // No backend — the invocation composes a pre-filled message and hands off to
+  // No backend - the invocation composes a pre-filled message and hands off to
   // the visitor's own mail client. Nothing is stored or transmitted by the site.
   const send = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,8 +86,11 @@ const FormModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <CornerBrackets className="text-gilt/20" size={14} />
 
         {/* Close */}
-        <button onClick={onClose}
-          className="absolute top-5 right-5 font-mono text-[9px] text-bone-faded/40 hover:text-bone-faded uppercase tracking-widest transition-colors">
+        <button
+          onClick={onClose}
+          aria-label="Close contact form"
+          className="absolute top-5 right-5 font-mono text-[9px] text-bone-faded/40 hover:text-bone-faded uppercase tracking-widest transition-colors"
+        >
           ✕
         </button>
 
@@ -221,7 +224,7 @@ export const Contact: React.FC = () => {
     <>
       <section id="invocation" className="relative min-h-screen flex flex-col justify-center py-24 px-6">
 
-        {/* Background — rotating sigil at near-zero opacity, CSS-driven so it never touches the JS scheduler */}
+        {/* Background - rotating sigil at near-zero opacity, CSS-driven so it never touches the JS scheduler */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
           style={{ animation: 'spin 120s linear infinite' }}>
@@ -238,7 +241,7 @@ export const Contact: React.FC = () => {
           {/* Heading */}
           <SectionHeading numeral="VI" title="The Invocation" sigil="compass" />
 
-          {/* Bonfire — hero element, scaled up */}
+          {/* Bonfire - hero element, scaled up */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
