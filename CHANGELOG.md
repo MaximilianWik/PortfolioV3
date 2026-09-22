@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.4] - 2026-09-22
+
+### Unify the global page surface
+
+- Applied `ink-void` to `html`, `body`, `#root`, and the application shell.
+- Prevents viewport gutters or transparent root areas from exposing a slightly
+  different browser surface at either side of the site.
+
 ## [1.14.3] - 2026-09-22
 
 ### Remove Chronicle GIF dark rectangle

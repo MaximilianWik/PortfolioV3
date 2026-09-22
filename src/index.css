@@ -22,8 +22,15 @@
 }
 
 @layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    background-color: var(--color-ink-void);
+  }
+
   body {
-    @apply bg-ink-void text-bone-white font-body selection:bg-ember-blood selection:text-white;
+    @apply text-bone-white font-body selection:bg-ember-blood selection:text-white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
