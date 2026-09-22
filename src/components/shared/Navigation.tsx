@@ -28,21 +28,15 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [activeHref, setActiveHref] = useState('#');
 
-  // Single rAF-throttled scroll/resize handler drives both the progress ember
-  // bar and the active-chapter highlight. Sections are queried live each frame
-  // so lazily-mounted ones (Timeline/Projects/Resume/Contact) are picked up
-  // the moment they enter the DOM.
+  // rAF-throttled scroll/resize handler drives the active-chapter highlight.
+  // Sections are queried live each frame so lazily-mounted ones
+  // (Timeline/Projects/Resume/Contact) are picked up the moment they enter the DOM.
   useEffect(() => {
     let raf = 0;
     const update = () => {
       raf = 0;
-      const doc = document.documentElement;
-      const max = doc.scrollHeight - doc.clientHeight;
-      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
-
       const probe = window.innerHeight * 0.4;
       let current = '#';
       for (const id of SECTION_IDS) {
@@ -74,14 +68,6 @@ export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinde
       <div style={{ height: '57px' }} aria-hidden="true" />
 
       <nav className="flex justify-between items-center px-6 md:px-12 py-4 border-b border-bone-faded/30 fixed top-0 inset-x-0 z-[90] bg-ink-void/90 backdrop-blur-sm">
-
-        {/* Scroll-progress ember bar — fills along the nav's lower edge as the
-            visitor descends the page. Pure transform, no layout cost. */}
-        <div
-          aria-hidden="true"
-          className="absolute bottom-0 left-0 w-full h-[2px] bg-ember-blood origin-left shadow-[0_0_8px_rgba(139,26,26,0.7)] will-change-transform"
-          style={{ transform: `scaleX(${progress})` }}
-        />
 
         {/* Left: sigil + name */}
         <motion.div

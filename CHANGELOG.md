@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.8] - 2026-09-22
+
+### Reorder relics, remove scroll-progress bar
+
+- Kitty Mesh moved to the front of PROJECTS (id I); all other entries
+  renumbered II through XIV in their existing order.
+- Removed the red scroll-progress ember bar from Navigation; dropped
+  the now-unused `progress` state and its scrollHeight calculation.
+
 ## [1.13.7] - 2026-09-22
 
 ### Add navbar toggle for cinders overlay
