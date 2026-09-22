@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.12] - 2026-09-22
+
+### Soften Firelink parallax image edges
+
+- Added responsive gradient edge fades to all four sides of the Firelink
+  parallax image, matching the Hero bonfire treatment.
+- Applied the responsive blur pattern (`clamp(2px, 0.3vw, 6px)`) to the
+  image and scaled it to 102%, so its blurred pixels extend beyond the
+  crop rather than ending in a sharp black edge.
+- The 64px to 128px side fades and 96px to 160px top/bottom fades blend
+  remaining crop edges into ink-void across viewport sizes.
+
 ## [1.13.11] - 2026-09-22
 
 ### Revert cinders slider to a glowing toggle button, off by default
