@@ -20,6 +20,7 @@ const NAV_LINKS = [
 // Ordered section ids matched against the viewport probe line for active-chapter
 // detection. Hero is the implicit top chapter ('#').
 const SECTION_IDS = ['about', 'chronicle', 'relics', 'arcane', 'resume', 'invocation'];
+const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
 
 // ─── Cinders toggle - a small glowing flame button ─────────────────────────────
 // Off by default. A soft ember pulse ring breathes outward while off to draw
@@ -89,7 +90,11 @@ interface NavigationProps {
 export const Navigation: React.FC<NavigationProps> = ({ cindersOn, onToggleCinders, showBearer }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('#');
-  const navLinks = showBearer ? NAV_LINKS : NAV_LINKS.filter(link => link.href !== '#about');
+  const navLinks = (showBearer ? NAV_LINKS : NAV_LINKS.filter(link => link.href !== '#about'))
+    .map((link, index) => ({
+      ...link,
+      label: showBearer ? link.label : link.label.replace(/^[IVX]+\./, `${ROMAN_NUMERALS[index]}.`),
+    }));
   const sectionIds = showBearer ? SECTION_IDS : SECTION_IDS.filter(id => id !== 'about');
 
   // rAF-throttled scroll/resize handler drives the active-chapter highlight.

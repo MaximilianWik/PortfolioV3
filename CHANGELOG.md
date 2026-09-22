@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.6] - 2026-09-22
+
+### Renumber visible navigation after hiding Bearer
+
+- Renumbered the visible navigation links sequentially when `SHOW_BEARER` is off.
+- Restoring the Bearer flag also restores the original navigation numerals.
+
 ## [1.14.5] - 2026-09-22
 
 ### Hide the Bearer section behind a feature flag
