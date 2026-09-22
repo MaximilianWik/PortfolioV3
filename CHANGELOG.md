@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.2] - 2026-09-22
+
+### Spread Humanity Restored particles across the beam
+
+- Changed the initial particle burst from a single centre spawn to a wide
+  beam spawn with outward horizontal and upward velocity.
+- Prevents the first animation frame from forming a dense central cluster.
+
 ## [1.14.1] - 2026-09-22
 
 ### Match Chronicle background surfaces

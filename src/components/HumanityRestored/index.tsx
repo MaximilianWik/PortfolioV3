@@ -36,14 +36,16 @@ const ParticleBurst: React.FC<{ active: boolean }> = ({ active }) => {
     };
     const particles: P[] = [];
 
-    // Burst particles - tight horizontal spread, compressed vertical
+    // Burst particles spawn across the beam and travel outward. Starting every
+    // particle at cx/cy created a dense centre clump at the first visible frame.
     for (let i = 0; i < 140; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 60 + Math.random() * 260;
+      const x = cx + (Math.random() - 0.5) * W * 0.82;
+      const y = cy + (Math.random() - 0.5) * 52;
+      const direction = x === cx ? (Math.random() < 0.5 ? -1 : 1) : Math.sign(x - cx);
       particles.push({
-        x: cx, y: cy,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed * 0.35,
+        x, y,
+        vx: direction * (35 + Math.random() * 150) + (Math.random() - 0.5) * 40,
+        vy: -25 - Math.random() * 125,
         size: 0.8 + Math.random() * 3,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         life: 0,
