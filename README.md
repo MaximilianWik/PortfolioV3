@@ -4,6 +4,13 @@ A React portfolio with a dark fantasy visual system. It uses Vite, Tailwind CSS,
 
 **Live:** https://maximilian-wikstrom.vercel.app/
 
+
+
+https://github.com/user-attachments/assets/a7277eff-0063-409b-9792-f5d7a1e271bd
+
+
+
+
 ## Stack
 
 - React 19 and TypeScript
