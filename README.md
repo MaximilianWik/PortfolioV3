@@ -1,6 +1,6 @@
 # Maximilian Wikström - Portfolio
 
-A React portfolio with a dark fantasy visual system. It uses Vite, Tailwind CSS, motion, Lenis, and canvas effects.
+A React portfolio with a dark fantasy visual system. It uses Vite, Tailwind CSS, motion, Lenis, and canvas effects. :3
 
 **Live:** https://maximilian-wikstrom.vercel.app/
 
