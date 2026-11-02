@@ -8,6 +8,10 @@
   `0.4em` to `0.3em`, so words no longer run together.
 - Replaced `CV_Maximilian_WikstromPDF.pdf` with a one-page CV that adds
   Soya Group as the current role and ends the DNB assignment in 2026.
+  Recent roles show months (Nov 2026 to present, Mar to Nov 2026), entry
+  headers use no em dashes, and Skills add SQL Server, PowerShell, and a
+  Tooling row with Azure DevOps and Git.
+- Added months to the Soya Group and DNB Chronicle entries.
 
 ## [1.15.0] - 2026-11-02
 
