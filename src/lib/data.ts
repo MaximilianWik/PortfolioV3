@@ -5,7 +5,7 @@
 
 export const PROFILE = {
   name: "Maximilian Wikström",
-  role: "AI & Automation Specialist",
+  role: "System Developer & Architect",
   location: "Stockholm",
   email: "max.wik@icloud.com",
   phone: "+46 70 736 0515",
@@ -24,6 +24,13 @@ export const STATS = {
 export const EXPERIENCE = [
   {
     year: "2026-PRESENT",
+    role: "System Developer & Architect",
+    company: "Soya Group",
+    description: "Full-stack development in .NET and React for a group spanning shipping, real estate, sustainable energy, and technology. Building integrations, APIs, and web solutions, adapting standard systems, and shaping development environments and ways of working. Next: bringing AI into the whole group.",
+    skills: [".NET", "C#", "React", "SQL Server", "REST API", "Azure DevOps", "Microsoft Graph", "AI"]
+  },
+  {
+    year: "2026",
     role: "AI & Automation Specialist / IT Service Consultant",
     company: "Consulting IT (at DNB Bank)",
     description: "Building Microsoft Copilot + Power Automate workflows + identity governance via SailPoint. Orchestrating enterprise-scale automation for regulated banking environments.",

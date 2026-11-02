@@ -71,14 +71,20 @@ const DeedCard: React.FC<{ deed: DeedItem }> = ({ deed }) => {
 
 const DEEDS: DeedItem[] = [
   {
-    title: "DNB Bank – AI & Automation",
+    title: "Soya Group – Systems & Architecture",
     num: "I",
+    desc: "Forging full-stack .NET and React systems for a house of shipping, property, and energy. Binding integrations and APIs, and readying the ground for AI to run through the whole.",
+    tags: [".NET", "INTEGRATIONS"],
+  },
+  {
+    title: "DNB Bank – AI & Automation",
+    num: "II",
     desc: "Binding Copilot Studio agents and Power Automate flows into the secure foundations of DNB. Scaling identity governance and automation in the regulated shadows.",
     tags: ["AI AGENTS", "POWER AUTOMATE"],
   },
   {
     title: "SEB – Agentic Thesis",
-    num: "II",
+    num: "III",
     desc: "A scholar's pursuit into Agentic AI within the iron-clad walls of SEB. Developing frameworks for autonomous reasoning where failure is not an option.",
     tags: ["AGENTIC AI", "LLMS"],
     pdfLink: "/Integrating%20Agentic%20AI%20into%20Software%20Development%20A%20Sociotechnical%20Case%20Study%20in%20a%20Large%20Nordic%20Bank.pdf",
@@ -121,7 +127,7 @@ export const Hero: React.FC = () => {
             <div className="mt-8 space-y-4">
               <div className="border-l border-ember-blood pl-4 py-2">
                 <div className="font-mono text-[10px] text-bone-faded uppercase tracking-tighter">Current Domain</div>
-                <div className="font-display text-xl text-bone-white truncate">DNB Bank – AI & Automation</div>
+                <div className="font-display text-xl text-bone-white truncate">Soya Group – Systems & Architecture</div>
               </div>
             </div>
           </div>
@@ -225,7 +231,7 @@ export const Hero: React.FC = () => {
             </h1>
             <div className="h-px w-20 sm:w-24 md:w-32 bg-ember-blood my-6 md:my-8"></div>
             <DispersingText
-              text="AI & Automation Specialist"
+              text="System Developer & Architect"
               className="font-subdisplay text-[9px] sm:text-[10px] md:text-xs tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.4em] text-center uppercase justify-center whitespace-nowrap"
               baseColor="#B8935A"
               style={{ color: '#B8935A' }}

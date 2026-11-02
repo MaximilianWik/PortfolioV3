@@ -71,17 +71,17 @@ const CraftTab: React.FC = () => (
     <div className="border-l border-gilt/40 pl-5">
       <div className="font-mono text-[9px] text-gilt uppercase tracking-widest mb-1.5">Current</div>
       <div className="font-display text-xl text-bone-dim uppercase tracking-wider mb-0.5">
-        AI & Automation Specialist
+        System Developer & Architect
       </div>
       <div className="font-subdisplay text-[10px] text-bone-faded tracking-widest mb-3">
-        Consulting IT - DNB Bank
+        Soya Group
       </div>
       <p className="font-body text-bone-dim/80 text-sm italic leading-relaxed mb-3">
-        Copilot Studio agents, Power Automate workflows, SailPoint identity governance. 
-        Enterprise automation where the cost of failure is real.
+        Full-stack .NET and React systems, integrations, and APIs across shipping,
+        real estate, and energy. Next: bringing AI into the whole group.
       </p>
       <div className="flex flex-wrap gap-1.5">
-        {['Copilot Studio','Power Automate','SailPoint','AI Agents','Python'].map(t => (
+        {['.NET','React','SQL Server','Integrations','AI Agents'].map(t => (
           <span key={t} className="px-2 py-0.5 border border-gilt/20 font-mono text-[9px] text-gilt/70 uppercase tracking-tighter">{t}</span>
         ))}
       </div>
@@ -154,8 +154,8 @@ const DoctrineTab: React.FC = () => (
           ['Automation',    'Power Automate · SailPoint · Power Apps'],
           ['Intelligence',  'Power BI · DAX · Medallion · Python'],
           ['Front-end',     'TypeScript · React · Vite'],
-          ['Back-end',      'C# / .NET · Java · ASP.NET Core'],
-          ['Data',          'SQL · Entity Framework · Azure'],
+          ['Back-end',      'C# / .NET · ASP.NET Core · REST APIs · Java'],
+          ['Data',          'SQL Server · Entity Framework · Azure'],
         ].map(([cat, tools]) => (
           <div key={cat}>
             <div className="font-mono text-[8px] text-gilt/60 uppercase tracking-widest mb-0.5">{cat}</div>
@@ -341,7 +341,7 @@ export const About: React.FC = () => {
               </div>
               <div className="relative p-4 border border-bone-faded/10 bg-ink-deep">
                 <CornerBrackets className="text-bone-faded/20" size={7} />
-                {[['Location','Stockholm',false],['Status','Active',true],['Domain','DNB Bank',false],['Focus','Agentic AI',false]].map(([k,v,p]) => (
+                {[['Location','Stockholm',false],['Status','Active',true],['Domain','Soya Group',false],['Focus','Systems & AI',false]].map(([k,v,p]) => (
                   <div key={String(k)} className="flex justify-between items-center py-1.5 border-b border-bone-faded/5 last:border-0">
                     <span className="font-mono text-[9px] text-bone-faded uppercase tracking-widest">{k}</span>
                     <span className={`font-mono text-[10px] flex items-center gap-1.5 ${p ? 'text-gilt' : 'text-bone-dim'}`}>

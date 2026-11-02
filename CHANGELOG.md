@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.15.0] - 2026-11-02
+
+### Move current role to Soya Group
+
+- Changed the tagline and `PROFILE.role` to "System Developer & Architect".
+- Added Soya Group as the current Chronicle entry and ended the DNB entry in 2026.
+- Set the Hero Current Domain to Soya Group and added it as Recent Deed I.
+  DNB and SEB move down to II and III.
+- Updated the About Current card, the Domain and Focus sidebar rows, and the
+  Back-end and Data Toolkit rows. The AI and Automation rows stay.
+- Updated the page title, meta, Open Graph, Twitter, noscript text, JSON-LD
+  (`jobTitle`, new `worksFor`), `metadata.json`, and the sitemap `lastmod`.
+
 ## [1.14.6] - 2026-09-22
 
 ### Renumber visible navigation after hiding Bearer
