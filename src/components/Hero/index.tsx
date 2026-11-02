@@ -232,9 +232,9 @@ export const Hero: React.FC = () => {
             <div className="h-px w-20 sm:w-24 md:w-32 bg-ember-blood my-6 md:my-8"></div>
             <DispersingText
               text="System Developer & Architect"
-              className="font-subdisplay text-[9px] sm:text-[10px] md:text-xs tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.4em] text-center uppercase justify-center whitespace-nowrap"
+              className="font-subdisplay text-[9px] sm:text-[10px] md:text-xs tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-center uppercase justify-center whitespace-nowrap"
               baseColor="#B8935A"
-              style={{ color: '#B8935A' }}
+              style={{ color: '#B8935A', columnGap: '0.8em' }}
             />
           </div>
 

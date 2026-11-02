@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.15.1] - 2026-11-02
+
+### Widen tagline word spacing and update the CV
+
+- Gave the Hero tagline a `0.8em` word gap and reduced desktop tracking from
+  `0.4em` to `0.3em`, so words no longer run together.
+- Replaced `CV_Maximilian_WikstromPDF.pdf` with a one-page CV that adds
+  Soya Group as the current role and ends the DNB assignment in 2026.
+
 ## [1.15.0] - 2026-11-02
 
 ### Move current role to Soya Group
